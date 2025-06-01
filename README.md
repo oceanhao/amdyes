@@ -1,9 +1,10 @@
 # Learning from Videos for 3D World: Enhancing MLLMs with 3D Vision Geometry Priors
 
 <div align="center" margin-bottom="3em">
-    <!-- <a href="https://arxiv.org/abs/2312.02010" target="_blank">
-    <img src="https://img.shields.io/badge/Paper-arXiv-green" alt="Paper arXiv"></a>
-  -->
+<a href="https://arxiv.org/abs/2505.24625" target="_blank">
+<img src="https://img.shields.io/badge/arXiv-VG_LLM-green" alt="arXiv"></a>
+<a href="https://arxiv.org/pdf/2505.24625" target="_blank">
+<img src="https://img.shields.io/badge/Paper-VG_LLM-orange" alt="Paper"></a>
 <a href="https://lavi-lab.github.io/VG-LLM/" target="_blank">
     <img alt="Website" src="https://img.shields.io/badge/Website-VG_LLM-blue.svg" height="20" />
 </a>
@@ -70,14 +71,6 @@ VG-LLM integrates a 3D visual geometry encoder (based on [VGGT](https://github.c
 </p>
 </details>
 
-## 📋Todo List
-
-- [ ] Release the model weights.
-- [ ] Release the inference demo.
-- [ ] Release the evaluation code.
-- [ ] Release the preprocessing data and scripts.
-- [ ] Release the training scripts for VG LLM.
-
 
 ## ⚙️Setup
 
@@ -110,6 +103,17 @@ VG-LLM is trained and evaluated on a variety of datasets:
     * Evaluation Benchmarks: We adopt [VSI-Bench](https://huggingface.co/datasets/nyu-visionx/VSI-Bench), [CV-Bench](https://huggingface.co/datasets/nyu-visionx/CV-Bench), [BLINK](https://huggingface.co/datasets/BLINK-Benchmark/BLINK), [Video-MME](https://huggingface.co/datasets/lmms-lab/Video-MME), [TempCompass](https://huggingface.co/datasets/lmms-lab/TempCompass), [NextQA](https://huggingface.co/datasets/lmms-lab/NExTQA) for evaluation.
 
 
+## Finetuned Models
+We release the following finetuned models:
+* `VG-LLM-4B (3D Scene Understanding)`: [VGLLM_For_3D_Scene_Understanding_4B](https://huggingface.co/zd11024/VGLLM_for_3D_Scene_Understanding_4B)
+* `VG-LLM-4B (Spatial Reasoning)`: [VGLLM_for_Spatial_Reasoning_4B](https://huggingface.co/zd11024/VGLLM_for_Spatial_Reasoning_4B)
+
+
+## Demo
+* Download the demo data at this [link](https://huggingface.co/datasets/zd11024/VGLLM_demo_data) and place it at `data/demo_data`.
+* Download the required model checkpoints according to the last section.
+* Run the script `demo.ipynb`.
+
 ## Training
 
 We train two models separately for 3D scene understanding and spatial reasoning tasks.
@@ -121,10 +125,31 @@ We train two models separately for 3D scene understanding and spatial reasoning 
 
 <!-- The training scripts will be released soon. -->
 
+## 📋Todo List
 
+- [x] Release the model weights.
+- [x] Release the inference demo.
+- [ ] Release the evaluation code.
+- [ ] Release the preprocessing data and scripts.
+- [ ] Release the training scripts for VG LLM.
+
+## Citation
+
+If you find our work useful, please consider citing:
+
+```bibtex
+@misc{zheng2025learningvideos3dworld,
+      title={Learning from Videos for 3D World: Enhancing MLLMs with 3D Vision Geometry Priors}, 
+      author={Duo Zheng and Shijia Huang and Yanyang Li and Liwei Wang},
+      year={2025},
+      eprint={2505.24625},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2505.24625}, 
+}
+```
 
 ## Acknowledgements
-
 
 * This work is built upon excellent previous research, including [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL), [VGGT](https://github.com/facebookresearch/vggt), [SPAR-7M](https://github.com/fudan-zvg/spar), [LLaVA-Video-178K](https://github.com/LLaVA-VL/LLaVA-NeXT), and various 3D datasets like [ScanNet](https://github.com/ScanNet/ScanNet), [ScanRefer](https://github.com/daveredrum/ScanRefer), [Scan2Cap](https://github.com/daveredrum/Scan2Cap), [EmbodiedScan](https://github.com/OpenRobotLab/EmbodiedScan).
 * We thank the developers of [LMMs-Eval](https://github.com/EvolvingLMMs-Lab/lmms-eval) for their evaluation framework.

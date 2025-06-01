@@ -19,7 +19,7 @@ setup(
         "isort==5.13.2",
         "datasets==2.16.1",
         "evaluate>=0.4.0",
-        "httpx==0.23.3",
+        "httpx==0.25.0",
         "jsonlines",
         "numexpr",
         "numpy==1.26.4",
@@ -60,7 +60,10 @@ setup(
         "decord",
         "zss",
         "protobuf==3.20",
-        "qwen_vl_utils"
+        "qwen_vl_utils",
+        "open3d===0.19.0",
+        "spicy==0.16.0",
+        "jupyter"
     ],
     author="Duo Zheng, Shijia Huang, Yanyang Li, Liwei Wang",
     author_email="dzheng23@link.cuhk.edu.hk",
