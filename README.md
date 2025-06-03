@@ -124,12 +124,33 @@ We train two models separately for 3D scene understanding and spatial reasoning 
 * **Training duration:** ~8 hours for 3D scene understanding, ~12 hours for spatial reasoning.
 
 <!-- The training scripts will be released soon. -->
+## Evaluation
+
+Evaluation is performed using the [LMMs-Eval](https://github.com/EvolvingLMMs-Lab/lmms-eval) with greedy sampling for generation. For video benchmarks, 32 frames are uniformly sampled for VSI-Bench.
+
+Please refer to the example evaluation script (`scripts/evaluation/eval.sh`) below for detailed command usage. You may need to adjust `model_path`, `benchmark`, or other parameters based on your specific setup and requirements.
+```bash
+set -e
+export LMMS_EVAL_LAUNCHER="accelerate"
+
+export NCCL_NVLS_ENABLE=0
+benchmark=vsibench # choices: [vsibench, cvbench, blink_spatial]
+output_path=logs/$(TZ="Asia/Shanghai" date "+%Y%m%d")
+model_path=zd11024/VGLLM_for_Spatial_Reasoning_4B
+
+accelerate launch --num_processes=8 -m lmms_eval \
+    --model vgllm \
+    --model_args pretrained=$model_path,use_flash_attention_2=true,max_num_frames=32,max_length=12800 \
+    --tasks ${benchmark} \
+    --batch_size 1 \
+    --output_path $output_path
+```
 
 ## 📋Todo List
 
 - [x] Release the model weights.
 - [x] Release the inference demo.
-- [ ] Release the evaluation code.
+- [x] Release the evaluation code.
 - [ ] Release the preprocessing data and scripts.
 - [ ] Release the training scripts for VG LLM.
 
