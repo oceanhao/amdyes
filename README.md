@@ -116,12 +116,92 @@ We release the following finetuned models:
 
 ## Training
 
-We train two models separately for 3D scene understanding and spatial reasoning tasks.
+### 1\. Data Preparation
 
-* **Hardware:** Experiments were conducted on 8x H100 80G GPUs.
-* **Settings:** Trained for one epoch, Adam optimizer, batch size 16, warmup ratio 0.03, learning rate 5e-6.
-* **Frozen Components:** The MLLM’s visual encoder, the 3D geometry encoder, and the multimodal connector are frozen.
-* **Training duration:** ~8 hours for 3D scene understanding, ~12 hours for spatial reasoning.
+Before starting the training process, you need to download the required datasets and annotations.
+
+#### Data for Spatial Reasoning
+  * **Annotations:** Download the annotation files from [VG-LLM-Data](https://huggingface.co/datasets/zd11024/VG-LLM-Data).
+  * **Video Data:** Download the media data of LLaVA-Video-178K (LLaVA-Hound split) from the [ShareGPTVideo](https://huggingface.co/datasets/ShareGPTVideo/train\_video\_and\_instruction/tree/main/train\_300k).
+  * **SPAR Data:** Download the media data of SPAR from [SPAR-7M](https://huggingface.co/datasets/jasonzhango/SPAR-7M).
+
+
+We have provided two example entries as follows
+<details>
+<summary>Example for LLaVA-Video-178K (LLaVA-Hound Split).</summary>
+
+```json
+{
+    "id": "23230678_1",
+    "conversations": [
+        {
+            "from": "human",
+            "value": "<video>\nWhat is the contrast provided in the video's midway point?"
+        },
+        {
+            "from": "gpt",
+            "value": "In the midway point of the video, a handgun is displayed on a surface covered with documents, providing a stark contrast to the earlier images of the cigarette being inhaled."
+        }
+    ],
+    "data_source": "llava_hound",
+}
+```
+
+</details>
+
+<details>
+<summary>Example for SPAR-7M.</summary>
+
+```json
+{
+    "id": "scene0012_01_1661",
+    "conversations": [
+        {
+            "from": "human",
+            "value": "<image>\n<image>\n<image>\nAssume the depth of box (red point) is 2.0. How much deeper or shallower is chair (green point) relative to table (blue point), measured in meters? Calculate or judge based on the 3D center points of these objects. The depth is calculated based on the image where the markers corresponding to these objects are located. Provide a numeric response with just one value."
+        },
+        {
+            "from": "gpt",
+            "value": "1.5"
+        }
+    ],
+    "images": [
+        "spar/scannet/images/scene0012_01/image_color/2626.jpg",
+        "spar/scannet/images/scene0012_01/image_color/3321.jpg",
+        "spar/scannet/images/scene0012_01/image_color/133.jpg"
+    ],
+    "spar_info": "{\"red_point\": [[395, 89]], \"blue_point\": [[494, 620]], \"green_point\": [[878, 737]], \"point_img_idx\": [[0, 2, 1]], \"type\": \"depth_prediction_oo_mv\"}"
+}
+```
+
+</details>
+
+### 2\. Configure Data Paths
+
+Next, you need to configure the data paths in the source code following Qwen-2.5-VL. Modify the `src/qwen_vl/data/__init__.py` file to ensure the script can locate your datasets.
+
+  * `annotation_path`: This should point to the JSON or JSONL file containing your downloaded dataset annotations.
+  * `data_path`: This can be left empty if the image and video paths specified in your annotation files are absolute paths. Otherwise, provide the directory where your data is stored.
+
+
+### 3\. Running the Training Script
+
+We train two models separately for 3D scene understanding and spatial reasoning tasks. The following instructions are for the spatial reasoning model.
+
+To start the training, execute the following script:
+
+```bash
+bash scripts/train/train_sr.sh
+```
+
+#### Training Details
+
+  * **Hardware:** Our experiments were conducted on a setup with 8x NVIDIA H100 (80G) GPUs.
+  * **Hyperparameters:** We trained the model for one epoch using the Adam optimizer with a batch size of 16, a warmup ratio of 0.03, and a learning rate of 5e-6.
+  * **Frozen Components:** During training, the visual encoder of the MLLM, the 3D geometry encoder, and the multimodal connector are kept frozen.
+  * **Training Duration:**
+      * 3D Scene Understanding: Approximately 8 hours.
+      * Spatial Reasoning: Approximately 12 hours.
 
 <!-- The training scripts will be released soon. -->
 ## Evaluation
@@ -150,23 +230,19 @@ accelerate launch --num_processes=8 -m lmms_eval \
 
 - [x] Release the model weights.
 - [x] Release the inference demo.
-- [x] Release the evaluation code.
-- [ ] Release the preprocessing data and scripts.
-- [ ] Release the training scripts for VG LLM.
+- [x] Release the evaluation code, preprocessing data and training scripts for spatial reasoning.
+- [ ] Release the evaluation code, preprocessing data and training scripts for 3D scene understanding.
 
 ## Citation
 
 If you find our work useful, please consider citing:
 
 ```bibtex
-@misc{zheng2025learningvideos3dworld,
-      title={Learning from Videos for 3D World: Enhancing MLLMs with 3D Vision Geometry Priors}, 
-      author={Duo Zheng and Shijia Huang and Yanyang Li and Liwei Wang},
-      year={2025},
-      eprint={2505.24625},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2505.24625}, 
+@article{zheng2025learning,
+  title={Learning from Videos for 3D World: Enhancing MLLMs with 3D Vision Geometry Priors},
+  author={Zheng, Duo and Huang, Shijia and Li, Yanyang and Wang, Liwei},
+  journal={arXiv preprint arXiv:2505.24625},
+  year={2025}
 }
 ```
 
