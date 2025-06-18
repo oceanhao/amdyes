@@ -8,6 +8,9 @@
 <a href="https://lavi-lab.github.io/VG-LLM/" target="_blank">
     <img alt="Website" src="https://img.shields.io/badge/Website-VG_LLM-blue.svg" height="20" />
 </a>
+<a href="https://huggingface.co/datasets/zd11024/VG-LLM-Data" target="_blank">
+    <img alt="Data" src="https://img.shields.io/badge/Data-VG_LLM-yellow.svg" height="20" />
+</a>
 
 </div>
 &nbsp
@@ -144,6 +147,7 @@ We have provided two example entries as follows
         }
     ],
     "data_source": "llava_hound",
+    "video": "llava_hound/frames/23230678"
 }
 ```
 
