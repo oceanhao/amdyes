@@ -22,26 +22,45 @@ VIDEOCHATGPT = {
 }
 
 SPAR = {
-    "annotation_path": "PATH_TO_SPAR_ANNOTATION",
-    "data_path": "PATH_TO_SPAR_DATA",
+    "annotation_path": "data/train/spar_7m.jsonl",
+    "data_path": "data/media",
     "tag": "3d"
 }
 
 LLAVA_HOUND = {
-    "annotation_path": "PATH_TO_LLAVA_HOUND_ANNOTATION",
-    "data_path": "PATH_TO_LLAVA_HOUND_DATA",
+    "annotation_path": "data/train/llava_hound_255k.json",
+    "data_path": "data/media",
     "tag": "2d"
 }
 
+SCANNET_DET = {
+    "annotation_path": "data/train/scannet_det_train_4frames.json",
+    "data_path": "data/media",
+    "tag": "3d"
+}
+
+SCANREFER = {
+    "annotation_path": "data/train/scanrefer_train_24frames.json",
+    "data_path": "data/media",
+    "tag": "3d"
+}
+
+SCAN2CAP = {
+    "annotation_path": "data/train/scan2cap_train_16frames.json",
+    "data_path": "data/media",
+    "tag": "3d"
+}
 
 data_dict = {
     "cambrian_737k": CAMBRIAN_737K,
     "mp_doc": MP_DOC,
     "clevr_mc": CLEVR_MC,
     "videochatgpt": VIDEOCHATGPT,
-    "sqa3d": SQA3D,
     "spar": SPAR,
     "llava_hound": LLAVA_HOUND,
+    "scannet_det": SCANNET_DET,
+    "scanrefer": SCANREFER,
+    "scan2cap": SCAN2CAP,
 }
 
 
