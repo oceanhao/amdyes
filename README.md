@@ -117,13 +117,34 @@ We release the following finetuned models:
 * Download the required model checkpoints according to the last section.
 * Run the script `demo.ipynb`.
 
-## Training
 
-### 1\. Data Preparation
+## Data Preparation
 
-Before starting the training process, you need to download the required datasets and annotations.
+### 1. Structure
+Before starting the training process, you need to download the required datasets and annotations according to the following folder structure.
+```
+data
+├── evaluation
+│   ├── scan2cap
+│   ├── scanrefer
+│   └── threedod
+├── media
+│   ├── llava_hound
+│   ├── scannet
+│   └── spar
+└── train
+    ├── llava_hound_255k.json
+    ├── scan2cap_train_16frames.json
+    ├── scannet_det_train_4frames.json
+    ├── scanrefer_train_24frames.json
+    └── spar_7m.jsonl
+```
 
-#### Data for Spatial Reasoning
+### 2. Data for 3D Scene Understanding
+  * **Annotations:** Download the annotation files from [VG-LLM-Data](https://huggingface.co/datasets/zd11024/VG-LLM-Data).
+  * **Media Data:** Prepare preprocessed video frames following the instruction of [Video-3D LLM](https://github.com/LaVi-Lab/Video-3D-LLM/blob/main/scripts/3d/preprocessing/README.md).
+
+### 3. Data for Spatial Reasoning
   * **Annotations:** Download the annotation files from [VG-LLM-Data](https://huggingface.co/datasets/zd11024/VG-LLM-Data).
   * **Video Data:** Download the media data of LLaVA-Video-178K (LLaVA-Hound split) from the [ShareGPTVideo](https://huggingface.co/datasets/ShareGPTVideo/train\_video\_and\_instruction/tree/main/train\_300k).
   * **SPAR Data:** Download the media data of SPAR from [SPAR-7M](https://huggingface.co/datasets/jasonzhango/SPAR-7M).
@@ -180,19 +201,25 @@ We have provided two example entries as follows
 
 </details>
 
-### 2\. Configure Data Paths
+
+### 4. Configure Data Paths
 
 Next, you need to configure the data paths in the source code following Qwen-2.5-VL. Modify the `src/qwen_vl/data/__init__.py` file to ensure the script can locate your datasets.
 
   * `annotation_path`: This should point to the JSON or JSONL file containing your downloaded dataset annotations.
   * `data_path`: This can be left empty if the image and video paths specified in your annotation files are absolute paths. Otherwise, provide the directory where your data is stored.
 
+## Training
 
-### 3\. Running the Training Script
-
-We train two models separately for 3D scene understanding and spatial reasoning tasks. The following instructions are for the spatial reasoning model.
+We train two models separately for 3D scene understanding and spatial reasoning tasks. The following instructions are for 3D scene understanidng.
 
 To start the training, execute the following script:
+
+```bash
+bash scripts/train/train_3d.sh
+```
+
+For spatial reasoning, run the following command:
 
 ```bash
 bash scripts/train/train_sr.sh
@@ -200,7 +227,7 @@ bash scripts/train/train_sr.sh
 
 #### Training Details
 
-  * **Hardware:** Our experiments were conducted on a setup with 8x NVIDIA H100 (80G) GPUs.
+  * **Hardware:** Our experiments were conducted on a setup with 8x NVIDIA H800 (80G) GPUs.
   * **Hyperparameters:** We trained the model for one epoch using the Adam optimizer with a batch size of 16, a warmup ratio of 0.03, and a learning rate of 5e-6.
   * **Frozen Components:** During training, the visual encoder of the MLLM, the 3D geometry encoder, and the multimodal connector are kept frozen.
   * **Training Duration:**
@@ -230,12 +257,14 @@ accelerate launch --num_processes=8 -m lmms_eval \
     --output_path $output_path
 ```
 
+For 3D scene understanding, please refer to the script `scripts/evaluation/eval_3d.sh` for more details. Notice that for 3D visual grounding, a frame index are asked to insert in front of each frame by setting `add_frame_index` to `true`.
+
 ## 📋Todo List
 
 - [x] Release the model weights.
 - [x] Release the inference demo.
 - [x] Release the evaluation code, preprocessing data and training scripts for spatial reasoning.
-- [ ] Release the evaluation code, preprocessing data and training scripts for 3D scene understanding.
+- [x] Release the evaluation code, preprocessing data and training scripts for 3D scene understanding.
 
 ## Citation
 

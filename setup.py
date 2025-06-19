@@ -17,7 +17,7 @@ setup(
         "torchcodec==0.2",
         "black==24.1.0",
         "isort==5.13.2",
-        "datasets==2.16.1",
+        "datasets==3.6.0",
         "evaluate>=0.4.0",
         "httpx==0.25.0",
         "jsonlines",
@@ -63,7 +63,8 @@ setup(
         "qwen_vl_utils",
         "open3d===0.19.0",
         "spicy==0.16.0",
-        "jupyter"
+        "terminaltables",
+        "pytorch3d"
     ],
     author="Duo Zheng, Shijia Huang, Yanyang Li, Liwei Wang",
     author_email="dzheng23@link.cuhk.edu.hk",
