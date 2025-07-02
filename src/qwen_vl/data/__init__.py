@@ -40,13 +40,13 @@ SCANNET_DET = {
 }
 
 SCANREFER = {
-    "annotation_path": "data/train/scanrefer_train_24frames.json",
+    "annotation_path": "data/train/scanrefer_train_32frames.json",
     "data_path": "data/media",
     "tag": "3d"
 }
 
 SCAN2CAP = {
-    "annotation_path": "data/train/scan2cap_train_16frames.json",
+    "annotation_path": "data/train/scan2cap_train_32frames.json",
     "data_path": "data/media",
     "tag": "3d"
 }
