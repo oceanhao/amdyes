@@ -23,9 +23,8 @@ from lmms_eval.api.model import lmms
 from lmms_eval.api.registry import register_model
 from lmms_eval.models.model_utils.load_video import read_video_pyav_base64
 
-from qwen_vl.model.vggt.utils.load_fn import load_and_preprocess_images
 from qwen_vl.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGenerationWithVGGT
-
+from qwen_vl.data.utils import load_and_preprocess_images
 
 try:
     # from qwen_vl_utils import process_vision_info
@@ -80,7 +79,8 @@ class VGLLM(lmms):
             self.device_map = f"cuda:{accelerator.local_process_index}"
 
         config = AutoConfig.from_pretrained(pretrained)
-        if getattr(config, "use_vggt_feature", False):
+
+        if getattr(config, "use_geometry_encoder", False) or getattr(config, "use_vggt_feature", False):
             load_class = Qwen2_5_VLForConditionalGenerationWithVGGT
             eval_logger.info("Using Qwen2_5_VLForConditionalGenerationWithVGGT")
         else:
@@ -275,13 +275,13 @@ class VGLLM(lmms):
             text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             # image_inputs, video_inputs = process_vision_info(messages)
 
-            images_vggt = []
+            geometry_encoder_inputs = []
             image_inputs = []
             patch_size = self.processor.image_processor.patch_size
             merge_size = self.processor.image_processor.merge_size
             for message in messages:
                 vision_info = extract_vision_info(message)
-                cur_images_vggt = []
+                cur_geometry_encoder_inputs = []
                 for ele in vision_info:
                     if "image" in ele:
                         image = ele["image"]
@@ -301,7 +301,7 @@ class VGLLM(lmms):
 
                     assert isinstance(image, Image.Image), f"Unsupported image type: {type(image)}"
                     image = load_and_preprocess_images([image])[0]
-                    cur_images_vggt.append(copy.deepcopy(image))
+                    cur_geometry_encoder_inputs.append(copy.deepcopy(image))
                     _, height, width = image.shape
                     # merge_size = 2
                     if (width // patch_size) % merge_size > 0:
@@ -311,7 +311,7 @@ class VGLLM(lmms):
                     image = image[:, :height, :width]
                     image_inputs.append(image)
 
-                images_vggt.append(torch.stack(cur_images_vggt))
+                geometry_encoder_inputs.append(torch.stack(cur_geometry_encoder_inputs))
             inputs = self.processor(
                 text=text,
                 images=image_inputs,
@@ -321,8 +321,8 @@ class VGLLM(lmms):
                 do_rescale=False
             )
             device = "cuda" if self.device_map == "auto" else self.device
-            if getattr(self.model.config, "use_vggt_feature", False):
-                inputs["images_vggt"] = [feat.to(device) for feat in images_vggt]
+            if getattr(self.model.config, "use_geometry_encoder", False) or getattr(self.model.config, "use_vggt_feature", False):
+                inputs["geometry_encoder_inputs"] = [feat.to(device) for feat in geometry_encoder_inputs]
             inputs = inputs.to(device)
 
             if "max_new_tokens" not in gen_kwargs:

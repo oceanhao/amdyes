@@ -27,8 +27,20 @@ SPAR = {
     "tag": "3d"
 }
 
+SPAR_234K = {
+    "annotation_path": "data/train/spar_234k.json",
+    "data_path": "data/media",
+    "tag": "3d"
+}
+
 LLAVA_HOUND = {
     "annotation_path": "data/train/llava_hound_255k.json",
+    "data_path": "data/media",
+    "tag": "2d"
+}
+
+LLAVA_HOUND_64K = {
+    "annotation_path": "data/train/llava_hound_64k.json",
     "data_path": "data/media",
     "tag": "2d"
 }
@@ -61,6 +73,8 @@ data_dict = {
     "scannet_det": SCANNET_DET,
     "scanrefer": SCANREFER,
     "scan2cap": SCAN2CAP,
+    "spar_234k": SPAR_234K,
+    "llava_hound_64k": LLAVA_HOUND_64K,
 }
 
 

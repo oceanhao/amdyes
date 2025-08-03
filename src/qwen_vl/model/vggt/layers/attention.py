@@ -11,9 +11,20 @@ import logging
 import os
 import warnings
 
+import torch
 from torch import Tensor
 from torch import nn
 import torch.nn.functional as F
+
+# Try to import flash_attn_interface
+try:
+    from flash_attn_interface import flash_attn_func
+    FLASH_ATTN_AVAILABLE = True
+    print("FlashAttention 3 is available")
+except ImportError:
+    FLASH_ATTN_AVAILABLE = False
+    flash_attn_func = None
+    print("Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention")
 
 XFORMERS_AVAILABLE = False
 
@@ -58,12 +69,23 @@ class Attention(nn.Module):
             k = self.rope(k, pos)
 
         if self.fused_attn:
-            x = F.scaled_dot_product_attention(
-                q,
-                k,
-                v,
-                dropout_p=self.attn_drop.p if self.training else 0.0,
-            )
+            if FLASH_ATTN_AVAILABLE:
+                # Use FlashAttention 3 if available
+                # flash_attn_func expects shape (batch_size, seq_len, num_heads, head_dim)
+                q_fa = q.transpose(1, 2)  # (B, N, num_heads, head_dim)
+                k_fa = k.transpose(1, 2)  # (B, N, num_heads, head_dim)
+                v_fa = v.transpose(1, 2)  # (B, N, num_heads, head_dim)
+                
+                x = flash_attn_func(
+                    q_fa.to(torch.bfloat16), 
+                    k_fa.to(torch.bfloat16), 
+                    v_fa.to(torch.bfloat16),
+                    # dropout_p=self.attn_drop.p if self.training else 0.0
+                )[0]
+                x = x.to(q.dtype).transpose(1, 2)
+            else:
+                # Fallback to PyTorch's scaled_dot_product_attention
+                x = F.scaled_dot_product_attention(q, k, v, dropout_p=self.attn_drop.p if self.training else 0.0)
         else:
             q = q * self.scale
             attn = q @ k.transpose(-2, -1)

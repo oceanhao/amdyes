@@ -90,18 +90,10 @@ def set_model(model_args, model):
             p.requires_grad = False
         model.lm_head.requires_grad = False
 
-    if model_args.use_vggt_feature:
+    if model_args.use_geometry_encoder:
         # vggt is frozen
-        for n, p in model.vggt.named_parameters():
+        for n, p in model.geometry_encoder.named_parameters():
             p.requires_grad = False
-        for n, p in model.merger.named_parameters():
-            p.requires_grad = True
-        
-        if model_args.use_dense_supervision:
-            for n, p in model.dpt_module.named_parameters():
-                p.requires_grad = True
-            for n, p in model.decompresser.named_parameters():
-                p.requires_grad = True
 
 def train(attn_implementation="flash_attention_2"):
     global local_rank
@@ -117,7 +109,7 @@ def train(attn_implementation="flash_attention_2"):
     os.makedirs(training_args.output_dir, exist_ok=True)
 
     if "qwen2.5" in model_args.model_name_or_path.lower():
-        if not model_args.use_vggt_feature:
+        if not model_args.use_geometry_encoder:
             from transformers import Qwen2_5_VLForConditionalGeneration
             model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 model_args.model_name_or_path,
@@ -128,25 +120,31 @@ def train(attn_implementation="flash_attention_2"):
         else:
             from qwen_vl.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGenerationWithVGGT
             config = AutoConfig.from_pretrained(model_args.model_name_or_path)
-            if hasattr(config, "use_vggt_feature") and config.use_vggt_feature != model_args.use_vggt_feature:
+            if hasattr(config, "use_geometry_encoder") and config.use_geometry_encoder != model_args.use_geometry_encoder:
                 raise ValueError(
-                    "The use_vggt_feature in config and model_args are not consistent. "
+                    "The use_geometry_encoder in config and model_args are not consistent. "
                     "Please check the model config."
                 )
-            setattr(config, "use_vggt_feature", model_args.use_vggt_feature)
-            setattr(config, "use_dense_supervision", model_args.use_dense_supervision)
-            setattr(config, "reference_frame", model_args.reference_frame)
-            if model_args.use_dense_supervision:
-                setattr(config, "distill_loss_weight", model_args.distill_loss_weight)
-            assert model_args.vggt_model_path is not None, \
-                "vggt_model_path must be set in the config when use_vggt_feature is True."
+
+            for k in [
+                "use_geometry_encoder", 
+                "geometry_encoder_type", 
+                "reference_frame",
+                "feature_fusion_method", 
+                "fusion_num_layers",
+                "geometry_merger_type"
+            ]:
+                setattr(config, k, getattr(model_args, k))
+
+            assert model_args.geometry_encoder_path is not None, \
+                "geometry_encoder_path must be set in the config when use_geometry_encoder is True."
             model = Qwen2_5_VLForConditionalGenerationWithVGGT.from_pretrained(
                 pretrained_model_name_or_path=model_args.model_name_or_path,
                 config=config,
                 cache_dir=training_args.cache_dir,
                 attn_implementation=attn_implementation,
                 torch_dtype=(torch.bfloat16 if training_args.bf16 else None),
-                vggt_model_path=model_args.vggt_model_path
+                geometry_encoder_path=model_args.geometry_encoder_path
             )
 
         data_args.image_processor = AutoProcessor.from_pretrained(
@@ -192,8 +190,9 @@ def train(attn_implementation="flash_attention_2"):
         model.visual.print_trainable_parameters()
         model.model.print_trainable_parameters()
 
-    if model_args.use_vggt_feature:
-        setattr(data_args, "use_vggt_feature", model_args.use_vggt_feature)
+    print(model.config)
+    if model_args.use_geometry_encoder:
+        setattr(data_args, "use_geometry_encoder", model_args.use_geometry_encoder)
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
     trainer = Trainer(
         model=model, processing_class=tokenizer, args=training_args, **data_module

@@ -108,8 +108,8 @@ VG-LLM is trained and evaluated on a variety of datasets:
 
 ## Finetuned Models
 We release the following finetuned models:
-* `VG-LLM-4B (3D Scene Understanding)`: [VGLLM_For_3D_Scene_Understanding_4B](https://huggingface.co/zd11024/VGLLM_for_3D_Scene_Understanding_4B)
-* `VG-LLM-4B (Spatial Reasoning)`: [VGLLM_for_Spatial_Reasoning_4B](https://huggingface.co/zd11024/VGLLM_for_Spatial_Reasoning_4B)
+* `VG-LLM-4B (3D Scene Understanding)`: [vgllm-3d-vggt-4b](https://huggingface.co/zd11024/vgllm-3d-vggt-4b)
+* `VG-LLM-4B (Spatial Reasoning)`: [vgllm-qa-vggt-4b](https://huggingface.co/zd11024/vgllm-qa-vggt-4b)
 
 
 ## Demo
@@ -134,9 +134,11 @@ data
 │   └── spar
 └── train
     ├── llava_hound_255k.json
+    ├── llava_hound_64k.json
     ├── scan2cap_train_16frames.json
     ├── scannet_det_train_4frames.json
     ├── scanrefer_train_24frames.json
+    ├── spar_234k.json
     └── spar_7m.jsonl
 ```
 
@@ -247,7 +249,7 @@ export LMMS_EVAL_LAUNCHER="accelerate"
 export NCCL_NVLS_ENABLE=0
 benchmark=vsibench # choices: [vsibench, cvbench, blink_spatial]
 output_path=logs/$(TZ="Asia/Shanghai" date "+%Y%m%d")
-model_path=zd11024/VGLLM_for_Spatial_Reasoning_4B
+model_path=zd11024/vgllm-qa-vggt-4b
 
 accelerate launch --num_processes=8 -m lmms_eval \
     --model vgllm \

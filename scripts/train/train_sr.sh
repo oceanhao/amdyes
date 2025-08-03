@@ -12,7 +12,8 @@ NPROC_PER_NODE=$(nvidia-smi --list-gpus | wc -l)  # Automatically detects availa
 # Path Configuration
 # ======================
 MODEL_PATH="Qwen/Qwen2.5-VL-3B-Instruct/"  # [ModelArguments] Pretrained model path
-VGGT_MODEL_PATH="facebook/VGGT-1B"
+GEOMETRY_ENCODER_TYPE="vggt"
+GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 OUTPUT_DIR="PATH_TO_OUTPUT_DIR"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
@@ -20,12 +21,15 @@ mkdir -p $OUTPUT_DIR
 # ======================
 # Model Configuration
 # ======================
-DATASETS="llava_hound%25,spar%3"                  # [DataArguments] Dataset with sampling rate
+DATASETS="llava_hound_64k,spar_234k"                  # [DataArguments] Dataset with sampling rate
 
 # ======================
 # Training Hyperparameters
 # ======================
-export NCCL_NVLS_ENABLE=0
+LR=1e-5
+total_batch_size=64
+GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
+
 torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
             --master_port=$MASTER_PORT \
@@ -39,12 +43,12 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --cache_dir $CACHE_DIR \
             --bf16 \
             --per_device_train_batch_size 1 \
-            --gradient_accumulation_steps 2 \
-            --learning_rate 5e-6 \
+            --gradient_accumulation_steps $GRADIENT_ACCUMULATION_STEPS \
+            --learning_rate $LR \
             --mm_projector_lr 1e-5 \
             --vision_tower_lr 1e-6 \
             --optim adamw_torch \
-            --model_max_length 9216 \
+            --model_max_length 12800 \
             --data_flatten False \
             --max_pixels $((576*28*28)) \
             --min_pixels $((16*28*28)) \
@@ -66,7 +70,8 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --group_by_modality_length true \
             --seed 0 \
             --report_to "none" \
-            --use_vggt_feature true \
-            --vggt_model_path $VGGT_MODEL_PATH \
-            --reference_frame first \
+            --use_geometry_encoder true \
+            --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
+            --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
+            --feature_fusion_method "add" \
             > ${OUTPUT_DIR}/train.log 2>&1

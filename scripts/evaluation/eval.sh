@@ -4,7 +4,7 @@ export LMMS_EVAL_LAUNCHER="accelerate"
 export NCCL_NVLS_ENABLE=0
 benchmark=vsibench # choices: [vsibench, cvbench, blink_spatial]
 output_path=logs/$(TZ="Asia/Shanghai" date "+%Y%m%d")
-model_path=zd11024/VGLLM_for_Spatial_Reasoning_4B
+model_path=zd11024/vgllm-qa-vggt-4b
 
 accelerate launch --num_processes=8 -m lmms_eval \
     --model vgllm \

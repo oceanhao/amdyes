@@ -51,6 +51,8 @@ from transformers.utils import (
 )
 from .configuration_qwen2_5_vl import Qwen2_5_VLConfig, Qwen2_5_VLVisionConfig
 from .vggt.models.vggt import VGGT
+from .geometry_encoders import create_geometry_encoder, GeometryEncoderConfig
+from .feature_fusion import FeatureFusionModule, FeatureFusionConfig, GeometryFeatureMerger
 from .loss import normalize_pointcloud, check_and_fix_inf_nan
 
 
@@ -145,23 +147,6 @@ class Qwen2RMSNorm(nn.Module):
     def extra_repr(self):
         return f"{tuple(self.weight.shape)}, eps={self.variance_epsilon}"
 
-
-class VGGTMerger(nn.Module):
-    def __init__(self, output_dim: int, hidden_dim: int, context_dim: int, spatial_merge_size: int = 2) -> None:
-        super().__init__()
-        self.input_dim = context_dim * (spatial_merge_size**2)
-        self.hidden_dim = hidden_dim
-        self.output_dim = output_dim
-        self.ln_q = Qwen2RMSNorm(context_dim, eps=1e-6)
-        self.mlp = nn.Sequential(
-            nn.Linear(self.input_dim, self.hidden_dim),
-            nn.GELU(),
-            nn.Linear(self.hidden_dim, self.output_dim),
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = self.mlp(self.ln_q(x).view(-1, self.input_dim))
-        return x
 
 
 class Qwen2_5_VLPatchMerger(nn.Module):
@@ -1587,51 +1572,6 @@ QWEN2_5_VL_INPUTS_DOCSTRING = r"""
             The rope index difference between sequence length and multimodal rope.
 """
 
-class DensePredictionHead(nn.Module):
-    def __init__(self, config):
-        super().__init__()
-        vggt = VGGT.from_pretrained(config.vggt_model_path)
-        self.point_head = vggt.point_head
-        self.point_head.intermediate_layer_idx = [0,1,2,3]
-        self.depth_head = vggt.depth_head
-        self.depth_head.intermediate_layer_idx = [0,1,2,3]
-
-    def __call__(self, hidden, images, patch_start_idx=0):
-        # hidden: [S, H, W, D]
-        # images: [S, 3, H, W]
-        hidden = hidden.flatten(1, 2)
-        aggregated_tokens_list = [hidden[None], hidden[None], hidden[None], hidden[None]]
-        depth, depth_conf = self.depth_head(
-            aggregated_tokens_list, images=images[None], patch_start_idx=patch_start_idx
-        )
-        point, point_conf = self.point_head(
-            aggregated_tokens_list, images=images[None], patch_start_idx=patch_start_idx
-        )
-        output = {
-            "depth": depth[0],
-            "depth_conf": depth_conf[0],
-            "point": point[0],
-            "point_conf": point_conf[0],
-        }
-        return output
-    
-    def compute_loss(self, teacher_output, student_output, alpha=0.2):
-        valid_mask = torch.ones_like(student_output["point_conf"]).bool()
-
-        loss_depth = (student_output["depth"] - teacher_output["depth"]).norm(dim=-1)
-        loss_depth = check_and_fix_inf_nan(loss_depth, "loss_depth")
-        loss_depth = loss_depth * teacher_output["depth_conf"]
-
-        student_output["point"] = normalize_pointcloud(student_output["point"][None], valid_mask[None])[0]
-        teacher_output["point"] = normalize_pointcloud(teacher_output["point"][None], valid_mask[None])[0]
-        loss_point = (student_output["point"] - teacher_output["point"]).norm(dim=-1)
-        loss_point = check_and_fix_inf_nan(loss_point, "loss_point")
-        loss_point = loss_point * teacher_output["point_conf"]
-        loss_depth = loss_depth.mean()
-        loss_point = loss_point.mean()
-        loss = loss_depth + loss_point
-        return loss
-
 
 class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, GenerationMixin):
     _tied_weights_keys = ["lm_head.weight"]
@@ -1641,61 +1581,92 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
     def __init__(self, config):
         super().__init__(config)
         self.visual = Qwen2_5_VisionTransformerPretrainedModel._from_config(config.vision_config)
-        # self.projector = nn.Linear(2048, config.hidden_size)
-        # self.pooler = nn.AvgPool2d((config.vision_config.spatial_merge_size, config.vision_config.spatial_merge_size))
-        # if not hasattr(config, "vggt_model_path"):
-        #     self.config.vggt_model_path = "/mnt/data0/zhengduo/model/VGGT-1B/"
-        if self.config.use_vggt_feature:
-            vggt = VGGT()
-            vggt.camera_head = None
-            vggt.track_head = None
-            self.vggt = vggt
-            for param in self.vggt.parameters():
-                param.requires_grad = False
-
-            self.merger = VGGTMerger(
-                output_dim=config.hidden_size,
-                hidden_dim=getattr(config, "vggt_merger_hidden_dim", 4096),
-                context_dim=2048,
-                spatial_merge_size=config.vision_config.spatial_merge_size,
-            )
-            self.config.reference_frame = getattr(config, "reference_frame", "first")
         
-        if getattr(config, "add_ground_classifier", False):
-            self.classifier = nn.Sequential(
-                Qwen2RMSNorm(config.hidden_size, eps=1e-6),
-                nn.Linear(config.hidden_size, config.classifier_hidden_dim),
-                nn.GELU(),
-                nn.Linear(config.classifier_hidden_dim, config.classifier_out_dim),
-            )
+        # Initialize geometry encoder if enabled
+        if getattr(config, 'use_geometry_encoder', False):
+            self._init_geometry_encoder(config)
+        
         self.model = Qwen2_5_VLModel(config)
         self.vocab_size = config.vocab_size
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
         self.rope_deltas = None  # cache rope_deltas here
 
-        if getattr(config, "use_dense_supervision", False):
-            self.decompresser = nn.Sequential(
-                Qwen2RMSNorm(config.hidden_size, eps=1e-6),
-                nn.Linear(config.hidden_size, config.hidden_size),
-                nn.Linear(config.hidden_size, 2048 * (config.vision_config.spatial_merge_size ** 2))
-            )
         # Initialize weights and apply final processing
         self.post_init()
-        if getattr(config, "use_dense_supervision", False):
-            self.dpt_module = DensePredictionHead(config)
+    
+    def _init_geometry_encoder(self, config):
+        """Initialize geometry encoder and related modules."""
+        # Create geometry encoder configuration
+
+        encoder_config = GeometryEncoderConfig(
+            encoder_type=getattr(config, "geometry_encoder_type", "vggt"),
+            model_path=getattr(config, "geometry_encoder_path", None),
+            reference_frame=getattr(config, "reference_frame", "first"),
+            freeze_encoder=getattr(config, "geometry_encoder_freeze", True)
+        )
+        
+        # Create geometry encoder
+        self.geometry_encoder = create_geometry_encoder(
+            encoder_type=encoder_config.encoder_type,
+            model_path=encoder_config.model_path,
+            reference_frame=encoder_config.reference_frame,
+            freeze_encoder=encoder_config.freeze_encoder,
+        )
+        
+        # Create feature merger
+        self.geometry_merger = GeometryFeatureMerger(
+            output_dim=config.hidden_size,
+            hidden_dim=getattr(config, "geometry_merger_hidden_dim", 4096),
+            context_dim=self.geometry_encoder.get_feature_dim(),
+            spatial_merge_size=config.vision_config.spatial_merge_size,
+            merger_type=getattr(config, "geometry_merger_type", "mlp")
+        )
+        
+        # Create feature fusion module
+        fusion_config = FeatureFusionConfig(
+            fusion_method=getattr(config, "feature_fusion_method", "add"),
+            hidden_size=config.hidden_size,
+            num_heads=getattr(config, "fusion_attention_heads", 8),
+            dropout=getattr(config, "fusion_dropout", 0.1),
+            num_layers=getattr(config, "fusion_num_layers", 1)
+        )
+        self.feature_fusion = FeatureFusionModule(fusion_config)
+
+    def _process_geometry_features(self, image_embeds, geometry_encoder_inputs):
+        """Process geometry features using the geometry encoder."""
+
+        batch_size = len(geometry_encoder_inputs)
+        geo_embeds = []
+        for bn in range(batch_size):
+            if geometry_encoder_inputs[bn].shape[0] > 0:
+
+                n_image, _, height, width = geometry_encoder_inputs[bn].shape
+                # Encode geometry features
+                features = self.geometry_encoder.encode(geometry_encoder_inputs[bn]).to(image_embeds.dtype)
+
+                # [n_image, h_patch_size, w_patch_size, feature_dim]
+                features = features.reshape(n_image, height // self.geometry_encoder.patch_size, width // self.geometry_encoder.patch_size, -1)
+
+                # Reshape for merger
+                features = self.geometry_merger(features)
+                geo_embeds.append(features)
+
+        geo_embeds = torch.cat(geo_embeds, dim=0) if geo_embeds else None
+        
+        if geo_embeds is not None:
+            image_embeds = image_embeds.view(geo_embeds.shape)
+            image_embeds = self.feature_fusion(image_embeds, geo_embeds)
+            image_embeds = image_embeds.view(-1, image_embeds.shape[-1])
+        
+        return image_embeds
+
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
-        vggt_model_path = kwargs.pop("vggt_model_path", None)
+        geometry_encoder_path = kwargs.pop("geometry_encoder_path", None)
         model = super().from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
-        if vggt_model_path:
-            print(f"Loading VGGT from {vggt_model_path}")
-            vggt = VGGT.from_pretrained(vggt_model_path)
-            vggt.camera_head = None
-            vggt.track_head = None
-            model.vggt = vggt
-            for param in model.vggt.parameters():
-                param.requires_grad = False
+        if geometry_encoder_path:
+            model.geometry_encoder.load_model(geometry_encoder_path)
         return model
 
     def get_input_embeddings(self):
@@ -1915,7 +1886,7 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
         rope_deltas: Optional[torch.LongTensor] = None,
         cache_position: Optional[torch.LongTensor] = None,
         second_per_grid_ts: Optional[torch.Tensor] = None,
-        images_vggt: Optional[List[torch.Tensor]] = None,
+        geometry_encoder_inputs: Optional[List[torch.Tensor]] = None,
         boxes: Optional[List[torch.Tensor]] = None,
         tag: str = None,
         **kwargs,
@@ -1966,71 +1937,15 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         if inputs_embeds is None:
-            self.vggt.eval()
             inputs_embeds = self.model.embed_tokens(input_ids)
             if pixel_values is not None:
-                # add 3d features
-                if self.config.use_vggt_feature:
-                    batch_size = inputs_embeds.shape[0]
-                    image_embeds_3d = []
-                    teacher_outputs = []
-                    for i in range(batch_size):
-                        if images_vggt[i].shape[0] > 0:
-                            n_image = images_vggt[i].shape[0]
-                            height, width = images_vggt[i].shape[-2:]
-                            patch_size = self.config.vision_config.patch_size
-                            merge_size = self.config.vision_config.spatial_merge_size
-                            h_grid, w_grid = height // patch_size, width // patch_size
-                            h_grid_after_merge, w_grid_after_merge = h_grid // merge_size, w_grid // merge_size
-                            new_height = h_grid_after_merge * (patch_size * merge_size)
-                            new_width = w_grid_after_merge * (patch_size * merge_size)
-
-                            dtype = torch.bfloat16 if torch.cuda.get_device_capability()[0] >= 8 else torch.float16
-                            with torch.no_grad():
-                                with torch.cuda.amp.autocast(dtype=dtype):
-                                    # flip the images, as the reference system is based on the first frame
-                                    # vggt_features = self.vggt(torch.flip(images_vggt[i], dims=(0,)))["vggt_features"][0]
-                                    if not self.config.reference_frame=="first":
-                                        images_vggt[i] = torch.flip(images_vggt[i], dims=(0,))
-                                    if getattr(self.config, "use_dense_supervision", False):
-                                        prediction = self.vggt(images_vggt[i])
-                                        teacher_output = {
-                                            "depth": prediction["depth"][0] if self.config.reference_frame=="first" else torch.flip(prediction["depth"][0],dim=0),
-                                            "depth_conf": prediction["depth_conf"][0] if self.config.reference_frame=="first" else torch.flip(prediction["depth_conf"][0],dim=0),
-                                            "point": prediction["world_points"][0] if self.config.reference_frame=="first" else torch.flip(prediction["world_points"][0],dim=0),
-                                            "point_conf": prediction["world_points_conf"][0] if self.config.reference_frame=="first" else torch.flip(prediction["world_points_conf"][0],dim=0),
-                                        }
-                                        for k in teacher_output:
-                                            x = teacher_output[k].view(n_image, height, width, -1)
-                                            x = x[:, :new_height, :new_width, :].contiguous()
-                                            if k in ["depth_conf", "point_conf"]:
-                                                x = x.squeeze(3)
-                                            teacher_output[k] = x
-                                        teacher_outputs.append(teacher_output)
-                                        features = prediction["vggt_features"][0]
-                                    else:
-                                        aggregated_tokens_list, patch_start_idx = self.vggt.aggregator(images_vggt[i][None])
-                                        features = aggregated_tokens_list[-2][0,:, patch_start_idx:]
-                            if not self.config.reference_frame=="first":
-                                features = torch.flip(features, dims=(0,))
-                            # Using mean pooling to merge 4 patches
-                            # features = features.reshape(n_image, h_grid, w_grid, -1).permute(0, 3, 1, 2)
-                            # pooled_features = self.pooler(features).permute(0, 2, 3, 1)
-                            # image_embeds_3d.append(pooled_features.view(-1, pooled_features.shape[-1]))
-
-                            # using QwenPatchMerger
-                            features = features.view(n_image, h_grid, w_grid, -1)
-                            features = features[:, :h_grid_after_merge * merge_size, :w_grid_after_merge * merge_size, :].contiguous()
-                            features = features.view(n_image, h_grid_after_merge, merge_size, w_grid_after_merge, merge_size, -1)
-                            features = features.permute(0, 1, 3, 2, 4, 5).contiguous().to(self.visual.dtype)
-                            image_embeds_3d.append(self.merger(features))
-
-                    image_embeds_3d = torch.cat(image_embeds_3d, dim=0).to(self.visual.dtype)
-
                 pixel_values = pixel_values.type(self.visual.dtype)
                 image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
-                if self.config.use_vggt_feature:
-                    image_embeds = image_embeds + image_embeds_3d
+                
+                # Process 3D geometry features if enabled
+                if getattr(self.config, 'use_geometry_encoder', False) and geometry_encoder_inputs is not None:
+                    image_embeds = self._process_geometry_features(image_embeds, geometry_encoder_inputs)
+
                 n_image_tokens = (input_ids == self.config.image_token_id).sum().item()
                 n_image_features = image_embeds.shape[0]
                 if n_image_tokens != n_image_features:
@@ -2126,38 +2041,7 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
             shift_labels = shift_labels.view(-1)
             # Enable model parallelism
             shift_labels = shift_labels.to(shift_logits.device)
-            if hasattr(self.config, "add_ground_classifier") and self.config.add_ground_classifier:
-                shift_labels = shift_labels.masked_fill(shift_labels == self.config.box_3d_token_ids[1], -100)
             loss = loss_fct(shift_logits, shift_labels)
-            
-            if boxes is not None:
-                select_hidden_states = hidden_states[input_ids==self.config.box_3d_token_ids[0]].view(-1, hidden_states.shape[-1])
-                select_output = self.classifier(select_hidden_states)   # [K, 10]
-                loss_grd = F.mse_loss(select_output, boxes)
-                loss += loss_grd
-
-            if getattr(self.config, "use_dense_supervision", False) and tag == "3d":
-                batch_size = labels.shape[0]
-                distill_losses = []
-                for bn in range(batch_size):
-                    # n_frame, h_grid, w_grid, _  = teacher_outputs[bn]["depth"].shape
-                    n_frame, height, width, _ = teacher_outputs[bn]["point"].shape
-                    patch_size = self.config.vision_config.patch_size
-                    merge_size = self.config.vision_config.spatial_merge_size
-                    h_grid, w_grid = height // patch_size, width // patch_size
-                    h_grid_after_merge, w_grid_after_merge = h_grid // merge_size, w_grid // merge_size
-
-                    select_hiddens = hidden_states[bn, input_ids[bn] == self.config.image_token_id]
-                    expanded_hiddens = self.decompresser(select_hiddens)
-                    expanded_hiddens = expanded_hiddens.view(n_frame, h_grid_after_merge, w_grid_after_merge, merge_size, merge_size, -1)
-                    expanded_hiddens = expanded_hiddens.permute(0, 1, 3, 2, 4, 5).contiguous().view(n_frame, h_grid_after_merge*merge_size, w_grid_after_merge*merge_size, -1)
-                    dtype = torch.bfloat16 if torch.cuda.get_device_capability()[0] >= 8 else torch.float16
-                    with torch.cuda.amp.autocast(dtype=dtype):
-                        student_output = self.dpt_module(expanded_hiddens, images_vggt[bn][:, :, :height, :width])
-                    distill_losses.append(self.dpt_module.compute_loss(student_output=student_output, teacher_output=teacher_outputs[bn]))
-
-                distill_loss = torch.stack(distill_losses).mean()
-                loss += distill_loss * self.config.distill_loss_weight
 
         if not return_dict:
             output = (logits,) + outputs[1:]

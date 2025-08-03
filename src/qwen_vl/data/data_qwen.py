@@ -23,6 +23,7 @@ import transformers
 
 from . import data_list
 from .rope2d import get_rope_index_25, get_rope_index_2
+from .utils import prepare_image_inputs
 
 IGNORE_INDEX = -100
 IMAGE_TOKEN_INDEX = 151655
@@ -248,45 +249,20 @@ class LazySupervisedDataset(Dataset):
         return image_tensor, grid_thw
     
     def draw_visual_marks(self, images, spar_info):
-        # Images: list[PIL.Image.Image] when the number of images > 1
-        # or PIL.Image.Image otherwise
+
         if spar_info is None:
             return
         info = json.loads(spar_info)
         task_type = info["type"]
         from .draw_marker import DRAW_FUNCTIONS
         draw_fn = DRAW_FUNCTIONS[task_type]
-        draw_fn(images, info)
+        if len(images) == 1:
+            draw_fn(images[0], info)
+        else:
+            draw_fn(images, info)
         # for j, img in enumerate(images):
         #     # write to local
         #     img.save(f"images/img_{j}.jpg", format="JPEG")
-
-    def process_image_unified_vggt(self, image_file):
-        # this function reshapes the image to the width size of 518
-        image_processor = copy.deepcopy(self.data_args.image_processor)
-        from qwen_vl.model.vggt.utils.load_fn import load_and_preprocess_images
-        images = load_and_preprocess_images([image_file])
-        images_vggt = copy.deepcopy(images[0])
-        merge_size: int = getattr(image_processor, "merge_size")
-        patch_size: int = getattr(image_processor, "patch_size")
-        _, height, width = images[0].shape
-        # merge_size = 2
-        if (width // patch_size) % merge_size > 0:
-            width = width - (width // patch_size) % merge_size * patch_size
-        if (height // patch_size) % merge_size > 0:
-            height = height - (height // patch_size) % merge_size * patch_size
-        images = images[:,:, :height, :width]
-        visual_processed = image_processor(images, return_tensors="pt", do_rescale=False)
-        image_tensor = visual_processed["pixel_values"]
-        if isinstance(image_tensor, List):
-            image_tensor = image_tensor[0]
-        grid_thw = visual_processed["image_grid_thw"][0]
-        # return image_tensor, grid_thw
-        return {
-            "pixel_values": image_tensor,
-            "image_grid_thw": grid_thw,
-            "images_vggt": images_vggt
-        }
 
     def process_video(self, video_file):
         if not os.path.exists(video_file):
@@ -426,53 +402,29 @@ class LazySupervisedDataset(Dataset):
             image_folder = self.list_data_dict[i]["data_path"]
             image_file = self.list_data_dict[i]["image"]
             if isinstance(image_file, List):
-                if len(image_file) > 1:
-                    if isinstance(image_file[0], str):
-                        image_file = [
-                            os.path.join(image_folder, file) for file in image_file
-                        ]
-                        image_file = [Image.open(img).convert("RGB") for img in image_file]
-                    elif isinstance(image_file[0], Image.Image):
-                        pass
-                    else:
-                        raise NotImplementedError
-                    # draw visual markers
-                    self.draw_visual_marks(image_file, sources[0].get("spar_info", None))
 
-                    # results = [self.process_image_unified(file) for file in image_file]
-                    # results = [self.process_image_unified_vggt(file) for file in image_file]
-                    # image, grid_thw = zip(*results)
-                    image, grid_thw, images_vggt = [], [], []
-                    for file in image_file:
-                        ret = self.process_image_unified_vggt(file)
-                        image.append(ret["pixel_values"])
-                        images_vggt.append(ret["images_vggt"])
-                        grid_thw.append(ret["image_grid_thw"])
+                if isinstance(image_file[0], str):
+                    image_file = [
+                        os.path.join(image_folder, file) for file in image_file
+                    ]
+                    image_file = [Image.open(img).convert("RGB") for img in image_file]
+                elif isinstance(image_file[0], Image.Image):
+                    pass
                 else:
-                    image_file = image_file[0]
-                    if isinstance(image_file, str):
-                        image_file = os.path.join(image_folder, image_file)
-                        image_file = Image.open(image_file).convert("RGB")
-                    elif isinstance(image_file, Image.Image):
-                        pass
-                    else:
-                        raise NotImplementedError
-                    self.draw_visual_marks(image_file, sources[0].get("spar_info", None))
-                    
-                    # image, grid_thw = self.process_image_unified(image_file)
-                    ret = self.process_image_unified_vggt(image_file)
-                    image = [ret["pixel_values"]]
-                    images_vggt = [ret["images_vggt"]]
-                    grid_thw = ret["image_grid_thw"]
+                    raise NotImplementedError
+                # draw visual markers
+                self.draw_visual_marks(image_file, sources[0].get("spar_info", None))
+
+                image, grid_thw, geometry_encoder_inputs = [], [], []
+                for file in image_file:
+                    ret = prepare_image_inputs(file, self.data_args.image_processor)
+                    image.append(ret["pixel_values"])
+                    geometry_encoder_inputs.append(ret["geometry_encoder_inputs"])
+                    grid_thw.append(ret["image_grid_thw"])
             else:
                 raise NotImplementedError
-                # image_file = os.path.join(image_folder, image_file)
-                # image, grid_thw = self.process_image_unified(image_file)
-                # image = [image]
+
             grid_thw_merged = copy.deepcopy(grid_thw)
-            if not isinstance(grid_thw, Sequence):
-                grid_thw_merged = [grid_thw_merged]
-                grid_thw = [grid_thw]
             grid_thw_merged = [
                 merged_thw.prod() // self.data_args.image_processor.merge_size**2
                 for merged_thw in grid_thw_merged
@@ -546,8 +498,8 @@ class LazySupervisedDataset(Dataset):
         if "image" in self.list_data_dict[i]:
             data_dict["pixel_values"] = image
             data_dict["image_grid_thw"] = grid_thw
-            if getattr(self.data_args, "use_vggt_feature", False):
-                data_dict["images_vggt"] = images_vggt
+            if getattr(self.data_args, "use_geometry_encoder", False):
+                data_dict["geometry_encoder_inputs"] = geometry_encoder_inputs
         # video exist in the data
         elif "video" in self.list_data_dict[i]:
             data_dict["pixel_values_videos"] = video
@@ -653,10 +605,10 @@ class DataCollatorForSupervisedDataset(object):
         batch["video_grid_thw"] = video_grid_thw
         batch["position_ids"] = position_ids
                 
-        # assume all data in a batch has images_vggt
-        if "images_vggt" in instances[0]:
-            images_vggt = [torch.stack(instance["images_vggt"]) for instance in instances]
-            batch["images_vggt"] = images_vggt
+        # assume all data in a batch has geometry_encoder_inputs
+        if "geometry_encoder_inputs" in instances[0]:
+            geometry_encoder_inputs = [torch.stack(instance["geometry_encoder_inputs"]) for instance in instances]
+            batch["geometry_encoder_inputs"] = geometry_encoder_inputs
             assert len(set([instance["tag"] for instance in instances])) == 1, "all data in a batch should have the same tag"
             batch["tag"] = instances[0]["tag"]
         return batch
@@ -744,9 +696,9 @@ class FlattenedDataCollatorForSupervisedDataset(DataCollatorForSupervisedDataset
         batch["video_grid_thw"] = video_grid_thw
 
                 
-        # assume all data in a batch has images_vggt
-        if "images_vggt" in instances[0]:
-            raise NotImplementedError("FlattenedDataCollatorForSupervisedDataset does not support images_vggt")
+        # assume all data in a batch has geometry_encoder_inputs
+        if "geometry_encoder_inputs" in instances[0]:
+            raise NotImplementedError("FlattenedDataCollatorForSupervisedDataset does not support geometry_encoder_inputs")
 
         return batch
 
