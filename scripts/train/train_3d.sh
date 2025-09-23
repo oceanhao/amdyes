@@ -11,7 +11,7 @@ NPROC_PER_NODE=$(nvidia-smi --list-gpus | wc -l)  # Automatically detects availa
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="Qwen/Qwen2.5-VL-3B-Instruct/"  # [ModelArguments] Pretrained model path
+MODEL_PATH="Qwen/Qwen2.5-VL-7B-Instruct/"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 OUTPUT_DIR="PATH_TO_OUTPUT_DIR"                   # Directory for saving checkpoints
@@ -27,8 +27,8 @@ DATASETS="scan2cap,scanrefer,scannet_det"                  # [DataArguments] Dat
 # Training Hyperparameters
 # ======================
 export NCCL_NVLS_ENABLE=0
-LR=5e-6
-total_batch_size=16
+LR=1e-5
+total_batch_size=64
 GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
 
 torchrun --nproc_per_node=$NPROC_PER_NODE \
@@ -65,7 +65,7 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --logging_steps 10 \
             --save_steps 1000 \
             --save_total_limit 1 \
-            --deepspeed "scripts/zero2.json" \
+            --deepspeed "scripts/zero2_opt.json" \
             --gradient_checkpointing \
             --dataloader_num_workers 4 \
             --group_by_modality_length true \

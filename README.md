@@ -37,6 +37,10 @@ point clouds or reconstructed Bird’s-Eye View (BEV) maps. In our research, we
 advance this field by enhancing the capability of MLLMs to understand and reason
 in 3D spaces directly from video data, without the need for additional 3D input.
 
+## 📢News
+* [2025-09-23] We release the 7B size models fintuned on Qwen2.5-VL-7B-Instruct, which achieve better performance and inference speed.
+* [2025-09-18] Our paper has been accepted by NeurIPS 2025!
+
 
 ## ✨Architecture Overview
 
@@ -107,10 +111,13 @@ VG-LLM is trained and evaluated on a variety of datasets:
 
 
 ## Finetuned Models
-We release the following finetuned models:
-* `VG-LLM-4B (3D Scene Understanding)`: [vgllm-3d-vggt-4b](https://huggingface.co/zd11024/vgllm-3d-vggt-4b)
-* `VG-LLM-4B (Spatial Reasoning)`: [vgllm-qa-vggt-4b](https://huggingface.co/zd11024/vgllm-qa-vggt-4b)
+Our models are built upon two variants of Qwen2.5-VL, [Qwen2.5-VL—3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct)and [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct), and are integrated with VGGT-1B as the 3D geometry encoder. 
+We recommend adopting the 7B model as the backbone, as our experiments show it delivers both superior performance and faster inference speed.
 
+| | Model Access |
+|---|---|
+| 3D Scene Understanding | [🤗VG LLM-3D-4B](https://huggingface.co/zd11024/vgllm-3d-vggt-4b)<br>[🤗VG LLM-3D-8B](https://huggingface.co/zd11024/vgllm-3d-vggt-8b) |
+| Spatial Reasoning | [🤗VG LLM-QA-4B](https://huggingface.co/zd11024/vgllm-qa-vggt-4b)<br>[🤗VG LLM-QA-8B](https://huggingface.co/zd11024/vgllm-qa-vggt-8b) |
 
 ## Demo
 * Download the demo data at this [link](https://huggingface.co/datasets/zd11024/VGLLM_demo_data) and place it at `data/demo_data`.

@@ -65,7 +65,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_file", type=str, required=True, help="""Path to the ScanRefer prediction file in JSONL format. 
         You could produce the prdiction file by flagging --log_samples when running lmms-eval.""")
-    parser.add_argument('--scannet_dir', type=str, default='data/scannet/')
+    parser.add_argument('--scannet_dir', type=str, default='data/media/scannet/')
     parser.add_argument("--num_workers", type=int, default=8)
     args = parser.parse_args()
 

@@ -11,7 +11,7 @@ NPROC_PER_NODE=$(nvidia-smi --list-gpus | wc -l)  # Automatically detects availa
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="Qwen/Qwen2.5-VL-3B-Instruct/"  # [ModelArguments] Pretrained model path
+MODEL_PATH="Qwen/Qwen2.5-VL-7B-Instruct/"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 OUTPUT_DIR="PATH_TO_OUTPUT_DIR"                   # Directory for saving checkpoints
@@ -21,7 +21,7 @@ mkdir -p $OUTPUT_DIR
 # ======================
 # Model Configuration
 # ======================
-DATASETS="llava_hound_64k,spar_234k"                  # [DataArguments] Dataset with sampling rate
+DATASETS="spar_234k,llava_hound_64k"                  # [DataArguments] Dataset with sampling rate
 
 # ======================
 # Training Hyperparameters
@@ -61,10 +61,10 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --warmup_ratio 0.03 \
             --lr_scheduler_type "cosine" \
             --weight_decay 0.01 \
-            --logging_steps 10 \
+            --logging_steps 50 \
             --save_steps 1000 \
             --save_total_limit 1 \
-            --deepspeed "scripts/zero2.json" \
+            --deepspeed "scripts/zero2_opt.json" \
             --gradient_checkpointing \
             --dataloader_num_workers 4 \
             --group_by_modality_length true \
