@@ -3,7 +3,7 @@
 <div align="center" margin-bottom="3em">
 <a href="https://arxiv.org/abs/2505.24625" target="_blank">
 <img src="https://img.shields.io/badge/arXiv-VG_LLM-green" alt="arXiv"></a>
-<a href="https://arxiv.org/pdf/2505.24625" target="_blank">
+<a href="assets/VG_LLM_Neurips_2025.pdf" target="_blank">
 <img src="https://img.shields.io/badge/Paper-VG_LLM-orange" alt="Paper"></a>
 <a href="https://lavi-lab.github.io/VG-LLM/" target="_blank">
     <img alt="Website" src="https://img.shields.io/badge/Website-VG_LLM-blue.svg" height="20" />
@@ -38,7 +38,7 @@ advance this field by enhancing the capability of MLLMs to understand and reason
 in 3D spaces directly from video data, without the need for additional 3D input.
 
 ## 📢News
-* [2025-09-23] We release the 7B size models fintuned on Qwen2.5-VL-7B-Instruct, which achieve better performance and inference speed.
+* [2025-09-23] We release the 7B size models fintuned on Qwen2.5-VL-7B-Instruct, which achieve better performance and inference speed. Check out our latest revision [here](assets/VG_LLM_Neurips_2025.pdf).
 * [2025-09-18] Our paper has been accepted by NeurIPS 2025!
 
 
@@ -50,17 +50,37 @@ VG-LLM integrates a 3D visual geometry encoder (based on [VGGT](https://github.c
 3.  These fused, geometry-augmented visual features, along with text embeddings of a question, are fed into an MLLM backbone ([Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL)) to generate a response.
 
 <p align="center">
-    <img src="assets/model.png" width="90%"><br>
+    <img src="assets/model.png" width="80%"><br>
     <figcaption align="center">The architecture of our VG LLM.</figcaption>
 </p>
 
 
 ## 🚀Main Results Highlights
-* **3D Visual Grounding (ScanRefer):** Our model can directly predict the 3D oriented bounding box at the camera's coordinate system without any 3D data input, and obtains 34.1\% Acc@0.25. 
-* **3D Dense Captioning (Scan2Cap):** Achieves competitive results (e.g., 74.1 CIDEr@0.5 on Scan2Cap) without explicit 3D scene data input.
+* **3D Visual Grounding (ScanRefer):** Our
+8B model achieves an accuracy of 41.6% at an IoU threshold of 0.25, surpassing the 31.9% accuracy
+of SPAR by a significant margin of 9.7 points.
+
+    <p align="center">
+        <img src="assets/3d_results.png" width="80%"><br>
+    </p>
+
+* **3D Dense Captioning (Scan2Cap):** Achieves 80.0 C@0.5 and 41.5 B-4@0.5, which are comparable
+to previous SOTA approaches.
+
 * **3D Video Object Detection (curated from EmbodiedScan):** Shows significant recall improvement (e.g., +19.3 F1 for common classes in 6-frame setting) by better handling egocentric-allocentric transformations.
-* **Spatial Reasoning (VSI-Bench):** Our 4B model achieves an average score of 46.1%, surpassing Gemini-1.5-Pro.
-* **Generic Multimodal Benchmarks (CVBench, VideoMME, BLINK, TempCompass, NextQA)**: Enhancing spatial understanding incurs negligible loss on general multimodal performance.
+
+    <!-- <p align="center">
+        <img src="assets/det_results.png" width="90%"><br>
+    </p> -->
+
+* **Spatial Reasoning (VSI-Bench):** Archieves an average score of 50.7%, surpassing Gemini-1.5-Pro.
+
+* **Effect of Geometry and Data Composition:** The results show consistent gains after integrating the 3D geometry into the model architecture with the
+different data compositions.
+
+    <p align="center">
+        <img src="assets/ablation_study.png" width="80%"><br>
+    </p>
 
 <details>
 <summary>Visualization results of VG LLM in 3D visual grounding tasks.</summary>
@@ -235,13 +255,13 @@ bash scripts/train/train_sr.sh
 ```
 
 #### Training Details
-
+  * **Backbones**: Our models are built upon two sizes of Qwen2.5-VL—3B and 7B, and integrated with VGGT-1B as the 3D geometry encoder.
   * **Hardware:** Our experiments were conducted on a setup with 8x NVIDIA H800 (80G) GPUs.
-  * **Hyperparameters:** We trained the model for one epoch using the Adam optimizer with a batch size of 16, a warmup ratio of 0.03, and a learning rate of 5e-6.
+  * **Hyperparameters:** We trained the model for one epoch using the Adam optimizer with a batch size of 64, a warmup ratio of 0.03, and a learning rate of 1e-5.
   * **Frozen Components:** During training, the visual encoder of the MLLM, the 3D geometry encoder, and the multimodal connector are kept frozen.
   * **Training Duration:**
-      * 3D Scene Understanding: Approximately 8 hours.
-      * Spatial Reasoning: Approximately 12 hours.
+      * 3D Scene Understanding: Approximately 12 hours for 8B model.
+      * Spatial Reasoning: Approximately 9 hours for 8B model.
 
 <!-- The training scripts will be released soon. -->
 ## Evaluation
@@ -256,7 +276,7 @@ export LMMS_EVAL_LAUNCHER="accelerate"
 export NCCL_NVLS_ENABLE=0
 benchmark=vsibench # choices: [vsibench, cvbench, blink_spatial]
 output_path=logs/$(TZ="Asia/Shanghai" date "+%Y%m%d")
-model_path=zd11024/vgllm-qa-vggt-4b
+model_path=zd11024/vgllm-qa-vggt-8b
 
 accelerate launch --num_processes=8 -m lmms_eval \
     --model vgllm \
