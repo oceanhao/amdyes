@@ -82,6 +82,7 @@ class VGLLM(lmms):
 
         if getattr(config, "use_geometry_encoder", False) or getattr(config, "use_vggt_feature", False):
             load_class = Qwen2_5_VLForConditionalGenerationWithVGGT
+            
             eval_logger.info("Using Qwen2_5_VLForConditionalGenerationWithVGGT")
         else:
             load_class = Qwen2_5_VLForConditionalGeneration

@@ -19,6 +19,12 @@ class ModelArguments:
     fusion_num_layers: int = field(default=1)  # Number of layers in the cross-attention module when feature_fusion_method is "cross_attention"
     geometry_merger_type: str = field(default="mlp")  # Type of geometry feature merger ("mlp", "avg")
 
+
+    # haohh Geometry encoder control config
+    stage: str = field(default="cold_start")
+
+
+
 @dataclass
 class DataArguments:
     dataset_use: str = field(default="")

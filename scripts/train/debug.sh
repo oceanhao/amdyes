@@ -6,7 +6,7 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=2  # Automatically detects available GPUs
+NPROC_PER_NODE=1  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
@@ -14,7 +14,7 @@ NPROC_PER_NODE=2  # Automatically detects available GPUs
 MODEL_PATH="/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
-OUTPUT_DIR="train_output"                   # Directory for saving checkpoints
+OUTPUT_DIR="debug_output"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
 
@@ -28,7 +28,7 @@ DATASETS="spar_234k,llava_hound_64k"
 # Training Hyperparameters
 # ======================
 LR=1e-5
-total_batch_size=4
+total_batch_size=1
 GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
 
 torchrun --nproc_per_node=$NPROC_PER_NODE \
@@ -62,9 +62,9 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --warmup_ratio 0.03 \
             --lr_scheduler_type "cosine" \
             --weight_decay 0.01 \
-            --logging_steps 50 \
-            --save_steps 1000 \
-            --save_total_limit 1 \
+            --logging_steps 20 \
+            --save_steps 200 \
+            --save_total_limit 2 \
             --deepspeed "scripts/zero2_opt.json" \
             --gradient_checkpointing \
             --dataloader_num_workers 4 \
@@ -74,5 +74,5 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --use_geometry_encoder true \
             --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
             --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
-            --feature_fusion_method "add" \
-            > ${OUTPUT_DIR}/train.log 2>&1
+            --stage "cold_start" \
+            > ${OUTPUT_DIR}/debug_train.log 2>&1

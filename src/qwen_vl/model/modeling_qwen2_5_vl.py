@@ -55,6 +55,8 @@ from .geometry_encoders import create_geometry_encoder, GeometryEncoderConfig
 from .feature_fusion import FeatureFusionModule, FeatureFusionConfig, GeometryFeatureMerger
 from .loss import normalize_pointcloud, check_and_fix_inf_nan
 
+import torch.distributed as dist
+import random
 
 if is_flash_attn_2_available():
     from flash_attn import flash_attn_varlen_func
@@ -74,6 +76,7 @@ else:
 logger = logging.get_logger(__name__)
 
 _CONFIG_FOR_DOC = "Qwen2_5_VLConfig"
+
 
 
 class Qwen2_5_VLMLP(nn.Module):
@@ -1593,6 +1596,10 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
 
         # Initialize weights and apply final processing
         self.post_init()
+
+        # Initialize haohh geometry control args
+        self.stage=config.stage
+        self.use_vggt_epoch=False
     
     def _init_geometry_encoder(self, config):
         """Initialize geometry encoder and related modules."""
@@ -1651,14 +1658,19 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                 features = self.geometry_merger(features)
                 geo_embeds.append(features)
 
-        geo_embeds = torch.cat(geo_embeds, dim=0) if geo_embeds else None
-        
+        geo_embeds = torch.cat(geo_embeds, dim=0) if geo_embeds else None #image_embeds.shape torch.Size([180, 2048]) geo_embeds.shap torch.Size([1, 10, 18, 2048])
+        # from remote_pdb import RemotePdb
+        # RemotePdb('127.0.0.1', 8457).set_trace()
         if geo_embeds is not None:
             image_embeds = image_embeds.view(geo_embeds.shape)
-            image_embeds = self.feature_fusion(image_embeds, geo_embeds)
+            # image_embeds = self.feature_fusion(image_embeds, geo_embeds)
             image_embeds = image_embeds.view(-1, image_embeds.shape[-1])
-        
-        return image_embeds
+            geo_embeds_flat = geo_embeds.contiguous().view(-1, geo_embeds.size(-1))
+            geo_embeds_flat = geo_embeds_flat.to(image_embeds.device, image_embeds.dtype)
+        # from remote_pdb import RemotePdb
+        # RemotePdb('127.0.0.1', 8457).set_trace() #image_embeds.shape torch.Size([180, 2048])
+
+        return image_embeds, geo_embeds_flat #image_embeds.shape torch.Size([180, 2048])
 
 
     @classmethod
@@ -1752,6 +1764,8 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
         image_token_id = self.config.image_token_id
         video_token_id = self.config.video_token_id
         vision_start_token_id = self.config.vision_start_token_id
+        # >>> 新增：读取 geo_token_id（默认为 0）
+        geo_token_id = getattr(self.config, "geo_token_id", 0)
         mrope_position_deltas = []
         if input_ids is not None and (image_grid_thw is not None or video_grid_thw is not None):
             total_input_ids = input_ids
@@ -1810,13 +1824,15 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                         video_index += 1
                         remain_videos -= 1
                         ed = ed_video
+                    
+                    # ======= 原有：计算该视觉段的网格大小与文本长度 =======
                     llm_grid_t, llm_grid_h, llm_grid_w = (
                         t.item(),
                         h.item() // spatial_merge_size,
                         w.item() // spatial_merge_size,
                     )
                     text_len = ed - st
-
+                    # ======= 原有：先补前面的文本一维位置 =======
                     st_idx = llm_pos_ids_list[-1].max() + 1 if len(llm_pos_ids_list) > 0 else 0
                     llm_pos_ids_list.append(torch.arange(text_len).view(1, -1).expand(3, -1) + st_idx)
 
@@ -1830,9 +1846,27 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
 
                     h_index = torch.arange(llm_grid_h).view(1, -1, 1).expand(llm_grid_t, -1, llm_grid_w).flatten()
                     w_index = torch.arange(llm_grid_w).view(1, 1, -1).expand(llm_grid_t, llm_grid_h, -1).flatten()
+                     # ======= 原有：把当前视觉段的 3D 位置写入 =======
                     llm_pos_ids_list.append(torch.stack([t_index, h_index, w_index]) + text_len + st_idx)
-                    st = ed + llm_grid_t * llm_grid_h * llm_grid_w
-
+                    # ======= 原有：推进游标到该视觉段之后 =======
+                    vision_token_cnt = llm_grid_t * llm_grid_h * llm_grid_w
+                    st = ed + vision_token_cnt
+                    if self.use_vggt_epoch:
+                        # >>> 新增：若该段是 image，则检查其后是否紧跟 geo 段（同长度），若是则用同一 (t,h,w) 再追加一段
+                        #     条件：1) 当前处理的是 image（即 ed == ed_image）  2) 后续 tokens 满足 geo_token_id * vision_token_cnt
+                        if ed == ed_image and vision_token_cnt > 0:
+                            # Python list 切片检查，以免 .index 反复扫描
+                            tail = input_tokens[st: st + vision_token_cnt]
+                            # 判断是否全部是 geo_token_id
+                            if len(tail) == vision_token_cnt and all(tok == int(geo_token_id) for tok in tail):
+                                # 起点 = 上一个块的最大位置 + 1 （与 image/video 一致）
+                                st_idx_geo = llm_pos_ids_list[-1].max() + 1
+                                # 与 image 段相同的 3D 索引（时间步长 second_per_grid_t 保持与 image 一致，这里为 0）
+                                llm_pos_ids_list.append(torch.stack([t_index, h_index, w_index]) + st_idx_geo)
+                                # 推进游标跨过 geo 段
+                                st += vision_token_cnt
+                            # 若不满足就跳过（把它当普通文本，后面的逻辑会补文本 1D 位置）
+                        # <<< 新增结束
                 if st < len(input_tokens):
                     st_idx = llm_pos_ids_list[-1].max() + 1 if len(llm_pos_ids_list) > 0 else 0
                     text_len = len(input_tokens) - st
@@ -1879,14 +1913,14 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-        pixel_values: Optional[torch.Tensor] = None,
+        pixel_values: Optional[torch.Tensor] = None, #pixel_values.shape torch.Size([720, 1176])pixel_values 指的是已经按视觉打块后的“视觉 token.720 = 该样本里产生的视觉 token 数（和图像被切成多少块有关.   为什么是 1176：Qwen2-VL/2.5-VL 的视觉预处理把每个视觉 token 展平成长度 3 × 2 × 14 × 14 = 1176
         pixel_values_videos: Optional[torch.FloatTensor] = None,
-        image_grid_thw: Optional[torch.LongTensor] = None,
+        image_grid_thw: Optional[torch.LongTensor] = None, #tensor([[ 1, 20, 36]], device='cuda:0')image_grid_thw 不是“梯度（gradient）”，而是“网格/栅格（grid）”的意思。image_grid_thw = [[1, 20, 36]]，图像 token 数 = T×H×W = 1×20×36 = 720。
         video_grid_thw: Optional[torch.LongTensor] = None,
         rope_deltas: Optional[torch.LongTensor] = None,
         cache_position: Optional[torch.LongTensor] = None,
         second_per_grid_ts: Optional[torch.Tensor] = None,
-        geometry_encoder_inputs: Optional[List[torch.Tensor]] = None,
+        geometry_encoder_inputs: Optional[List[torch.Tensor]] = None, #geometry_encoder_inputs[0].shape torch.Size([1, 3, 294, 518])
         boxes: Optional[List[torch.Tensor]] = None,
         tag: str = None,
         **kwargs,
@@ -1929,6 +1963,18 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
         >>> tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
         "The image shows a street scene with a red stop sign in the foreground. In the background, there is a large red gate with Chinese characters ..."
         ```"""
+        # from remote_pdb import RemotePdb
+        # RemotePdb('127.0.0.1', 8457).set_trace()
+
+        if self.stage=="cold_start":
+            if not dist.is_initialized() or dist.get_rank() == 0:
+                flag = torch.tensor([int(bool(random.getrandbits(1)))], device="cuda" if torch.cuda.is_available() else "cpu")
+            else:
+                flag = torch.zeros(1, device="cuda" if torch.cuda.is_available() else "cpu", dtype=torch.long)
+            if dist.is_initialized():
+                dist.broadcast(flag, src=0)
+            self.use_vggt_epoch = bool(flag.item())
+            print("##############VGGT usage:###########",self.use_vggt_epoch)
 
         output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
         output_hidden_states = (
@@ -1944,7 +1990,7 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                 
                 # Process 3D geometry features if enabled
                 if getattr(self.config, 'use_geometry_encoder', False) and geometry_encoder_inputs is not None:
-                    image_embeds = self._process_geometry_features(image_embeds, geometry_encoder_inputs)
+                    image_embeds,geo_embeds = self._process_geometry_features(image_embeds, geometry_encoder_inputs)
 
                 n_image_tokens = (input_ids == self.config.image_token_id).sum().item()
                 n_image_features = image_embeds.shape[0]
@@ -1957,9 +2003,34 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                 mask_unsqueezed = mask.unsqueeze(-1)
                 mask_expanded = mask_unsqueezed.expand_as(inputs_embeds)
                 image_mask = mask_expanded.to(inputs_embeds.device)
+                # from remote_pdb import RemotePdb
+                # RemotePdb('127.0.0.1', 8457).set_trace()
 
-                image_embeds = image_embeds.to(inputs_embeds.device, inputs_embeds.dtype)
-                inputs_embeds = inputs_embeds.masked_scatter(image_mask, image_embeds)
+                image_embeds = image_embeds.to(inputs_embeds.device, inputs_embeds.dtype) #torch.Size([180, 2048])
+                inputs_embeds = inputs_embeds.masked_scatter(image_mask, image_embeds) # inputs_embeds.shape torch.Size([1, 323, 2048])
+
+                if self.use_vggt_epoch:
+                    B, S, H = inputs_embeds.shape
+                    device, dtype = inputs_embeds.device, inputs_embeds.dtype
+                    N_geo = geo_embeds.shape[0]  # 与 n_image_features 相同
+                    geo_token_id = getattr(self.config, 'geo_token_id', getattr(self.config, 'unk_token_id', 0))
+                    # 1) 找“插在最后一个 <image> 后面”的位置
+                    last_img_pos = torch.nonzero(input_ids == self.config.image_token_id, as_tuple=False)
+                    insert_idx = (last_img_pos[:, 1].max().item() + 1) if last_img_pos.numel() > 0 else S
+                    # 2) 扩展 input_ids / attention_mask（插入 N_geo 个 GEO 占位）
+                    geo_ids = torch.full((B, N_geo), geo_token_id, dtype=input_ids.dtype, device=device)
+                    input_ids = torch.cat([input_ids[:, :insert_idx], geo_ids, input_ids[:, insert_idx:]], dim=1)
+                    ones_geo = torch.ones((B, N_geo), dtype=attention_mask.dtype, device=device)
+                    attention_mask = torch.cat([attention_mask[:, :insert_idx], ones_geo, attention_mask[:, insert_idx:]], dim=1) #attention_mask.shape torch.Size([1, 4595])
+                    # attention_mask = torch.ones((B, input_ids.shape[-1]), dtype=torch.long, device=input_ids.device)
+                    # 3) 直接在嵌入层面“插段”——不重算整段 token embedding
+                    left  = inputs_embeds[:, :insert_idx, :]               # 保留已替换的 image 部分
+                    right = inputs_embeds[:, insert_idx:, :]
+                    geo_chunk = geo_embeds.to(device=device, dtype=dtype).unsqueeze(0).expand(B, -1, -1)  # [B, N_geo, H]
+                    inputs_embeds = torch.cat([left, geo_chunk, right], dim=1) #inputs_embeds.shape: torch.Size([1, 503, 2048]) (323+180=503)
+                    self.rope_deltas = None
+                    # from remote_pdb import RemotePdb
+                    # RemotePdb('127.0.0.1', 8457).set_trace()
 
             if pixel_values_videos is not None:
                 pixel_values_videos = pixel_values_videos.type(self.visual.dtype)
@@ -1981,9 +2052,9 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
 
             if attention_mask is not None:
                 attention_mask = attention_mask.to(inputs_embeds.device)
-
         # if we get 4D attention mask we cannot calculate rope deltas anymore. TODO @raushan fixme
-        if position_ids is None and (attention_mask is None or attention_mask.ndim == 2):
+        # if position_ids is None and (attention_mask is None or attention_mask.ndim == 2):
+        if(attention_mask is None or attention_mask.ndim == 2) and self.rope_deltas is None :
             # calculate RoPE index once per generation in the pre-fill stage only
             if (
                 (cache_position is not None and cache_position[0] == 0)
@@ -1998,6 +2069,8 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                     attention_mask,
                 )
                 self.rope_deltas = rope_deltas
+                # from remote_pdb import RemotePdb
+                # RemotePdb('127.0.0.1', 8457).set_trace()
             # then use the prev pre-calculated rope-deltas to get the correct position ids
             else:
                 batch_size, seq_length, _ = inputs_embeds.shape
@@ -2029,8 +2102,17 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
         hidden_states = outputs[0]
         logits = self.lm_head(hidden_states)
         loss = None
+        # from remote_pdb import RemotePdb
+        # RemotePdb('127.0.0.1', 8457).set_trace()
         if labels is not None:
             # Upcast to float if we need to compute the loss to avoid potential precision issues
+            ignore_index = getattr(self.config, "ignore_index", -100)
+            B = labels.size(0)
+            device = labels.device
+            # 若 labels 还是旧长度（常见情况），在 GEO 段位置插入 -100
+            if labels.size(1) != input_ids.size(1):
+                pad_geo = torch.full((B, N_geo), ignore_index, dtype=labels.dtype, device=device)
+                labels = torch.cat([labels[:, :insert_idx], pad_geo, labels[:, insert_idx:]], dim=1)
             logits = logits.float()
             # Shift so that tokens < n predict n
             shift_logits = logits[..., :-1, :].contiguous()
