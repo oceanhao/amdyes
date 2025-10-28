@@ -64,7 +64,7 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --weight_decay 0.01 \
             --logging_steps 50 \
             --save_steps 1000 \
-            --save_total_limit 1 \
+            --save_total_limit 4 \
             --deepspeed "scripts/zero2_opt.json" \
             --gradient_checkpointing \
             --dataloader_num_workers 4 \
@@ -74,5 +74,5 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --use_geometry_encoder true \
             --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
             --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
-            --feature_fusion_method "add" \
+            --stage "cold_start" \
             > ${OUTPUT_DIR}/train.log 2>&1

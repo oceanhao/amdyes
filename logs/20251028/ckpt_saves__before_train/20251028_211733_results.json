@@ -1,0 +1,124 @@
+{
+  "results": {
+    "vsibench": {
+      "alias": "vsibench",
+      "vsibench_score,none": 3.884954271307881,
+      "vsibench_score_stderr,none": "N/A"
+    }
+  },
+  "group_subtasks": {
+    "vsibench": []
+  },
+  "configs": {
+    "vsibench": {
+      "task": "vsibench",
+      "dataset_path": "nyu-visionx/VSI-Bench",
+      "dataset_kwargs": {
+        "token": true
+      },
+      "test_split": "test",
+      "full_docs": false,
+      "process_results_use_image": false,
+      "process_docs": "<function process_docs at 0x7fb549c17250>",
+      "doc_to_visual": "<function vsibench_doc_to_visual at 0x7fb549c17910>",
+      "doc_to_text": "<function vsibench_doc_to_text at 0x7fb54829c1f0>",
+      "doc_to_target": "ground_truth",
+      "process_results": "<function vsibench_process_results at 0x7fb54829cdc0>",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "vsibench_score",
+          "aggregation": "<function vsibench_aggregate_results at 0x7fb54829d630>",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "max_new_tokens": 16,
+        "temperature": 0.0,
+        "top_p": 1.0,
+        "num_beams": 1,
+        "do_sample": false,
+        "until": [
+          "\n\n"
+        ]
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": [
+        {
+          "version": 0.0
+        }
+      ],
+      "lmms_eval_specific_kwargs": {
+        "default": {
+          "pre_prompt": "",
+          "mca_post_prompt": "Answer with the option's letter from the given choices directly.",
+          "na_post_prompt": "Please answer the question using a single word or phrase."
+        },
+        "gemini_api": {
+          "pre_prompt": "",
+          "mca_post_prompt": "Answer with the option's letter from the given choices directly.",
+          "na_post_prompt": "Do not response anything other than a single number!"
+        },
+        "gpt4v": {
+          "pre_prompt": "",
+          "mca_post_prompt": "Answer with the option's letter from the given choices directly.",
+          "na_post_prompt": "Do not response anything other than a single number!"
+        },
+        "pre_prompt": "",
+        "mca_post_prompt": "Answer with the option's letter from the given choices directly.",
+        "na_post_prompt": "Please answer the question using a single word or phrase."
+      }
+    }
+  },
+  "versions": {
+    "vsibench": "Yaml"
+  },
+  "n-shot": {
+    "vsibench": 0
+  },
+  "higher_is_better": {
+    "vsibench": {
+      "vsibench_score": true
+    }
+  },
+  "n-samples": {
+    "vsibench": {
+      "original": 5130,
+      "effective": 5130
+    }
+  },
+  "config": {
+    "model": "vgllm",
+    "model_args": "pretrained=/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/before_train,use_flash_attention_2=true,max_num_frames=32,max_length=12800",
+    "batch_size": "1",
+    "batch_sizes": [],
+    "device": null,
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": "",
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "4acada1",
+  "date": "20251028_211733",
+  "task_hashes": {},
+  "model_source": "vgllm",
+  "model_name": "/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/before_train",
+  "model_name_sanitized": "ckpt_saves__before_train",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": false,
+  "chat_template": null,
+  "chat_template_sha": null,
+  "start_time": 1741755.916182628,
+  "end_time": 1751103.797668001,
+  "total_evaluation_time_seconds": "9347.881485373015"
+}
