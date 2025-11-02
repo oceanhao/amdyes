@@ -1,0 +1,134 @@
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+[32m2025-10-30 14:07:44.963[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-30 14:07:44.964[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[W1030 14:07:45.111177806 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1030 14:07:45.111312898 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1030 14:07:45.115767959 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1030 14:07:45.115871589 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-30 14:07:45.476[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251030'}[0m
+[32m2025-10-30 14:07:45.476[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-30 14:07:45.491[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-30 14:07:45.623[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251030'}[0m
+[32m2025-10-30 14:07:45.623[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-30 14:07:45.631[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank1]:[W1030 14:07:45.743272816 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files:  17%|█▋        | 1/6 [00:01<00:08,  1.62s/it]Fetching 6 files:  33%|███▎      | 2/6 [00:01<00:03,  1.19it/s]Fetching 6 files:  50%|█████     | 3/6 [04:23<06:00, 120.03s/it]Fetching 6 files:  67%|██████▋   | 4/6 [07:12<04:38, 139.26s/it]Fetching 6 files: 100%|██████████| 6/6 [07:12<00:00, 72.09s/it] 
+[32m2025-10-30 14:15:01.381[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36munzip_video_data[0m:[36m961[0m - [1mExtracted all files from /root/.cache/huggingface/hub/datasets--nyu-visionx--VSI-Bench/snapshots/bc96b17cb6be84878a6c1f2e64c24346356e0d04/arkitscenes.zip to /root/.cache/huggingface/vsibench[0m
+[32m2025-10-30 14:15:05.690[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36munzip_video_data[0m:[36m961[0m - [1mExtracted all files from /root/.cache/huggingface/hub/datasets--nyu-visionx--VSI-Bench/snapshots/bc96b17cb6be84878a6c1f2e64c24346356e0d04/scannet.zip to /root/.cache/huggingface/vsibench[0m
+[32m2025-10-30 14:15:07.173[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36munzip_video_data[0m:[36m961[0m - [1mExtracted all files from /root/.cache/huggingface/hub/datasets--nyu-visionx--VSI-Bench/snapshots/bc96b17cb6be84878a6c1f2e64c24346356e0d04/scannetpp.zip to /root/.cache/huggingface/vsibench[0m
+[rank0]:[W1030 14:15:07.372130984 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Traceback (most recent call last):
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 470, in __call__
+    result = fn(*args, **kwargs)
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/api/task.py", line 1018, in download
+    accelerator.wait_for_everyone()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/accelerator.py", line 2741, in wait_for_everyone
+    wait_for_everyone()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/utils/other.py", line 148, in wait_for_everyone
+    PartialState().wait_for_everyone()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/state.py", line 376, in wait_for_everyone
+    torch.distributed.barrier()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 470, in __call__
+    result = fn(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/distributed/c10d_logger.py", line 83, in wrapper
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/api/task.py", line 1018, in download
+    accelerator.wait_for_everyone()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 4159, in barrier
+    work = group.barrier(opts=opts)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/accelerator.py", line 2741, in wait_for_everyone
+    wait_for_everyone()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/utils/other.py", line 148, in wait_for_everyone
+    PartialState().wait_for_everyone()
+torch.distributed.DistBackendError: NCCL error in: ../torch/csrc/distributed/c10d/NCCLUtils.hpp:317, unhandled cuda error (run with NCCL_DEBUG=INFO for details), NCCL version 2.21.5
+ncclUnhandledCudaError: Call to CUDA function failed.
+Last error:
+P2P is disabled between NVLINK connected GPUs 7 and 6. This should not be the case given their connectivity, and is probably due to a hardware issue. If you still want to proceed, you can set NCCL_IGNORE_DISABLED_P2P=1.
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/state.py", line 376, in wait_for_everyone
+    torch.distributed.barrier()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/distributed/c10d_logger.py", line 83, in wrapper
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 4159, in barrier
+    work = group.barrier(opts=opts)
+torch.distributed.DistBackendError: NCCL error in: ../torch/csrc/distributed/c10d/NCCLUtils.hpp:317, unhandled cuda error (run with NCCL_DEBUG=INFO for details), NCCL version 2.21.5
+ncclUnhandledCudaError: Call to CUDA function failed.
+Last error:
+P2P is disabled between NVLINK connected GPUs 7 and 6. This should not be the case given their connectivity, and is probably due to a hardware issue. If you still want to proceed, you can set NCCL_IGNORE_DISABLED_P2P=1.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 171, in simple_evaluate
+    task_dict = get_task_dict(tasks, task_manager)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 558, in get_task_dict
+    task_name_from_string_dict = task_manager.load_task_or_group(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 372, in load_task_or_group
+    all_loaded_tasks = dict(collections.ChainMap(*map(self._load_individual_task_or_group, task_list)))
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 289, in _load_individual_task_or_group
+    return _load_task(task_config, task=name_or_config)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 259, in _load_task
+    task_object = ConfigurableTask(config=config, model_name=self.model_name)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/api/task.py", line 720, in __init__
+    self.download(self.config.dataset_kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 330, in wrapped_f
+    return self(f, *args, **kw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 467, in __call__
+    do = self.iter(retry_state=retry_state)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 368, in iter
+    result = action(retry_state)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 411, in exc_check
+    raise retry_exc from fut.exception()
+tenacity.RetryError: RetryError[<Future at 0x7fb8b068b490 state=finished raised DistBackendError>]
+[32m2025-10-30 14:15:08.064[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: RetryError[<Future at 0x7fb8b068b490 state=finished raised DistBackendError>]. Please set `--verbosity=DEBUG` to get more information.[0m
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 171, in simple_evaluate
+    task_dict = get_task_dict(tasks, task_manager)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 558, in get_task_dict
+    task_name_from_string_dict = task_manager.load_task_or_group(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 372, in load_task_or_group
+    all_loaded_tasks = dict(collections.ChainMap(*map(self._load_individual_task_or_group, task_list)))
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 289, in _load_individual_task_or_group
+    return _load_task(task_config, task=name_or_config)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/tasks/__init__.py", line 259, in _load_task
+    task_object = ConfigurableTask(config=config, model_name=self.model_name)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/api/task.py", line 720, in __init__
+    self.download(self.config.dataset_kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 330, in wrapped_f
+    return self(f, *args, **kw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 467, in __call__
+    do = self.iter(retry_state=retry_state)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 368, in iter
+    result = action(retry_state)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/tenacity/__init__.py", line 411, in exc_check
+    raise retry_exc from fut.exception()
+tenacity.RetryError: RetryError[<Future at 0x7f548cdb7250 state=finished raised DistBackendError>]
+[32m2025-10-30 14:15:08.065[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: RetryError[<Future at 0x7f548cdb7250 state=finished raised DistBackendError>]. Please set `--verbosity=DEBUG` to get more information.[0m
+[rank0]:[W1030 14:15:08.537112045 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())

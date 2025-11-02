@@ -230,20 +230,45 @@ class VGLLM(lmms):
                 if len(visuals) > 0:
                     visual = visuals[i] if i < len(visuals) else None
                     if isinstance(visual, str) and visual.endswith((".mp4", ".avi", ".mov")):  # Video file
-                        vr = decord.VideoReader(visual)
-                        image_num = len(vr)
-                        # sample max_num_frames frame indices from the video
-                        if image_num < self.max_num_frames:
-                            frame_indices = np.arange(image_num)
-                        else:
-                            frame_indices = np.linspace(0, image_num - 1, self.max_num_frames).astype(int)
-                        # read the frames
-                        frames = [vr[i].asnumpy() for i in frame_indices]
+                        frames = []
+                        try:
+                            vr = decord.VideoReader(visual, num_threads=1)
+                            image_num = len(vr)
+                            # sample max_num_frames frame indices from the video
+                            if image_num < self.max_num_frames:
+                                frame_indices = np.arange(image_num)
+                            else:
+                                frame_indices = np.linspace(0, image_num - 1, self.max_num_frames).astype(int)
+                            # try indexed read
+                            try:
+                                frames = [vr[j].asnumpy() for j in frame_indices]
+                            except Exception:
+                                # fallback: read all frames with decord
+                                frames = [f.asnumpy() for f in vr]
+                        except Exception:
+                            # decord init failed: fallback to OpenCV read-all
+                            try:
+                                import cv2
+                                cap = cv2.VideoCapture(visual)
+                                ok, frame_bgr = cap.read()
+                                while ok:
+                                    frames.append(frame_bgr[:, :, ::-1])  # BGR -> RGB
+                                    ok, frame_bgr = cap.read()
+                                cap.release()
+                            except Exception:
+                                frames = []
+
                         visual_content = []
                         for frame in frames:
                             image = Image.fromarray(frame).convert("RGB")
                             visual_content.append({"type": "image", "image": image})
-                        message.append({"role": "user", "content": visual_content + [{"type": "text", "text": context}]})
+
+                        # 若仍无帧，退化为仅文本，避免中断
+                        if visual_content:
+                            message.append({"role": "user", "content": visual_content + [{"type": "text", "text": context}]})
+                        else:
+                            message.append({"role": "user", "content": [{"type": "text", "text": context}]})
+
 
                     elif isinstance(visual, Image.Image):  # Single image
                         base64_image = visual.convert("RGB")

@@ -1,0 +1,537 @@
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+[32m2025-10-29 08:13:09.409[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.409[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.410[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.410[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.410[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.411[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.411[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:13:09.411[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[W1029 08:13:09.400718621 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.400848545 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:13:09.401166677 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.401259931 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:13:09.401338625 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.401435931 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:13:09.401520905 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.401627005 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:13:09.401711154 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.402534629 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.402597005 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:13:09.402624862 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:13:09.403001673 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:09.403102168 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-29 08:13:10.235[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.235[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.249[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-29 08:13:10.310[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.310[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.312[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:13:10.335[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.335[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.338[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:13:10.339[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.339[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.342[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank6]:[W1029 08:13:10.277068009 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 6]  using GPU 6 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[32m2025-10-29 08:13:10.358[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.359[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.361[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:13:10.372[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.372[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.375[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank4]:[W1029 08:13:10.301885706 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 4]  using GPU 4 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank5]:[W1029 08:13:10.306477201 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 5]  using GPU 5 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[32m2025-10-29 08:13:10.394[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:10.394[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:10.396[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank2]:[W1029 08:13:10.323863421 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank1]:[W1029 08:13:10.341995734 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank3]:[W1029 08:13:10.358817314 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 7628.32it/s]
+[rank0]:[W1029 08:13:12.236115172 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[W1029 08:13:14.374878850 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:13:14.375015348 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[32m2025-10-29 08:13:15.235[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:13:15.236[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:13:15.252[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank7]:[W1029 08:13:15.220252700 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 7]  using GPU 7 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:13:20.691[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+[32m2025-10-29 08:13:20.692[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-29 08:13:20.939[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:13:22.308[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+[32m2025-10-29 08:13:22.308[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:13:22.796[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+[32m2025-10-29 08:13:22.796[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:13:23.023[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:14<00:29, 14.67s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:26, 13.29s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:26, 13.27s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:25, 12.83s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:14<00:29, 14.80s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:25, 12.82s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:14<00:29, 14.82s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:25, 12.61s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:26<00:12, 12.78s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:26<00:12, 12.77s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:12, 12.19s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:26<00:12, 12.82s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:11, 11.99s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:11, 12.00s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:12, 12.18s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:11, 11.91s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  7.18s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.56s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  7.28s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  7.60s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  7.63s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  7.29s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  9.19s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  9.23s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  8.71s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  7.18s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  8.72s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  7.13s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.56s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.49s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  7.63s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  9.22s/it]
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+[32m2025-10-29 08:13:50.472[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.473[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.477[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.485[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.489[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.501[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.502[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.504[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 5...[0m
+[32m2025-10-29 08:13:50.504[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.505[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 2...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:13:50.506[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:13:50.506[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 4...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:13:50.515[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.516[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 1...[0m
+[32m2025-10-29 08:13:50.517[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+  0%|          | 0/642 [00:00<?, ?it/s][32m2025-10-29 08:13:50.519[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.520[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 7...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:13:50.524[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 12800[0m
+[32m2025-10-29 08:13:50.531[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.531[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 3...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:13:50.545[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.546[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 6...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:13:50.554[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m126[0m - [1mUsing 8 devices with data parallelism[0m
+[32m2025-10-29 08:13:50.555[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:13:50.555[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 0...[0m
+  0%|          | 0/642 [00:00<?, ?it/s] 20%|█▉        | 125/641 [00:00<00:00, 1239.06it/s] 20%|█▉        | 126/641 [00:00<00:00, 1258.78it/s] 20%|█▉        | 126/641 [00:00<00:00, 1245.18it/s] 22%|██▏       | 139/642 [00:00<00:00, 1381.50it/s] 23%|██▎       | 149/641 [00:00<00:00, 1487.63it/s] 29%|██▊       | 184/641 [00:00<00:00, 1838.52it/s] 35%|███▍      | 222/641 [00:00<00:00, 2218.91it/s] 37%|███▋      | 236/642 [00:00<00:00, 2355.91it/s] 52%|█████▏    | 333/641 [00:00<00:00, 1731.28it/s] 52%|█████▏    | 336/641 [00:00<00:00, 1753.16it/s] 52%|█████▏    | 331/641 [00:00<00:00, 1713.95it/s] 57%|█████▋    | 364/642 [00:00<00:00, 1888.65it/s] 60%|█████▉    | 384/641 [00:00<00:00, 1990.03it/s] 65%|██████▍   | 415/641 [00:00<00:00, 2114.36it/s] 70%|███████   | 450/641 [00:00<00:00, 2250.95it/s] 74%|███████▎  | 472/642 [00:00<00:00, 2331.60it/s] 88%|████████▊ | 565/641 [00:00<00:00, 1996.10it/s] 90%|████████▉ | 575/641 [00:00<00:00, 2040.73it/s] 88%|████████▊ | 563/641 [00:00<00:00, 1987.17it/s] 94%|█████████▎| 601/642 [00:00<00:00, 2106.82it/s] 97%|█████████▋| 623/641 [00:00<00:00, 2171.83it/s]100%|██████████| 641/641 [00:00<00:00, 1814.17it/s]100%|██████████| 641/641 [00:00<00:00, 1805.51it/s]100%|██████████| 641/641 [00:00<00:00, 2045.04it/s]100%|██████████| 642/642 [00:00<00:00, 1870.75it/s]
+100%|██████████| 641/641 [00:00<00:00, 1809.67it/s]
+100%|██████████| 641/641 [00:00<00:00, 1953.92it/s]
+
+100%|██████████| 642/642 [00:00<00:00, 2110.74it/s]100%|██████████| 641/641 [00:00<00:00, 1887.95it/s]
+
+
+
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:13:51.100[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+Model Responding:   0%|          | 0/642 [00:00<?, ?it/s][2025-10-29 08:13:53,289] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:53,290] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:53,368] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:53,389] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:53,419] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:53,596] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:53,661] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:13:54,327] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+##############VGGT usage:#########################VGGT usage:###########  ##############VGGT usage:###########TrueTrue##############VGGT usage:#########################VGGT usage:#########################VGGT usage:#########################VGGT usage:########### 
+
+##############VGGT usage:###########    True TrueTrueTrueTrue
+True
+
+
+
+
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 0 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036792 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.71 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 7 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036799 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.61 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 5 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036797 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.68 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 3 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036795 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.72 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 102.52 GiB. GPU 1 has a total capacity of 23.64 GiB of which 6.97 GiB is free. Process 3036793 has 16.67 GiB memory in use. Of the allocated memory 15.79 GiB is allocated by PyTorch, and 299.51 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 2 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036794 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.56 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 4 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036796 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.58 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 6 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036798 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.64 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 5 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036797 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.68 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 0 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036792 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.71 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 3 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036795 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.72 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 7 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036799 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.61 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 2 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036794 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.56 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+Model Responding:   0%|          | 0/642 [00:09<?, ?it/s]
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 102.52 GiB. GPU 1 has a total capacity of 23.64 GiB of which 6.97 GiB is free. Process 3036793 has 16.67 GiB memory in use. Of the allocated memory 15.79 GiB is allocated by PyTorch, and 299.51 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 4 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036796 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.58 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+[32m2025-10-29 08:14:00.206[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 62.02 GiB. GPU 6 has a total capacity of 23.64 GiB of which 9.41 GiB is free. Process 3036798 has 14.23 GiB memory in use. Of the allocated memory 13.42 GiB is allocated by PyTorch, and 230.64 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m

@@ -1,0 +1,111 @@
+{
+  "results": {
+    "cvbench": {
+      "alias": "cvbench",
+      "cvbench_score,none": 51.81312369373878,
+      "cvbench_score_stderr,none": "N/A"
+    }
+  },
+  "group_subtasks": {
+    "cvbench": []
+  },
+  "configs": {
+    "cvbench": {
+      "task": "cvbench",
+      "dataset_path": "nyu-visionx/CV-Bench",
+      "dataset_kwargs": {
+        "token": true
+      },
+      "test_split": "test",
+      "full_docs": false,
+      "process_results_use_image": false,
+      "doc_to_visual": "<function cvbench_doc_to_visual at 0x7f2f063ddcf0>",
+      "doc_to_text": "<function cvbench_doc_to_text at 0x7f2f063de200>",
+      "doc_to_target": "answer",
+      "process_results": "<function cvbench_process_results at 0x7f2f063de7a0>",
+      "description": "",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "num_fewshot": 0,
+      "metric_list": [
+        {
+          "metric": "cvbench_score",
+          "aggregation": "<function cvbench_aggregate_results at 0x7f2f063decb0>",
+          "higher_is_better": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "max_new_tokens": 16,
+        "temperature": 0.0,
+        "top_p": 1.0,
+        "num_beams": 1,
+        "do_sample": false,
+        "until": [
+          "\n\n"
+        ]
+      },
+      "repeats": 1,
+      "should_decontaminate": false,
+      "metadata": [
+        {
+          "version": 0.0
+        }
+      ],
+      "lmms_eval_specific_kwargs": {
+        "default": {
+          "pre_prompt": "",
+          "mca_post_prompt": "Answer with the option's letter from the given choices directly."
+        },
+        "pre_prompt": "",
+        "mca_post_prompt": "Answer with the option's letter from the given choices directly."
+      }
+    }
+  },
+  "versions": {
+    "cvbench": "Yaml"
+  },
+  "n-shot": {
+    "cvbench": 0
+  },
+  "higher_is_better": {
+    "cvbench": {
+      "cvbench_score": true
+    }
+  },
+  "n-samples": {
+    "cvbench": {
+      "original": 2638,
+      "effective": 2638
+    }
+  },
+  "config": {
+    "model": "vgllm",
+    "model_args": "pretrained=/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/train_valUse_ckpt,use_flash_attention_2=true,max_num_frames=32,max_length=12800",
+    "batch_size": "1",
+    "batch_sizes": [],
+    "device": null,
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": "",
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "b239d9d",
+  "date": "20251029_105124",
+  "task_hashes": {},
+  "model_source": "vgllm",
+  "model_name": "/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/train_valUse_ckpt",
+  "model_name_sanitized": "ckpt_saves__train_valUse_ckpt",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": false,
+  "chat_template": null,
+  "chat_template_sha": null,
+  "start_time": 1790586.500231026,
+  "end_time": 1790730.107278958,
+  "total_evaluation_time_seconds": "143.60704793198965"
+}

@@ -1,0 +1,117 @@
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+[32m2025-10-29 13:09:45.257[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 13:09:45.261[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 13:09:45.262[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 13:09:45.263[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 13:09:46.116[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 13:09:46.116[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['blink_spatial'][0m
+[32m2025-10-29 13:09:46.120[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 13:09:46.121[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['blink_spatial'][0m
+[32m2025-10-29 13:09:46.212[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 13:09:46.212[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 13:09:46.261[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 13:09:46.262[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['blink_spatial'][0m
+[32m2025-10-29 13:09:46.263[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 13:09:46.264[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['blink_spatial'][0m
+[32m2025-10-29 13:09:46.306[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 13:09:46.307[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+Generating val split:   0%|          | 0/143 [00:00<?, ? examples/s]Generating val split: 100%|██████████| 143/143 [00:00<00:00, 2803.10 examples/s]
+Generating test split:   0%|          | 0/143 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 143/143 [00:00<00:00, 4737.12 examples/s]
+Generating val split:   0%|          | 0/124 [00:00<?, ? examples/s]Generating val split: 100%|██████████| 124/124 [00:00<00:00, 3728.00 examples/s]
+Generating test split:   0%|          | 0/124 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 124/124 [00:00<00:00, 4505.36 examples/s]
+Generating val split:   0%|          | 0/133 [00:00<?, ? examples/s]Generating val split: 100%|██████████| 133/133 [00:00<00:00, 4083.08 examples/s]
+Generating test split:   0%|          | 0/133 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 133/133 [00:00<00:00, 3540.22 examples/s]
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 176, in simple_evaluate
+    lm = lmms_eval.models.get_model(model).create_from_arg_string(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/api/model.py", line 110, in create_from_arg_string
+    return cls(**args, **args2)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/qwen2_5_vl.py", line 77, in __init__
+    self._model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 272, in _wrapper
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 4455, in from_pretrained
+    ) = cls._load_pretrained_model(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 4841, in _load_pretrained_model
+    caching_allocator_warmup(model_to_load, expanded_device_map)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 5849, in caching_allocator_warmup
+    device_memory = torch.cuda.mem_get_info(device)[0]
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/cuda/memory.py", line 712, in mem_get_info
+    return torch.cuda.cudart().cudaMemGetInfo(device)
+RuntimeError: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+[32m2025-10-29 13:10:09.182[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+. Please set `--verbosity=DEBUG` to get more information.[0m
+Traceback (most recent call last):
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 176, in simple_evaluate
+    lm = lmms_eval.models.get_model(model).create_from_arg_string(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/api/model.py", line 110, in create_from_arg_string
+    return cls(**args, **args2)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/qwen2_5_vl.py", line 77, in __init__
+    self._model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 272, in _wrapper
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 4455, in from_pretrained
+    ) = cls._load_pretrained_model(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 4841, in _load_pretrained_model
+    caching_allocator_warmup(model_to_load, expanded_device_map)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/modeling_utils.py", line 5849, in caching_allocator_warmup
+    device_memory = torch.cuda.mem_get_info(device)[0]
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/cuda/memory.py", line 712, in mem_get_info
+    return torch.cuda.cudart().cudaMemGetInfo(device)
+RuntimeError: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+[32m2025-10-29 13:10:09.183[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+. Please set `--verbosity=DEBUG` to get more information.[0m
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+[rank2]:[W1029 13:10:09.267906168 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+Loading checkpoint shards:  50%|█████     | 1/2 [00:09<00:09,  9.52s/it]Loading checkpoint shards:  50%|█████     | 1/2 [00:09<00:09,  9.62s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:16<00:00,  7.95s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:16<00:00,  8.20s/it]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:16<00:00,  8.01s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:16<00:00,  8.24s/it]
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+[32m2025-10-29 13:10:27.011[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_multi_view_reasoning, using default n_shot=0[0m
+[32m2025-10-29 13:10:27.011[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_relative_depth, using default n_shot=0[0m
+[32m2025-10-29 13:10:27.011[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_spatial_relation, using default n_shot=0[0m
+[32m2025-10-29 13:10:27.014[0m | [1mINFO    [0m | [36mlmms_eval.models.qwen2_5_vl[0m:[36m__init__[0m:[36m106[0m - [1mUsing 4 devices with data parallelism[0m
+[32m2025-10-29 13:10:27.014[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_multi_view_reasoning, using default n_shot=0[0m
+[32m2025-10-29 13:10:27.015[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_relative_depth, using default n_shot=0[0m
+[32m2025-10-29 13:10:27.015[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_spatial_relation, using default n_shot=0[0m
+[32m2025-10-29 13:10:27.037[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_multi_view_reasoning on rank 0...[0m
+[32m2025-10-29 13:10:27.037[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_multi_view_reasoning on rank 1...[0m
+  0%|          | 0/34 [00:00<?, ?it/s]  0%|          | 0/33 [00:00<?, ?it/s]100%|██████████| 34/34 [00:00<00:00, 2495.60it/s]
+100%|██████████| 33/33 [00:00<00:00, 1128.58it/s]

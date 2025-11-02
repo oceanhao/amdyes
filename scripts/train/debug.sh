@@ -6,7 +6,7 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=1  # Automatically detects available GPUs
+NPROC_PER_NODE=2  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
@@ -27,10 +27,10 @@ DATASETS="spar_234k,llava_hound_64k"
 # ======================
 # Training Hyperparameters
 # ======================
-LR=1e-5
-total_batch_size=1
+LR=5e-6
+total_batch_size=2
 GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
-
+export NCCL_IGNORE_DISABLED_P2P=1
 torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
             --master_port=$MASTER_PORT \
@@ -63,7 +63,7 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --lr_scheduler_type "cosine" \
             --weight_decay 0.01 \
             --logging_steps 20 \
-            --save_steps 200 \
+            --save_steps 1000 \
             --save_total_limit 2 \
             --deepspeed "scripts/zero2_opt.json" \
             --gradient_checkpointing \

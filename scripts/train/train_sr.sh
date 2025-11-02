@@ -11,7 +11,7 @@ NPROC_PER_NODE=2  # Automatically detects available GPUs
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"  # [ModelArguments] Pretrained model path
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 OUTPUT_DIR="train_output"                   # Directory for saving checkpoints
@@ -27,10 +27,10 @@ DATASETS="spar_234k,llava_hound_64k"
 # ======================
 # Training Hyperparameters
 # ======================
-LR=1e-5
-total_batch_size=4
+LR=5e-6
+total_batch_size=2
 GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
-
+export NCCL_IGNORE_DISABLED_P2P=1
 torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
             --master_port=$MASTER_PORT \
@@ -49,7 +49,7 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --mm_projector_lr 1e-5 \
             --vision_tower_lr 0 \
             --optim adamw_torch \
-            --model_max_length 12800 \
+            --model_max_length 25600 \
             --data_flatten False \
             --max_pixels $((576*28*28)) \
             --min_pixels $((16*28*28)) \

@@ -1,0 +1,257 @@
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+[32m2025-10-29 08:20:43.733[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.733[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.733[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.733[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.733[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.733[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.734[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 08:20:43.736[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[W1029 08:20:43.719801591 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.719812105 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.719804628 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.719804077 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.719914248 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.719923418 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.719958135 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.719991549 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.720557989 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.720724895 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.720928331 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.720962206 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.723143872 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.723228079 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 08:20:43.725993949 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 08:20:43.726080748 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-29 08:20:44.730[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.730[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.742[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.751[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.752[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.754[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.757[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.757[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.759[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.783[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.783[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-29 08:20:44.784[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.795[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.795[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.797[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.803[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.804[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.806[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.809[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.809[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.811[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 08:20:44.832[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 08:20:44.832[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 08:20:44.834[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank2]:[W1029 08:20:44.786493263 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank7]:[W1029 08:20:44.786490421 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 7]  using GPU 7 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank6]:[W1029 08:20:44.786496755 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 6]  using GPU 6 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank4]:[W1029 08:20:44.786487502 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 4]  using GPU 4 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank1]:[W1029 08:20:44.786618844 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank3]:[W1029 08:20:44.786973072 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank5]:[W1029 08:20:44.797359933 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 5]  using GPU 5 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 8805.40it/s]
+[rank0]:[W1029 08:20:46.618442576 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:20:53.043[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-29 08:20:53.048[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+[32m2025-10-29 08:20:53.049[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:20:54.058[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+[32m2025-10-29 08:20:54.058[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:20:56.655[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:20:59.211[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 08:21:00.312[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:26, 13.36s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:06<00:12,  6.22s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:09<00:19,  9.89s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:26, 13.36s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:25, 12.50s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:24, 12.49s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:26, 13.35s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:07<00:14,  7.34s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:25<00:12, 12.36s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:25<00:12, 12.40s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:17<00:09,  9.46s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:21<00:10, 10.97s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:12, 12.04s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:25<00:12, 12.39s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:24<00:12, 12.04s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:19<00:09,  9.92s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:19<00:00,  5.79s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:19<00:00,  6.45s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  7.39s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:20<00:00,  6.04s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  7.39s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:23<00:00,  6.61s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  7.38s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  7.19s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  8.84s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  7.19s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:20<00:00,  6.83s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  8.83s/it]
+
+Loading checkpoint shards: 100%|██████████| 3/3 [00:23<00:00,  7.68s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:26<00:00,  8.83s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.55s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:25<00:00,  8.55s/it]
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+[32m2025-10-29 08:21:21.706[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.715[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.716[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.719[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.719[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.720[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.726[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.734[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.736[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 2...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:21:21.744[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.744[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.744[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 4...[0m
+[32m2025-10-29 08:21:21.744[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 1...[0m
+  0%|          | 0/642 [00:00<?, ?it/s]  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:21:21.746[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m126[0m - [1mUsing 8 devices with data parallelism[0m
+[32m2025-10-29 08:21:21.747[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.747[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 0...[0m
+[32m2025-10-29 08:21:21.747[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.747[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 6...[0m
+  0%|          | 0/642 [00:00<?, ?it/s]  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:21:21.749[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.749[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 5...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:21:21.756[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.756[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 3...[0m
+  0%|          | 0/641 [00:00<?, ?it/s][32m2025-10-29 08:21:21.760[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 08:21:21.790[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 08:21:21.790[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 7...[0m
+  0%|          | 0/641 [00:00<?, ?it/s] 24%|██▍       | 154/641 [00:00<00:00, 1533.47it/s] 27%|██▋       | 172/642 [00:00<00:00, 1714.59it/s] 27%|██▋       | 171/641 [00:00<00:00, 1703.97it/s] 28%|██▊       | 177/642 [00:00<00:00, 1768.22it/s] 28%|██▊       | 178/641 [00:00<00:00, 1772.24it/s] 28%|██▊       | 181/641 [00:00<00:00, 1805.75it/s] 32%|███▏      | 207/641 [00:00<00:00, 2064.44it/s] 36%|███▋      | 233/641 [00:00<00:00, 2327.12it/s] 61%|██████▏   | 394/641 [00:00<00:00, 2040.75it/s] 64%|██████▍   | 411/642 [00:00<00:00, 2106.67it/s] 63%|██████▎   | 407/641 [00:00<00:00, 2086.01it/s] 64%|██████▍   | 412/642 [00:00<00:00, 2108.32it/s] 65%|██████▍   | 414/641 [00:00<00:00, 2113.56it/s] 65%|██████▍   | 416/641 [00:00<00:00, 2120.58it/s] 69%|██████▉   | 444/641 [00:00<00:00, 2239.63it/s] 73%|███████▎  | 466/641 [00:00<00:00, 2315.68it/s]100%|█████████▉| 638/641 [00:00<00:00, 2219.29it/s]100%|██████████| 641/641 [00:00<00:00, 1940.38it/s]
+100%|██████████| 642/642 [00:00<00:00, 2007.60it/s]100%|██████████| 641/641 [00:00<00:00, 2007.58it/s]
+100%|██████████| 642/642 [00:00<00:00, 1991.38it/s]100%|██████████| 641/641 [00:00<00:00, 2064.95it/s]100%|██████████| 641/641 [00:00<00:00, 2017.90it/s]100%|██████████| 641/641 [00:00<00:00, 1988.83it/s]
+
+
+
+
+100%|██████████| 641/641 [00:00<00:00, 2312.48it/s]
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 08:21:22.371[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+Model Responding:   0%|          | 0/642 [00:00<?, ?it/s][2025-10-29 08:21:23,758] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,758] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,758] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,758] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,758] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,759] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,759] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 08:21:23,759] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+##############VGGT usage:########### True
+##############VGGT usage:#########################VGGT usage:###########  TrueTrue
+
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.60 GiB. GPU 1 has a total capacity of 23.64 GiB of which 413.69 MiB is free. Process 3042048 has 23.23 GiB memory in use. Of the allocated memory 22.46 GiB is allocated by PyTorch, and 196.33 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[32m2025-10-29 08:21:31.272[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 1.60 GiB. GPU 1 has a total capacity of 23.64 GiB of which 413.69 MiB is free. Process 3042048 has 23.23 GiB memory in use. Of the allocated memory 22.46 GiB is allocated by PyTorch, and 196.33 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+##############VGGT usage:########### False
+Model Responding:   0%|          | 1/642 [00:12<2:18:06, 12.93s/it]##############VGGT usage:########### True
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 330, in cli_evaluate
+    results, samples = cli_evaluate_single(args)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/__main__.py", line 471, in cli_evaluate_single
+    results = evaluator.simple_evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 248, in simple_evaluate
+    results = evaluate(
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/utils.py", line 533, in _wrapper
+    return fn(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/evaluator.py", line 458, in evaluate
+    resps = getattr(lm, reqtype)(cloned_reqs)  # Choiszt run generate until
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/lmms_eval/models/vgllm.py", line 340, in generate_until
+    cont = self.model.generate(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 2326, in generate
+    result = self._sample(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/generation/utils.py", line 3286, in _sample
+    outputs = self(**model_inputs, return_dict=True)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 1989, in forward
+    image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 566, in forward
+    hidden_states = blk(hidden_states, cu_seqlens=cu_seqlens_now, position_embeddings=position_embeddings)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 359, in forward
+    hidden_states = hidden_states + self.attn(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/model/modeling_qwen2_5_vl.py", line 328, in forward
+    attn_output = F.scaled_dot_product_attention(q, k, v, attention_mask, dropout_p=0.0)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 6.41 GiB. GPU 0 has a total capacity of 23.64 GiB of which 6.06 GiB is free. Process 3042047 has 17.57 GiB memory in use. Of the allocated memory 16.05 GiB is allocated by PyTorch, and 963.14 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[32m2025-10-29 08:21:36.469[0m | [31m[1mERROR   [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m349[0m - [31m[1mError during evaluation: CUDA out of memory. Tried to allocate 6.41 GiB. GPU 0 has a total capacity of 23.64 GiB of which 6.06 GiB is free. Process 3042047 has 17.57 GiB memory in use. Of the allocated memory 16.05 GiB is allocated by PyTorch, and 963.14 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables). Please set `--verbosity=DEBUG` to get more information.[0m
+Model Responding:   0%|          | 1/642 [00:14<2:30:35, 14.10s/it]

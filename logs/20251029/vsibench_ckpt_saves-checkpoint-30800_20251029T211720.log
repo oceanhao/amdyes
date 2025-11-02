@@ -1,0 +1,223 @@
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+[32m2025-10-29 21:18:36.184[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 21:18:36.184[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 21:18:36.184[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-29 21:18:36.184[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[W1029 21:18:36.863519338 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 21:18:36.863529265 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 21:18:36.863591941 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 21:18:36.863632850 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 21:18:36.864138300 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 21:18:36.864225305 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1029 21:18:36.864262459 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1029 21:18:36.864349813 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[32m2025-10-29 21:18:36.730[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 21:18:36.731[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 21:18:36.753[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 21:18:36.767[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 21:18:36.767[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 21:18:36.769[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 21:18:36.785[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 21:18:36.785[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 21:18:36.787[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-29 21:18:36.794[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251029'}[0m
+[32m2025-10-29 21:18:36.794[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['vsibench'][0m
+[32m2025-10-29 21:18:36.796[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[rank2]:[W1029 21:18:36.417733856 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank1]:[W1029 21:18:36.431399461 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank3]:[W1029 21:18:36.441485819 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 6838.54it/s]
+[rank0]:[W1029 21:18:37.529180386 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 21:18:45.690[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 21:18:46.786[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 21:18:48.073[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+[32m2025-10-29 21:18:52.731[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:10<00:21, 10.88s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:03<00:07,  3.95s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:09<00:19,  9.89s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:08<00:17,  8.60s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:13<00:07,  7.06s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:19<00:09,  9.54s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:17<00:09,  9.01s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:20<00:09,  9.95s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:19<00:00,  5.52s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:19<00:00,  6.42s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:20<00:00,  5.81s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:20<00:00,  6.86s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:14<00:00,  4.49s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:14<00:00,  4.88s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:21<00:00,  6.04s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:21<00:00,  7.19s/it]
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+[32m2025-10-29 21:19:09.127[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 21:19:09.129[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 21:19:09.135[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 21:19:09.149[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m126[0m - [1mUsing 4 devices with data parallelism[0m
+[32m2025-10-29 21:19:09.150[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 21:19:09.152[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 21:19:09.154[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 1...[0m
+[32m2025-10-29 21:19:09.154[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 0...[0m
+  0%|          | 0/1283 [00:00<?, ?it/s]  0%|          | 0/1283 [00:00<?, ?it/s][32m2025-10-29 21:19:09.158[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 21:19:09.158[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 2...[0m
+  0%|          | 0/1282 [00:00<?, ?it/s][32m2025-10-29 21:19:09.166[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-29 21:19:09.189[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for vsibench, using default n_shot=0[0m
+[32m2025-10-29 21:19:09.189[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for vsibench on rank 3...[0m
+  0%|          | 0/1282 [00:00<?, ?it/s] 20%|██        | 257/1283 [00:00<00:00, 2568.59it/s] 20%|██        | 257/1283 [00:00<00:00, 2552.38it/s] 22%|██▏       | 277/1282 [00:00<00:00, 2762.45it/s] 36%|███▌      | 461/1282 [00:00<00:00, 4608.15it/s] 59%|█████▉    | 756/1283 [00:00<00:00, 3988.55it/s] 59%|█████▉    | 759/1283 [00:00<00:00, 3996.32it/s] 62%|██████▏   | 795/1282 [00:00<00:00, 4179.92it/s] 76%|███████▌  | 970/1282 [00:00<00:00, 4886.64it/s]100%|██████████| 1283/1283 [00:00<00:00, 3976.25it/s]100%|██████████| 1282/1282 [00:00<00:00, 4025.61it/s]100%|██████████| 1283/1283 [00:00<00:00, 3976.04it/s]100%|██████████| 1282/1282 [00:00<00:00, 4459.54it/s]
+
+
+
+[32m2025-10-29 21:19:09.650[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 21:19:09.650[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 21:19:09.650[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[32m2025-10-29 21:19:09.650[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+Model Responding:   0%|          | 0/1283 [00:00<?, ?it/s][2025-10-29 21:19:11,683] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 21:19:11,683] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 21:19:11,684] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-29 21:19:11,684] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+##############VGGT usage:#########################VGGT usage:#########################VGGT usage:########### ##############VGGT usage:###########  TrueTrueTrue
+ 
+
+True
+##############VGGT usage:########### False
+Model Responding:   0%|          | 1/1283 [00:13<4:57:30, 13.92s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   0%|          | 2/1283 [00:19<3:06:19,  8.73s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   0%|          | 3/1283 [00:25<2:47:08,  7.83s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   0%|          | 4/1283 [00:30<2:22:51,  6.70s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   0%|          | 5/1283 [00:36<2:17:26,  6.45s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   0%|          | 6/1283 [00:41<2:07:45,  6.00s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### ##############VGGT usage:###########True 
+True
+Model Responding:   1%|          | 7/1283 [00:49<2:15:20,  6.36s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   1%|          | 8/1283 [00:53<2:04:39,  5.87s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   1%|          | 9/1283 [00:58<1:58:21,  5.57s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   1%|          | 10/1283 [01:03<1:54:37,  5.40s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   1%|          | 11/1283 [01:08<1:50:14,  5.20s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   1%|          | 12/1283 [01:14<1:52:51,  5.33s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   1%|          | 13/1283 [01:20<1:58:40,  5.61s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   1%|          | 14/1283 [01:27<2:10:24,  6.17s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   1%|          | 15/1283 [01:32<2:01:01,  5.73s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   1%|          | 16/1283 [01:37<1:56:46,  5.53s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   1%|▏         | 17/1283 [01:44<2:07:19,  6.03s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   1%|▏         | 18/1283 [01:49<2:00:49,  5.73s/it]

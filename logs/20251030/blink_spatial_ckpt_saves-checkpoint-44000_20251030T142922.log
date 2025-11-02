@@ -1,0 +1,888 @@
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+The following values were not passed to `accelerate launch` and had defaults used instead:
+		More than one GPU was found, enabling multi-GPU training.
+		If this was unintended please pass in `--num_processes=1`.
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+[32m2025-10-30 14:30:10.188[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[32m2025-10-30 14:30:10.190[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate[0m:[36m295[0m - [1mVerbosity set to INFO[0m
+[W1030 14:30:10.335538161 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1030 14:30:10.335646147 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W1030 14:30:10.336263503 Utils.hpp:164] Warning: Environment variable NCCL_BLOCKING_WAIT is deprecated; use TORCH_NCCL_BLOCKING_WAIT instead (function operator())
+[W1030 14:30:10.336380163 Utils.hpp:135] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-30 14:30:10.712[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251030'}[0m
+[32m2025-10-30 14:30:10.713[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['blink_spatial'][0m
+[32m2025-10-30 14:30:10.723[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+[32m2025-10-30 14:30:11.020[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m378[0m - [1mEvaluation tracker args: {'output_path': 'logs/20251030'}[0m
+[32m2025-10-30 14:30:11.021[0m | [1mINFO    [0m | [36m__main__[0m:[36mcli_evaluate_single[0m:[36m467[0m - [1mSelected Tasks: ['blink_spatial'][0m
+[32m2025-10-30 14:30:11.047[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36msimple_evaluate[0m:[36m155[0m - [1mSetting random seed to 0 | Setting numpy seed to 1234 | Setting torch manual seed to 1234[0m
+Generating val split:   0%|          | 0/143 [00:00<?, ? examples/s]Generating val split: 100%|██████████| 143/143 [00:00<00:00, 2066.50 examples/s]
+Generating test split:   0%|          | 0/143 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 143/143 [00:00<00:00, 3946.24 examples/s]
+Generating val split:   0%|          | 0/124 [00:00<?, ? examples/s]Generating val split: 100%|██████████| 124/124 [00:00<00:00, 5613.59 examples/s]
+Generating test split:   0%|          | 0/124 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 124/124 [00:00<00:00, 4881.54 examples/s]
+Generating val split:   0%|          | 0/133 [00:00<?, ? examples/s]Generating val split: 100%|██████████| 133/133 [00:00<00:00, 2569.81 examples/s]
+Generating test split:   0%|          | 0/133 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 133/133 [00:00<00:00, 3107.03 examples/s]
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Warning: FlashAttention 3 is not available, falling back to PyTorch's scaled_dot_product_attention
+Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[32m2025-10-30 14:30:33.140[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+[32m2025-10-30 14:30:33.140[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m86[0m - [1mUsing Qwen2_5_VLForConditionalGenerationWithVGGT[0m
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:24, 12.08s/it]Loading checkpoint shards:  33%|███▎      | 1/3 [00:12<00:24, 12.08s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:20<00:09,  9.77s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:20<00:09,  9.77s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:21<00:00,  5.96s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:21<00:00,  7.22s/it]
+Loading checkpoint shards: 100%|██████████| 3/3 [00:21<00:00,  5.96s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:21<00:00,  7.22s/it]
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.50, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+[32m2025-10-30 14:30:56.078[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-30 14:30:56.098[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_multi_view_reasoning, using default n_shot=0[0m
+[32m2025-10-30 14:30:56.098[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_relative_depth, using default n_shot=0[0m
+[32m2025-10-30 14:30:56.098[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_spatial_relation, using default n_shot=0[0m
+[32m2025-10-30 14:30:56.099[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_multi_view_reasoning on rank 1...[0m
+  0%|          | 0/66 [00:00<?, ?it/s]100%|██████████| 66/66 [00:00<00:00, 11266.29it/s]
+[32m2025-10-30 14:30:56.120[0m | [33m[1mWARNING [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m107[0m - [33m[1mSetting max_length to 8192[0m
+[32m2025-10-30 14:30:56.140[0m | [1mINFO    [0m | [36mlmms_eval.models.vgllm[0m:[36m__init__[0m:[36m126[0m - [1mUsing 2 devices with data parallelism[0m
+[32m2025-10-30 14:30:56.141[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_multi_view_reasoning, using default n_shot=0[0m
+[32m2025-10-30 14:30:56.141[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_relative_depth, using default n_shot=0[0m
+[32m2025-10-30 14:30:56.141[0m | [1mINFO    [0m | [36mlmms_eval.evaluator_utils[0m:[36mfrom_taskdict[0m:[36m91[0m - [1mNo metadata found in task config for blink_spatial_relation, using default n_shot=0[0m
+[32m2025-10-30 14:30:56.141[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_multi_view_reasoning on rank 0...[0m
+  0%|          | 0/67 [00:00<?, ?it/s]100%|██████████| 67/67 [00:00<00:00, 11341.45it/s]
+[32m2025-10-30 14:30:56.832[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_relative_depth on rank 1...[0m
+[32m2025-10-30 14:30:56.832[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_relative_depth on rank 0...[0m
+  0%|          | 0/62 [00:00<?, ?it/s]  0%|          | 0/62 [00:00<?, ?it/s]100%|██████████| 62/62 [00:00<00:00, 4704.09it/s]
+100%|██████████| 62/62 [00:00<00:00, 3743.24it/s]
+[32m2025-10-30 14:30:56.859[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_spatial_relation on rank 1...[0m
+  0%|          | 0/71 [00:00<?, ?it/s][32m2025-10-30 14:30:56.862[0m | [1mINFO    [0m | [36mlmms_eval.api.task[0m:[36mbuild_all_requests[0m:[36m425[0m - [1mBuilding contexts for blink_spatial_relation on rank 0...[0m
+  0%|          | 0/72 [00:00<?, ?it/s]100%|██████████| 71/71 [00:00<00:00, 5162.27it/s]
+100%|██████████| 72/72 [00:00<00:00, 3759.23it/s]
+[32m2025-10-30 14:30:56.893[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+Model Responding:   0%|          | 0/201 [00:00<?, ?it/s][32m2025-10-30 14:30:56.895[0m | [1mINFO    [0m | [36mlmms_eval.evaluator[0m:[36mevaluate[0m:[36m447[0m - [1mRunning generate_until requests[0m
+[2025-10-30 14:30:57,116] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-10-30 14:30:57,323] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   0%|          | 1/201 [00:04<15:10,  4.55s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   1%|          | 2/201 [00:06<09:24,  2.83s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   1%|▏         | 3/201 [00:07<07:22,  2.23s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   2%|▏         | 4/201 [00:08<05:10,  1.58s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   2%|▏         | 5/201 [00:08<04:02,  1.24s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   3%|▎         | 6/201 [00:10<04:24,  1.36s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   3%|▎         | 7/201 [00:12<04:39,  1.44s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   4%|▍         | 8/201 [00:14<05:06,  1.59s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:   4%|▍         | 9/201 [00:14<04:02,  1.27s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   5%|▍         | 10/201 [00:15<03:21,  1.05s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   5%|▌         | 11/201 [00:16<03:22,  1.06s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   6%|▌         | 12/201 [00:17<03:56,  1.25s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   6%|▋         | 13/201 [00:19<04:13,  1.35s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:   7%|▋         | 14/201 [00:20<04:11,  1.34s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   7%|▋         | 15/201 [00:21<03:27,  1.11s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   8%|▊         | 16/201 [00:21<02:56,  1.05it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:   8%|▊         | 17/201 [00:23<03:45,  1.23s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   9%|▉         | 18/201 [00:25<04:17,  1.41s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:   9%|▉         | 19/201 [00:27<04:39,  1.54s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  10%|▉         | 20/201 [00:29<04:46,  1.58s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  10%|█         | 21/201 [00:29<03:49,  1.28s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  11%|█         | 22/201 [00:30<03:12,  1.08s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  11%|█▏        | 23/201 [00:32<03:41,  1.24s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  12%|█▏        | 24/201 [00:33<03:59,  1.35s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  12%|█▏        | 25/201 [00:35<04:21,  1.49s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  13%|█▎        | 26/201 [00:35<03:31,  1.21s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  13%|█▎        | 27/201 [00:36<02:56,  1.01s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  14%|█▍        | 28/201 [00:37<02:40,  1.08it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  14%|█▍        | 29/201 [00:38<03:15,  1.14s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  15%|█▍        | 30/201 [00:40<03:41,  1.30s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  15%|█▌        | 31/201 [00:42<03:57,  1.40s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  16%|█▌        | 32/201 [00:42<03:14,  1.15s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  16%|█▋        | 33/201 [00:43<02:46,  1.01it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  17%|█▋        | 34/201 [00:45<03:16,  1.18s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  17%|█▋        | 35/201 [00:46<03:37,  1.31s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  18%|█▊        | 36/201 [00:48<04:05,  1.49s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  18%|█▊        | 37/201 [00:49<03:19,  1.22s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  19%|█▉        | 38/201 [00:49<02:46,  1.02s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  19%|█▉        | 39/201 [00:50<02:24,  1.12it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  20%|█▉        | 40/201 [00:51<02:59,  1.12s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  20%|██        | 41/201 [00:53<03:20,  1.25s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  21%|██        | 42/201 [00:55<03:50,  1.45s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  21%|██▏       | 43/201 [00:55<03:07,  1.19s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  22%|██▏       | 44/201 [00:56<02:37,  1.00s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  22%|██▏       | 45/201 [00:57<02:15,  1.15it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  23%|██▎       | 46/201 [00:58<02:35,  1.00s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  23%|██▎       | 47/201 [01:00<03:03,  1.19s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  24%|██▍       | 48/201 [01:01<03:22,  1.32s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  24%|██▍       | 49/201 [01:02<03:14,  1.28s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  25%|██▍       | 50/201 [01:03<02:41,  1.07s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  25%|██▌       | 51/201 [01:04<02:56,  1.18s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  26%|██▌       | 52/201 [01:06<03:24,  1.37s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  26%|██▋       | 53/201 [01:08<03:35,  1.45s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  27%|██▋       | 54/201 [01:09<03:40,  1.50s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  27%|██▋       | 55/201 [01:10<02:59,  1.23s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  28%|██▊       | 56/201 [01:11<02:32,  1.05s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  28%|██▊       | 57/201 [01:12<03:04,  1.28s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  29%|██▉       | 58/201 [01:14<03:26,  1.45s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  29%|██▉       | 59/201 [01:16<03:41,  1.56s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  30%|██▉       | 60/201 [01:18<03:45,  1.60s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  30%|███       | 61/201 [01:18<03:01,  1.29s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  31%|███       | 62/201 [01:19<02:30,  1.08s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  31%|███▏      | 63/201 [01:20<02:37,  1.14s/it]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  32%|███▏      | 64/201 [01:22<02:58,  1.30s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  32%|███▏      | 65/201 [01:24<03:09,  1.40s/it]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  33%|███▎      | 66/201 [01:25<02:55,  1.30s/it]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  33%|███▎      | 67/201 [01:25<02:25,  1.09s/it]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  34%|███▍      | 68/201 [01:26<02:05,  1.06it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  34%|███▍      | 69/201 [01:26<01:50,  1.20it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  35%|███▍      | 70/201 [01:28<02:01,  1.07it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  35%|███▌      | 71/201 [01:28<01:53,  1.15it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  36%|███▌      | 72/201 [01:29<01:43,  1.24it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  36%|███▋      | 73/201 [01:30<01:34,  1.35it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  37%|███▋      | 74/201 [01:31<01:46,  1.19it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  37%|███▋      | 75/201 [01:31<01:22,  1.53it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  38%|███▊      | 76/201 [01:31<01:04,  1.93it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  38%|███▊      | 77/201 [01:31<00:52,  2.37it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  39%|███▉      | 78/201 [01:31<00:44,  2.74it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  39%|███▉      | 79/201 [01:32<00:38,  3.15it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  40%|███▉      | 80/201 [01:32<00:47,  2.56it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  40%|████      | 81/201 [01:33<01:01,  1.95it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  41%|████      | 82/201 [01:34<01:05,  1.82it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  41%|████▏     | 83/201 [01:34<01:11,  1.66it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  42%|████▏     | 84/201 [01:35<01:12,  1.60it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  42%|████▏     | 85/201 [01:36<01:16,  1.51it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  43%|████▎     | 86/201 [01:37<01:27,  1.32it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  43%|████▎     | 87/201 [01:37<01:07,  1.68it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  44%|████▍     | 88/201 [01:37<00:53,  2.09it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  44%|████▍     | 89/201 [01:38<00:46,  2.42it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  45%|████▍     | 90/201 [01:38<00:39,  2.78it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  45%|████▌     | 91/201 [01:38<00:39,  2.81it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  46%|████▌     | 92/201 [01:39<00:49,  2.20it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  46%|████▋     | 93/201 [01:40<01:00,  1.78it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  47%|████▋     | 94/201 [01:40<01:06,  1.62it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  47%|████▋     | 95/201 [01:41<01:09,  1.53it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  48%|████▊     | 96/201 [01:42<01:09,  1.51it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  48%|████▊     | 97/201 [01:43<01:16,  1.36it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  49%|████▉     | 98/201 [01:43<00:59,  1.73it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  49%|████▉     | 99/201 [01:43<00:47,  2.14it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  50%|████▉     | 100/201 [01:43<00:39,  2.53it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  50%|█████     | 101/201 [01:44<00:34,  2.88it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  51%|█████     | 102/201 [01:44<00:30,  3.27it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  51%|█████     | 103/201 [01:44<00:41,  2.38it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  52%|█████▏    | 104/201 [01:45<00:49,  1.98it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  52%|█████▏    | 105/201 [01:46<00:53,  1.81it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  53%|█████▎    | 106/201 [01:46<00:53,  1.78it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  53%|█████▎    | 107/201 [01:47<00:54,  1.71it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  54%|█████▎    | 108/201 [01:48<00:56,  1.65it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  54%|█████▍    | 109/201 [01:48<00:59,  1.56it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  55%|█████▍    | 110/201 [01:49<00:46,  1.96it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  55%|█████▌    | 111/201 [01:49<00:37,  2.39it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  56%|█████▌    | 112/201 [01:49<00:31,  2.81it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  56%|█████▌    | 113/201 [01:49<00:27,  3.22it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  57%|█████▋    | 114/201 [01:49<00:24,  3.58it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  57%|█████▋    | 115/201 [01:50<00:26,  3.29it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  58%|█████▊    | 116/201 [01:50<00:35,  2.40it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  58%|█████▊    | 117/201 [01:51<00:41,  2.03it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  59%|█████▊    | 118/201 [01:52<00:48,  1.71it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  59%|█████▉    | 119/201 [01:53<00:48,  1.69it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  60%|█████▉    | 120/201 [01:53<00:51,  1.57it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  60%|██████    | 121/201 [01:54<00:52,  1.53it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  61%|██████    | 122/201 [01:55<00:53,  1.49it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  61%|██████    | 123/201 [01:55<00:41,  1.88it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  62%|██████▏   | 124/201 [01:55<00:33,  2.30it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  62%|██████▏   | 125/201 [01:55<00:27,  2.74it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  63%|██████▎   | 126/201 [01:56<00:23,  3.15it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  63%|██████▎   | 127/201 [01:56<00:22,  3.27it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  64%|██████▎   | 128/201 [01:56<00:30,  2.40it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  64%|██████▍   | 129/201 [01:57<00:36,  1.96it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  65%|██████▍   | 130/201 [01:58<00:44,  1.60it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  65%|██████▌   | 131/201 [01:59<00:46,  1.52it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  66%|██████▌   | 132/201 [02:00<00:46,  1.50it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  66%|██████▌   | 133/201 [02:00<00:48,  1.42it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  67%|██████▋   | 134/201 [02:01<00:37,  1.78it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  67%|██████▋   | 135/201 [02:01<00:31,  2.09it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  68%|██████▊   | 136/201 [02:01<00:27,  2.38it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  68%|██████▊   | 137/201 [02:01<00:23,  2.76it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  69%|██████▊   | 138/201 [02:02<00:29,  2.15it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  69%|██████▉   | 139/201 [02:03<00:36,  1.69it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  70%|██████▉   | 140/201 [02:04<00:41,  1.47it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  70%|███████   | 141/201 [02:05<00:42,  1.43it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  71%|███████   | 142/201 [02:06<00:45,  1.29it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  71%|███████   | 143/201 [02:06<00:39,  1.46it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  72%|███████▏  | 144/201 [02:06<00:32,  1.77it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  72%|███████▏  | 145/201 [02:06<00:25,  2.18it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  73%|███████▎  | 146/201 [02:07<00:21,  2.57it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  73%|███████▎  | 147/201 [02:07<00:27,  2.00it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  74%|███████▎  | 148/201 [02:08<00:28,  1.86it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  74%|███████▍  | 149/201 [02:09<00:30,  1.72it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  75%|███████▍  | 150/201 [02:10<00:33,  1.54it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  75%|███████▌  | 151/201 [02:11<00:36,  1.38it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  76%|███████▌  | 152/201 [02:11<00:36,  1.34it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  76%|███████▌  | 153/201 [02:12<00:31,  1.51it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  77%|███████▋  | 154/201 [02:12<00:25,  1.81it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  77%|███████▋  | 155/201 [02:12<00:21,  2.18it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  78%|███████▊  | 156/201 [02:13<00:17,  2.62it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  78%|███████▊  | 157/201 [02:13<00:14,  3.05it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  79%|███████▊  | 158/201 [02:13<00:12,  3.33it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  79%|███████▉  | 159/201 [02:13<00:14,  2.89it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  80%|███████▉  | 160/201 [02:14<00:18,  2.24it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  80%|████████  | 161/201 [02:15<00:21,  1.83it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  81%|████████  | 162/201 [02:16<00:24,  1.58it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  81%|████████  | 163/201 [02:16<00:25,  1.48it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  82%|████████▏ | 164/201 [02:17<00:25,  1.45it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  82%|████████▏ | 165/201 [02:18<00:27,  1.30it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  83%|████████▎ | 166/201 [02:18<00:21,  1.65it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  83%|████████▎ | 167/201 [02:19<00:17,  1.89it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  84%|████████▎ | 168/201 [02:20<00:20,  1.62it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  84%|████████▍ | 169/201 [02:20<00:20,  1.58it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  85%|████████▍ | 170/201 [02:21<00:20,  1.51it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  85%|████████▌ | 171/201 [02:22<00:22,  1.36it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  86%|████████▌ | 172/201 [02:22<00:20,  1.43it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  86%|████████▌ | 173/201 [02:23<00:21,  1.32it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  87%|████████▋ | 174/201 [02:24<00:16,  1.67it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  87%|████████▋ | 175/201 [02:24<00:13,  1.98it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  88%|████████▊ | 176/201 [02:24<00:10,  2.36it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  88%|████████▊ | 177/201 [02:24<00:08,  2.79it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  89%|████████▊ | 178/201 [02:25<00:07,  3.10it/s]##############VGGT usage:########### False
+##############VGGT usage:########### ##############VGGT usage:###########True 
+True
+Model Responding:  89%|████████▉ | 179/201 [02:25<00:07,  3.00it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  90%|████████▉ | 180/201 [02:26<00:10,  2.07it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  90%|█████████ | 181/201 [02:26<00:10,  1.85it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  91%|█████████ | 182/201 [02:27<00:12,  1.54it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  91%|█████████ | 183/201 [02:28<00:11,  1.53it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  92%|█████████▏| 184/201 [02:29<00:11,  1.51it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  92%|█████████▏| 185/201 [02:30<00:11,  1.35it/s]##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  93%|█████████▎| 186/201 [02:30<00:08,  1.68it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  93%|█████████▎| 187/201 [02:30<00:06,  2.06it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  94%|█████████▎| 188/201 [02:30<00:05,  2.49it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  94%|█████████▍| 189/201 [02:31<00:04,  2.41it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  95%|█████████▍| 190/201 [02:31<00:05,  1.93it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+Model Responding:  95%|█████████▌| 191/201 [02:32<00:05,  1.82it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  96%|█████████▌| 192/201 [02:33<00:06,  1.47it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  96%|█████████▌| 193/201 [02:34<00:05,  1.48it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  97%|█████████▋| 194/201 [02:34<00:04,  1.54it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding:  97%|█████████▋| 195/201 [02:35<00:04,  1.49it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  98%|█████████▊| 196/201 [02:36<00:03,  1.29it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  98%|█████████▊| 197/201 [02:36<00:02,  1.60it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+Model Responding:  99%|█████████▊| 198/201 [02:37<00:01,  2.00it/s]##############VGGT usage:########### True
+##############VGGT usage:########### True
+Model Responding:  99%|█████████▉| 199/201 [02:37<00:00,  2.35it/s]##############VGGT usage:########### False
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding: 100%|█████████▉| 200/201 [02:37<00:00,  2.72it/s]##############VGGT usage:########### False
+##############VGGT usage:########### False
+Model Responding: 100%|██████████| 201/201 [02:37<00:00,  2.94it/s]Model Responding: 100%|██████████| 201/201 [02:37<00:00,  1.27it/s]
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### True
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+##############VGGT usage:########### False
+Postprocessing:   0%|          | 0/67 [00:00<?, ?it/s]Postprocessing: 100%|██████████| 67/67 [00:00<00:00, 3040.47it/s]
+Postprocessing:   0%|          | 0/62 [00:00<?, ?it/s]Postprocessing: 100%|██████████| 62/62 [00:00<00:00, 5681.10it/s]
+Postprocessing:   0%|          | 0/72 [00:00<?, ?it/s]Postprocessing: 100%|██████████| 72/72 [00:00<00:00, 8041.48it/s]
+[32m2025-10-30 14:33:38.180[0m | [1mINFO    [0m | [36mutils[0m:[36mblink_aggregate_results[0m:[36m114[0m - [1mEvaluation results: {'accuracy': 0.556390977443609}[0m
+[32m2025-10-30 14:33:38.183[0m | [1mINFO    [0m | [36mutils[0m:[36mblink_aggregate_results[0m:[36m114[0m - [1mEvaluation results: {'accuracy': 0.4838709677419355}[0m
+[32m2025-10-30 14:33:38.185[0m | [1mINFO    [0m | [36mutils[0m:[36mblink_aggregate_results[0m:[36m114[0m - [1mEvaluation results: {'accuracy': 0.8251748251748252}[0m
+[32m2025-10-30 14:33:38.360[0m | [1mINFO    [0m | [36mlmms_eval.loggers.evaluation_tracker[0m:[36msave_results_aggregated[0m:[36m188[0m - [1mSaving results aggregated[0m
+vgllm (pretrained=/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/checkpoint-44000,max_num_frames=16,max_length=8192), gen_kwargs: (), limit: None, num_fewshot: None, batch_size: 1
+|            Tasks            |Version|Filter|n-shot|  Metric   |   | Value |   |Stderr|
+|-----------------------------|-------|------|-----:|-----------|---|------:|---|------|
+|blink_spatial                |    N/A|none  |      |blink_score|↑  |62.1812|±  |   N/A|
+| - blink_multi_view_reasoning|Yaml   |none  |     0|blink_score|↑  |55.6391|±  |   N/A|
+| - blink_relative_depth      |Yaml   |none  |     0|blink_score|↑  |48.3871|±  |   N/A|
+| - blink_spatial_relation    |Yaml   |none  |     0|blink_score|↑  |82.5175|±  |   N/A|
+
+|   Groups    |Version|Filter|n-shot|  Metric   |   | Value |   |Stderr|
+|-------------|-------|------|------|-----------|---|------:|---|------|
+|blink_spatial|    N/A|none  |      |blink_score|↑  |62.1812|±  |   N/A|
+

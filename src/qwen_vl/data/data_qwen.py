@@ -55,6 +55,7 @@ def preprocess_qwen_2_visual(
     tokenizer: transformers.PreTrainedTokenizer,
     grid_thw: List = [],
     visual_type: str = "image",
+    vggt_use: bool=False
 ) -> Dict:
     roles = {"human": "user", "gpt": "assistant"}
     system_message = "You are a helpful assistant."
@@ -98,12 +99,24 @@ def preprocess_qwen_2_visual(
                     new_parts = []
                     for i in range(len(parts) - 1):
                         new_parts.append(parts[i])
-                        replacement = (
-                            "<|vision_start|>"
-                            + f"<|{visual_type}_pad|>"
-                            * grid_thw[visual_replicate_index]
-                            + "<|vision_end|>"
-                        )
+                        if vggt_use:
+                            replacement = (
+                                "<|vision_start|>"
+                                + f"<|{visual_type}_pad|>"
+                                * grid_thw[visual_replicate_index]
+                                + "<|vision_end|>"
+                                +"<|vggt_start|>"
+                                + f"<|vggt_pad|>"
+                                * grid_thw[visual_replicate_index]
+                                + "<|vggt_end|>"    
+                            )
+                        else:
+                            replacement = (
+                                "<|vision_start|>"
+                                + f"<|{visual_type}_pad|>"
+                                * grid_thw[visual_replicate_index]
+                                + "<|vision_end|>"
+                            )
                         new_parts.append(replacement)
                         visual_replicate_index += 1
                     new_parts.append(parts[-1])
@@ -185,6 +198,10 @@ class LazySupervisedDataset(Dataset):
         self.data_args.image_processor.min_pixels = data_args.min_pixels
         self.data_args.image_processor.size["longest_edge"] = data_args.max_pixels
         self.data_args.image_processor.size["shortest_edge"] = data_args.min_pixels
+
+        #hhh
+        self.stage=data_args.stage
+        self.use_vggt_epoch=False
 
     def __len__(self):
         return len(self.list_data_dict)
@@ -374,6 +391,8 @@ class LazySupervisedDataset(Dataset):
         return images
 
     def _get_item(self, i) -> Dict[str, torch.Tensor]:
+        if self.stage == "cold_start":
+            self.use_vggt_epoch = bool(random.getrandbits(1))
         sources = self.list_data_dict[i]
         if isinstance(i, int):
             sources = [sources]
@@ -431,7 +450,7 @@ class LazySupervisedDataset(Dataset):
             ]
             sources = copy.deepcopy([e["conversations"] for e in sources])
             data_dict = preprocess_qwen_2_visual(
-                sources, self.tokenizer, grid_thw=grid_thw_merged, visual_type="image"
+                sources, self.tokenizer, grid_thw=grid_thw_merged, visual_type="image",vggt_use=self.use_vggt_epoch
             )
             position_ids, _ = self.get_rope_index(
                 self.data_args.image_processor.merge_size,
@@ -467,7 +486,7 @@ class LazySupervisedDataset(Dataset):
             ]
             sources = copy.deepcopy([e["conversations"] for e in sources])
             data_dict = preprocess_qwen_2_visual(
-                sources, self.tokenizer, grid_thw=grid_thw_merged, visual_type="video"
+                sources, self.tokenizer, grid_thw=grid_thw_merged, visual_type="video",vggt_use=self.use_vggt_epoch
             )
             position_ids, _ = self.get_rope_index(
                 self.data_args.image_processor.merge_size,
@@ -479,7 +498,7 @@ class LazySupervisedDataset(Dataset):
             grid_thw_merged = None
             sources = copy.deepcopy([e["conversations"] for e in sources])
             data_dict = preprocess_qwen_2_visual(
-                sources, self.tokenizer, grid_thw=grid_thw_merged
+                sources, self.tokenizer, grid_thw=grid_thw_merged,vggt_use=self.use_vggt_epoch
             )
             position_ids = (
                 torch.arange(0, data_dict["input_ids"].size(1))
