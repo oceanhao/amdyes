@@ -6,7 +6,7 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=4  # Automatically detects available GPUs
+NPROC_PER_NODE=1  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
@@ -14,28 +14,25 @@ NPROC_PER_NODE=4  # Automatically detects available GPUs
 MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
-OUTPUT_DIR="train_output"                   # Directory for saving checkpoints
+OUTPUT_DIR="datagenerate_rlColdStartOutput"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
 
 # ======================
 # Model Configuration
 # ======================
-DATASETS="spar_234k,llava_hound_64k"   
+DATASETS="llava_hound_sampleN"   
 # DATASETS="spar_234k"                 # [DataArguments] Dataset with sampling rate
 
 # ======================
 # Training Hyperparameters
 # ======================
-LR=5e-6
-# total_batch_size=4
-# GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
-GRADIENT_ACCUMULATION_STEPS=4
+
 export NCCL_IGNORE_DISABLED_P2P=1
-nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
+torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
             --master_port=$MASTER_PORT \
-            src/qwen_vl/train/train_qwen.py \
+            scripts/data_generation/dataGener_qwen.py \
             --model_name_or_path $MODEL_PATH \
             --tune_mm_llm True \
             --tune_mm_vision False \
@@ -44,26 +41,15 @@ nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --output_dir $OUTPUT_DIR \
             --cache_dir $CACHE_DIR \
             --bf16 \
-            --per_device_train_batch_size 1 \
-            --gradient_accumulation_steps $GRADIENT_ACCUMULATION_STEPS \
-            --learning_rate $LR \
-            --mm_projector_lr 1e-5 \
-            --vision_tower_lr 0 \
-            --optim adamw_torch \
             --model_max_length 25600 \
             --data_flatten False \
+            --max_pixels $((576*28*28)) \
+            --min_pixels $((16*28*28)) \
             --base_interval 2 \
             --video_max_frames 8 \
             --video_min_frames 4 \
-            --num_train_epochs 1 \
-            --warmup_ratio 0.03 \
-            --lr_scheduler_type "cosine" \
-            --weight_decay 0.01 \
-            --logging_steps 50 \
-            --save_steps 1000 \
-            --save_total_limit 4 \
-            --deepspeed "scripts/zero2_opt.json" \
-            --gradient_checkpointing \
+            --video_max_frame_pixels $((1664*28*28)) \
+            --video_min_frame_pixels $((256*28*28)) \
             --dataloader_num_workers 4 \
             --group_by_modality_length true \
             --seed 0 \
@@ -71,5 +57,5 @@ nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --use_geometry_encoder true \
             --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
             --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
-            --stage "cold_start" \
-            > ${OUTPUT_DIR}/train.log 2>&1 &
+            --stage "stage2-1_rlColdStart" \
+            > ${OUTPUT_DIR}/datagenerate.log 2>&1

@@ -7,10 +7,10 @@ export NCCL_ASYNC_ERROR_HANDLING=1   # 发生通信异常及时报错而不是�
 export NCCL_BLOCKING_WAIT=1          # collective 出错立刻阻塞报错，便于定位
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export NCCL_IGNORE_DISABLED_P2P=1
-benchmark="cvbench"                     # choices: [vsibench, cvbench, blink_spatial]
-model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/checkpoint-67000"
-num_processes=1
-
+benchmark="blink_spatial"                     # choices: [vsibench, cvbench, blink_spatial]
+model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init"
+num_processes=4
+stage='force_use' #'force_use'、'force_notuse'\'cold_start'
 # ---------- 输出与日志 ----------
 out_root="logs"                                          # 总日志根目录
 out_day="${out_root}/$(TZ='Asia/Shanghai' date +%Y%m%d)" # 日期分桶
@@ -39,7 +39,7 @@ echo "[INFO] output_path=${output_path}"
 # ---------- 启动（后台 + nohup + 重定向到日志） ----------
 nohup accelerate launch --main_process_port "${PORT}" --num_processes="${num_processes}" -m lmms_eval \
   --model vgllm \
-  --model_args "pretrained=${model_path},max_num_frames=8,max_length=8192" \
+  --model_args "pretrained=${model_path},max_num_frames=8,max_length=25600,stage=${stage}" \
   --tasks "${benchmark}" \
   --batch_size 1 \
   --output_path "${output_path}" \

@@ -216,7 +216,10 @@ class Qwen2_5_VL(lmms):
             # for i in range(len(contexts)):
             #     if "<image>" in contexts[i]:
             #         contexts[i] = contexts[i].replace("<image>", "")
-
+            import os
+            if os.getenv("Debug", "False")=="True":
+                from remote_pdb import RemotePdb
+                RemotePdb('127.0.0.1', 8457).set_trace()
             messages = []
             processed_visuals = []
             for i, context in enumerate(contexts):

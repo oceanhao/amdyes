@@ -57,6 +57,7 @@ from .loss import normalize_pointcloud, check_and_fix_inf_nan
 
 import torch.distributed as dist
 import random
+import os
 
 if is_flash_attn_2_available():
     from flash_attn import flash_attn_varlen_func
@@ -2007,7 +2008,9 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
             if pixel_values is not None:
                 pixel_values = pixel_values.type(self.visual.dtype)
                 image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw) # self.visual是一个vision transformer
-                
+                if os.getenv("Debug", "False")=="True":
+                    from remote_pdb import RemotePdb
+                    RemotePdb('127.0.0.1', 18457).set_trace()
                 # Process 3D geometry features if enabled
                 if getattr(self.config, 'use_geometry_encoder', False) and geometry_encoder_inputs is not None:
                     image_embeds,vggt_embeds = self._process_geometry_features(image_embeds, geometry_encoder_inputs)

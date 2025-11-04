@@ -45,6 +45,12 @@ LLAVA_HOUND_64K = {
     "tag": "2d"
 }
 
+llava_hound_sampleN = {
+    "annotation_path": "data/train/llava_hound_sample10.json",
+    "data_path": "data/media",
+    "tag": "2d"
+}
+
 SCANNET_DET = {
     "annotation_path": "data/train/scannet_det_train_4frames.json",
     "data_path": "data/media",
@@ -75,6 +81,7 @@ data_dict = {
     "scan2cap": SCAN2CAP,
     "spar_234k": SPAR_234K,
     "llava_hound_64k": LLAVA_HOUND_64K,
+    "llava_hound_sampleN":llava_hound_sampleN
 }
 
 

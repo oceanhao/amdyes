@@ -50,12 +50,14 @@ def read_jsonl(path, max_samples: int=-1):
     return ret
 
 
+# CHG: 增加 stage 参数
 def preprocess_qwen_2_visual(
     sources,
     tokenizer: transformers.PreTrainedTokenizer,
     grid_thw: List = [],
     visual_type: str = "image",
-    vggt_use: bool=False
+    vggt_use: bool=False,
+    stage: str = None,               # NEW
 ) -> Dict:
     roles = {"human": "user", "gpt": "assistant"}
     system_message = "You are a helpful assistant."
@@ -66,6 +68,9 @@ def preprocess_qwen_2_visual(
     chat_template = "{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}"
     tokenizer.chat_template = chat_template
 
+    # NEW: 标记是否进入 RL ColdStart 推理阶段（仅取 user）
+    rl_coldstart = (stage == "stage2-1_rlColdStart")  # NEW
+
     visual_replicate_index = 0
     input_ids, targets = [], []
 
@@ -75,6 +80,24 @@ def preprocess_qwen_2_visual(
                 source = source[1:]
         except:
             print(sources)
+
+        # NEW: 在 RL ColdStart 阶段，仅保留“用户”消息
+        if rl_coldstart:  # NEW
+            filtered = []  # NEW
+            for _conv in source:  # NEW
+                try:  # NEW
+                    role = _conv["role"]  # NEW
+                    content = _conv["content"]  # NEW
+                except:  # NEW
+                    role = _conv["from"]  # NEW
+                    content = _conv["value"]  # NEW
+                role = roles.get(role, role)  # NEW
+                if role == "user":  # 只保留 user  # NEW
+                    filtered.append({"role": role, "content": content})  # NEW
+            source = filtered  # NEW
+            # 若该条样本中没有 user 内容，则直接跳过  # NEW
+            if len(source) == 0:  # NEW
+                continue  # NEW
 
         input_id, target = [], []
 
@@ -105,10 +128,10 @@ def preprocess_qwen_2_visual(
                                 + f"<|{visual_type}_pad|>"
                                 * grid_thw[visual_replicate_index]
                                 + "<|vision_end|>"
-                                +"<|vggt_start|>"
+                                + "<|vggt_start|>"
                                 + f"<|vggt_pad|>"
                                 * grid_thw[visual_replicate_index]
-                                + "<|vggt_end|>"    
+                                + "<|vggt_end|>"
                             )
                         else:
                             replacement = (
@@ -128,9 +151,17 @@ def preprocess_qwen_2_visual(
             if role in ["user", "system"]:
                 target += [IGNORE_INDEX] * len(encode_id)
             else:
+                # 训练时 assistant 才会走到这里；RL ColdStart 阶段不会进入
                 target_mask = encode_id.copy()
                 target_mask[:3] = [IGNORE_INDEX] * 3
                 target += target_mask
+
+        # NEW: 在 RL ColdStart 阶段，为生成回答补上 assistant 起始提示（不含内容）
+        if rl_coldstart or stage in ["force_use","force_notuse"]:
+            add_prompt_str = "<|im_start|>assistant\n"  # 和你上面 chat_template 的生成提示严格一致
+            add_tokens = tokenizer.encode(add_prompt_str, add_special_tokens=False)
+            input_id += add_tokens
+            target  += [IGNORE_INDEX] * len(add_tokens)
 
         assert len(input_id) == len(target), f"{len(input_id)} != {len(target)}"
         input_ids.append(input_id)
@@ -143,16 +174,17 @@ def preprocess_qwen_2_visual(
         labels=targets,
     )
 
-
 class LazySupervisedDataset(Dataset):
     """Dataset for supervised fine-tuning."""
 
     def __init__(self, tokenizer: transformers.PreTrainedTokenizer, data_args):
         super(LazySupervisedDataset, self).__init__()
-
-        dataset = data_args.dataset_use.split(",")
-        dataset_list = data_list(dataset)
-        print(f"Loading datasets: {dataset_list}")
+        if data_args.dataset_use:
+            dataset = data_args.dataset_use.split(",")
+            dataset_list = data_list(dataset)
+            print(f"Loading datasets: {dataset_list}")
+        else:
+            print("########  inference mode   ###########")
         self.video_max_total_pixels = getattr(
             data_args, "video_max_total_pixels", 1664 * 28 * 28
         )
@@ -166,31 +198,31 @@ class LazySupervisedDataset(Dataset):
             self.get_rope_index = get_rope_index_2
 
         list_data_dict = []
+        if data_args.dataset_use:
+            for data in dataset_list:
+                file_format = data["annotation_path"].split(".")[-1]
+                if file_format == "jsonl":
+                    annotations = read_jsonl(data["annotation_path"], max_samples=data_args.max_samples)
+                else:
+                    annotations = json.load(open(data["annotation_path"], "r"))
+                sampling_rate = data.get("sampling_rate", 1.0)
+                if sampling_rate < 1.0:
+                    annotations = random.sample(
+                        annotations, int(len(annotations) * sampling_rate)
+                    )
+                    print(f"sampling {len(annotations)} examples from dataset {data}")
+                else:
+                    rank0_print(f"dataset name: {data}")
+                for ann in annotations:
+                    ann["data_path"] = data["data_path"]
+                    ann["tag"] = data["tag"]
+                list_data_dict += annotations
 
-        for data in dataset_list:
-            file_format = data["annotation_path"].split(".")[-1]
-            if file_format == "jsonl":
-                annotations = read_jsonl(data["annotation_path"], max_samples=data_args.max_samples)
-            else:
-                annotations = json.load(open(data["annotation_path"], "r"))
-            sampling_rate = data.get("sampling_rate", 1.0)
-            if sampling_rate < 1.0:
-                annotations = random.sample(
-                    annotations, int(len(annotations) * sampling_rate)
-                )
-                print(f"sampling {len(annotations)} examples from dataset {data}")
-            else:
-                rank0_print(f"dataset name: {data}")
-            for ann in annotations:
-                ann["data_path"] = data["data_path"]
-                ann["tag"] = data["tag"]
-            list_data_dict += annotations
+            print(f"Total training samples: {len(list_data_dict)}")
 
-        print(f"Total training samples: {len(list_data_dict)}")
+            random.shuffle(list_data_dict)  # Randomly shuffle the data for training
 
-        random.shuffle(list_data_dict)  # Randomly shuffle the data for training
-
-        print("Formatting inputs...Skip in lazy mode")
+            print("Formatting inputs...Skip in lazy mode")
         self.tokenizer = tokenizer
         self.list_data_dict = list_data_dict
         self.data_args = data_args
@@ -351,48 +383,164 @@ class LazySupervisedDataset(Dataset):
             return sample
         except Exception as e:
             raise e
-    
-    def read_video_images(self, source):
-        # read video images from the source
-        assert isinstance(source["video"], str), "video should be a string"
-        video_file = os.path.join(source["data_path"], source["video"])
-        if not os.path.exists(video_file):
-            print(f"File not exist: {video_file}")
-            raise FileNotFoundError
-        
-        def get_frame_indices(total_frames, fps=1):
-            video_length = total_frames / fps
-            interval = getattr(self.data_args, "base_interval", 2)
-            num_frames_to_sample = round(video_length / interval)
-            video_min_frames = getattr(self.data_args, "video_min_frames", 4)
-            video_max_frames = getattr(self.data_args, "video_max_frames", 8)
-            target_frames = min(
-                max(num_frames_to_sample, video_min_frames), video_max_frames
-            )
-            frame_idx = np.linspace(0, total_frames - 1, target_frames, dtype=int)
-            frame_idx = np.unique(frame_idx)
-            return frame_idx        
+    # 放在 Dataset 类中
+    def _resolve_images(self, source: dict) -> List[Image.Image]:
+        """
+        返回 PIL.Image 列表，兼容多种来源：
+        - source["image"] 为绝对/相对路径字符串
+        - source["image"] 为路径列表
+        - source["image"] 为 PIL.Image 或其列表
+        - source["image_dir"] 或 "frames_dir"：目录下所有图片（排序后采样）
+        - base64 data URI: "data:image/jpeg;base64,...."
+        """
+        imgs: List[Image.Image] = []
 
-        # check whether video_file is a directory
-        if os.path.isdir(video_file):
-            frame_files = [os.path.join(video_file, f) for f in os.listdir(video_file) if os.path.isfile(os.path.join(video_file, f))]
+        def _open_one(p):
+            if isinstance(p, Image.Image):
+                return p.convert("RGB")
+            if isinstance(p, str) and p.startswith("data:image"):
+                head, b64 = p.split("base64,", 1)
+                from io import BytesIO
+                import base64
+                return Image.open(BytesIO(base64.b64decode(b64))).convert("RGB")
+            if isinstance(p, str):
+                # 绝对路径 or 相对 data_path
+                full = p if os.path.isabs(p) else os.path.join(source.get("data_path", ""), p)
+                return Image.open(full).convert("RGB")
+            raise NotImplementedError(f"Unsupported image spec: {type(p)}")
+
+        if "image" in source:
+            v = source["image"]
+            if isinstance(v, (list, tuple)):
+                for x in v:
+                    imgs.append(_open_one(x))
+            else:
+                imgs.append(_open_one(v))
+
+        # 目录帧
+        frames_dir = source.get("image_dir") or source.get("frames_dir")
+        if frames_dir:
+            full_dir = frames_dir if os.path.isabs(frames_dir) else os.path.join(source.get("data_path", ""), frames_dir)
+            if os.path.isdir(full_dir):
+                files = [os.path.join(full_dir, f) for f in os.listdir(full_dir)
+                        if os.path.isfile(os.path.join(full_dir, f))
+                        and f.lower().endswith((".jpg",".jpeg",".png",".bmp",".webp"))]
+                files.sort()
+                for f in files:
+                    imgs.append(Image.open(f).convert("RGB"))
+
+        if not imgs:
+            raise FileNotFoundError("No images resolved from source.")
+        return imgs
+    def read_video_images(self, source):
+        """
+        兼容：
+        - source["video"] 为绝对/相对路径视频文件
+        - source["video"] 指向帧目录
+        """
+        assert isinstance(source["video"], str), "video should be a string"
+        v = source["video"]
+        video_path = v if os.path.isabs(v) else os.path.join(source.get("data_path",""), v)
+
+        if os.path.isdir(video_path):
+            frame_files = [os.path.join(video_path, f) for f in os.listdir(video_path)
+                        if os.path.isfile(os.path.join(video_path, f))]
             frame_files.sort()
-            frame_idx = get_frame_indices(len(frame_files), 1)
-            images = [frame_files[i] for i in frame_idx]
-            images = [Image.open(frame).convert("RGB") for frame in images]
-        elif any([video_file.endswith(ext) for ext in [".mp4", ".avi", ".mov"]]):
-            vr = VideoReader(video_file, num_threads=4)
-            total_frames = len(vr)
-            avg_fps = vr.get_avg_fps()
-            frame_idx = get_frame_indices(total_frames, avg_fps)
-            video = vr.get_batch(frame_idx).asnumpy()
-            
-            images = [Image.fromarray(frame).convert("RGB") for frame in video]
-        return images
+            # 与你原来的采样策略一致
+            def get_frame_indices(n, fps=1):
+                video_length = n / fps
+                interval = getattr(self.data_args, "base_interval", 2)
+                n_to_sample = round(video_length / interval)
+                vmin = getattr(self.data_args, "video_min_frames", 4)
+                vmax = getattr(self.data_args, "video_max_frames", 8)
+                tgt = min(max(n_to_sample, vmin), vmax)
+                idx = np.linspace(0, n-1, tgt, dtype=int)
+                return np.unique(idx)
+            idx = get_frame_indices(len(frame_files), 1)
+            return [Image.open(frame_files[i]).convert("RGB") for i in idx]
+
+        if any(video_path.lower().endswith(ext) for ext in [".mp4",".avi",".mov"]):
+            try:
+                vr = VideoReader(video_path, num_threads=4)
+                total = len(vr)
+                avg_fps = vr.get_avg_fps()
+                def get_frame_indices(total_frames, fps):
+                    video_length = total_frames / max(fps, 1e-6)
+                    interval = getattr(self.data_args, "base_interval", 2)
+                    n_to_sample = round(video_length / interval)
+                    vmin = getattr(self.data_args, "video_min_frames", 4)
+                    vmax = getattr(self.data_args, "video_max_frames", 8)
+                    tgt = min(max(n_to_sample, vmin), vmax)
+                    return np.unique(np.linspace(0, total_frames-1, tgt, dtype=int))
+                idx = get_frame_indices(total, avg_fps)
+                frames = vr.get_batch(idx).asnumpy()
+                return [Image.fromarray(fr).convert("RGB") for fr in frames]
+            except Exception:
+                # decord失败降级到OpenCV
+                try:
+                    import cv2
+                    cap = cv2.VideoCapture(video_path)
+                    frames = []
+                    ok, frame_bgr = cap.read()
+                    while ok:
+                        frames.append(Image.fromarray(frame_bgr[:, :, ::-1]).convert("RGB"))
+                        ok, frame_bgr = cap.read()
+                    cap.release()
+                    if not frames:
+                        raise RuntimeError("No frames decoded by OpenCV.")
+                    # 简单等间隔采样
+                    vmin = getattr(self.data_args, "video_min_frames", 4)
+                    vmax = getattr(self.data_args, "video_max_frames", 8)
+                    tgt = min(max(len(frames), vmin), vmax)
+                    idx = np.unique(np.linspace(0, len(frames)-1, tgt, dtype=int))
+                    return [frames[i] for i in idx]
+                except Exception as e:
+                    raise FileNotFoundError(f"Cannot read video: {video_path}, err={e}")
+        raise FileNotFoundError(f"Invalid video path: {video_path}")
+
 
     def _get_item(self, i) -> Dict[str, torch.Tensor]:
-        if self.stage == "cold_start":
-            self.use_vggt_epoch = bool(random.getrandbits(1))
+
+        if self.stage == "force_use":
+            print("#########force_use################")
+            self.use_vggt_epoch = True
+            os.makedirs("/remote-home/haohh/_cvpr2025/VG-LLM/tmp", exist_ok=True)
+            with open(f"/remote-home/haohh/_cvpr2025/VG-LLM/tmp/vgllm_dbg_r{getattr(self,'rank',0)}.log", "a", encoding="utf-8") as f:
+                f.write("####force_use#####\n")
+                f.flush()
+        elif self.stage =="force_notuse":
+            self.use_vggt_epoch = False
+            print("#########force_notuse################")
+            os.makedirs("/remote-home/haohh/_cvpr2025/VG-LLM/tmp", exist_ok=True)
+            with open(f"/remote-home/haohh/_cvpr2025/VG-LLM/tmp/vgllm_dbg_r{getattr(self,'rank',0)}.log", "a", encoding="utf-8") as f:
+                f.write("####force_notuse###\n")
+                f.flush()
+        else:
+            if self.stage == "cold_start":
+                self.use_vggt_epoch = bool(random.getrandbits(1))
+        # NEW: 先对原始样本做一次完整快照，用于 meta（避免后续改写影响）
+        orig = copy.deepcopy(self.list_data_dict[i])  # NEW
+
+        # NEW: 提取首条 human/gpt（如需最后一条可自行调整）
+        orig_human_first, orig_gpt_first = None, None  # NEW
+        for msg in orig.get("conversations", []):  # NEW
+            if msg.get("from") == "human" and orig_human_first is None:  # NEW
+                orig_human_first = msg.get("value")  # NEW
+            if msg.get("from") == "gpt" and orig_gpt_first is None:  # NEW
+                orig_gpt_first = msg.get("value")  # NEW
+
+        meta = {  # NEW
+            "id": orig.get("id"),
+            "data_source": orig.get("data_source"),
+            "video": orig.get("video"),          # 注意：此处保留原始 video，不受后续改写影响
+            "data_path": orig.get("data_path"),
+            "tag": orig.get("tag"),
+            "orig_conversations": copy.deepcopy(orig.get("conversations", [])),
+            "orig_human_first": orig_human_first,
+            "orig_gpt_first": orig_gpt_first,
+        }
+
+
         sources = self.list_data_dict[i]
         if isinstance(i, int):
             sources = [sources]
@@ -417,46 +565,33 @@ class LazySupervisedDataset(Dataset):
             sources[0]["image"] = sources[0]["images"]
 
         # notice that we use images as the tag
-        if "image" in sources[0]:
-            image_folder = self.list_data_dict[i]["data_path"]
-            image_file = self.list_data_dict[i]["image"]
-            if isinstance(image_file, List):
+        # ---- 替换 _get_item 里 'if "image" in sources[0]:' 的主体 ----
+        if "image" in sources[0] or "image_dir" in sources[0] or "frames_dir" in sources[0]:
+            # 统一解析为 PIL.Image 列表
+            images = self._resolve_images(sources[0])
 
-                if isinstance(image_file[0], str):
-                    image_file = [
-                        os.path.join(image_folder, file) for file in image_file
-                    ]
-                    image_file = [Image.open(img).convert("RGB") for img in image_file]
-                elif isinstance(image_file[0], Image.Image):
-                    pass
-                else:
-                    raise NotImplementedError
-                # draw visual markers
-                self.draw_visual_marks(image_file, sources[0].get("spar_info", None))
+            # 画可视化标记（如有）
+            self.draw_visual_marks(images, sources[0].get("spar_info", None))
 
-                image, grid_thw, geometry_encoder_inputs = [], [], []
-                for file in image_file:
-                    ret = prepare_image_inputs(file, self.data_args.image_processor)
-                    image.append(ret["pixel_values"])
-                    geometry_encoder_inputs.append(ret["geometry_encoder_inputs"])
-                    grid_thw.append(ret["image_grid_thw"])
-            else:
-                raise NotImplementedError
+            image, grid_thw, geometry_encoder_inputs = [], [], []
+            for img in images:
+                ret = prepare_image_inputs(img, self.data_args.image_processor)
+                image.append(ret["pixel_values"])
+                geometry_encoder_inputs.append(ret["geometry_encoder_inputs"])
+                grid_thw.append(ret["image_grid_thw"])
 
-            grid_thw_merged = copy.deepcopy(grid_thw)
-            grid_thw_merged = [
-                merged_thw.prod() // self.data_args.image_processor.merge_size**2
-                for merged_thw in grid_thw_merged
-            ]
-            sources = copy.deepcopy([e["conversations"] for e in sources])
+            grid_thw_merged = [g.prod() // self.data_args.image_processor.merge_size**2 for g in copy.deepcopy(grid_thw)]
+            sources_conv = copy.deepcopy([e["conversations"] for e in [sources[0]]])
             data_dict = preprocess_qwen_2_visual(
-                sources, self.tokenizer, grid_thw=grid_thw_merged, visual_type="image",vggt_use=self.use_vggt_epoch
+                sources_conv, self.tokenizer, grid_thw=grid_thw_merged, visual_type="image",
+                vggt_use=self.use_vggt_epoch, stage=self.stage
             )
             position_ids, _ = self.get_rope_index(
                 self.data_args.image_processor.merge_size,
                 data_dict["input_ids"],
                 torch.stack(grid_thw, dim=0),
             )
+
         elif "video" in sources[0]:
             video_file = self.list_data_dict[i]["video"]
             video_folder = self.list_data_dict[i]["data_path"]
@@ -487,6 +622,7 @@ class LazySupervisedDataset(Dataset):
             sources = copy.deepcopy([e["conversations"] for e in sources])
             data_dict = preprocess_qwen_2_visual(
                 sources, self.tokenizer, grid_thw=grid_thw_merged, visual_type="video",vggt_use=self.use_vggt_epoch
+                , stage=self.stage
             )
             position_ids, _ = self.get_rope_index(
                 self.data_args.image_processor.merge_size,
@@ -499,6 +635,7 @@ class LazySupervisedDataset(Dataset):
             sources = copy.deepcopy([e["conversations"] for e in sources])
             data_dict = preprocess_qwen_2_visual(
                 sources, self.tokenizer, grid_thw=grid_thw_merged,vggt_use=self.use_vggt_epoch
+                , stage=self.stage
             )
             position_ids = (
                 torch.arange(0, data_dict["input_ids"].size(1))
@@ -523,9 +660,22 @@ class LazySupervisedDataset(Dataset):
         elif "video" in self.list_data_dict[i]:
             data_dict["pixel_values_videos"] = video
             data_dict["video_grid_thw"] = grid_thw
-        
+        data_dict["meta"] = meta  # NEW
         data_dict["tag"] = self.list_data_dict[i].get("tag", "2d")
         return data_dict
+    # new: 复用现有 _get_item 的所有逻辑来处理“单条原始样本 dict”
+    def build_from_entry(self, entry: dict) -> dict[str, torch.tensor]:
+        """
+        给我一条原始样本（与 self.list_data_dict[i] 同结构），
+        我临时把它放到 list_data_dict=[entry]，调用现有 _get_item(0)，
+        返回与 __getitem__ 完全一致的一条 processed sample。
+        """
+        _backup = self.list_data_dict
+        try:
+            self.list_data_dict = [entry]
+            return self._get_item(0)
+        finally:
+            self.list_data_dict = _backup
 
 
 def pad_and_cat(tensor_list):
@@ -630,6 +780,8 @@ class DataCollatorForSupervisedDataset(object):
             batch["geometry_encoder_inputs"] = geometry_encoder_inputs
             assert len(set([instance["tag"] for instance in instances])) == 1, "all data in a batch should have the same tag"
             batch["tag"] = instances[0]["tag"]
+
+        batch["meta"] = [inst.get("meta") for inst in instances]  # NEW   
         return batch
 
 
@@ -718,7 +870,7 @@ class FlattenedDataCollatorForSupervisedDataset(DataCollatorForSupervisedDataset
         # assume all data in a batch has geometry_encoder_inputs
         if "geometry_encoder_inputs" in instances[0]:
             raise NotImplementedError("FlattenedDataCollatorForSupervisedDataset does not support geometry_encoder_inputs")
-
+        batch["meta"] = [inst.get("meta") for inst in instances]  # NEW
         return batch
 
 
