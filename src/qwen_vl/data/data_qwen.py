@@ -157,7 +157,7 @@ def preprocess_qwen_2_visual(
                 target += target_mask
 
         # NEW: 在 RL ColdStart 阶段，为生成回答补上 assistant 起始提示（不含内容）
-        if rl_coldstart or stage in ["force_use","force_notuse"]:
+        if stage not in ["cold_start","stage2-1_rlColdStart"] :
             add_prompt_str = "<|im_start|>assistant\n"  # 和你上面 chat_template 的生成提示严格一致
             add_tokens = tokenizer.encode(add_prompt_str, add_special_tokens=False)
             input_id += add_tokens
@@ -183,8 +183,10 @@ class LazySupervisedDataset(Dataset):
             dataset = data_args.dataset_use.split(",")
             dataset_list = data_list(dataset)
             print(f"Loading datasets: {dataset_list}")
+            self.oneDatainference_mode=False
         else:
             print("########  inference mode   ###########")
+            self.oneDatainference_mode=True
         self.video_max_total_pixels = getattr(
             data_args, "video_max_total_pixels", 1664 * 28 * 28
         )
@@ -233,6 +235,7 @@ class LazySupervisedDataset(Dataset):
 
         #hhh
         self.stage=data_args.stage
+        print("==================stage:",self.stage,"========================")
         self.use_vggt_epoch=False
 
     def __len__(self):
@@ -502,21 +505,13 @@ class LazySupervisedDataset(Dataset):
     def _get_item(self, i) -> Dict[str, torch.Tensor]:
 
         if self.stage == "force_use":
-            print("#########force_use################")
             self.use_vggt_epoch = True
-            os.makedirs("/remote-home/haohh/_cvpr2025/VG-LLM/tmp", exist_ok=True)
-            with open(f"/remote-home/haohh/_cvpr2025/VG-LLM/tmp/vgllm_dbg_r{getattr(self,'rank',0)}.log", "a", encoding="utf-8") as f:
-                f.write("####force_use#####\n")
-                f.flush()
+
         elif self.stage =="force_notuse":
             self.use_vggt_epoch = False
-            print("#########force_notuse################")
-            os.makedirs("/remote-home/haohh/_cvpr2025/VG-LLM/tmp", exist_ok=True)
-            with open(f"/remote-home/haohh/_cvpr2025/VG-LLM/tmp/vgllm_dbg_r{getattr(self,'rank',0)}.log", "a", encoding="utf-8") as f:
-                f.write("####force_notuse###\n")
-                f.flush()
+
         else:
-            if self.stage == "cold_start":
+            if self.stage == "cold_start" or self.stage == "force_half":
                 self.use_vggt_epoch = bool(random.getrandbits(1))
         # NEW: 先对原始样本做一次完整快照，用于 meta（避免后续改写影响）
         orig = copy.deepcopy(self.list_data_dict[i])  # NEW
