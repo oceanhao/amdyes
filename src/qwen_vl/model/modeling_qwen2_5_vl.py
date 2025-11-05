@@ -2008,7 +2008,7 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
             if pixel_values is not None:
                 pixel_values = pixel_values.type(self.visual.dtype)
                 image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw) # self.visual是一个vision transformer
-                if os.getenv("Debug", "False")=="True":
+                if os.getenv("Debug", "False")=="ifvggt":
                     from remote_pdb import RemotePdb
                     RemotePdb('127.0.0.1', 18457).set_trace()
                 # Process 3D geometry features if enabled

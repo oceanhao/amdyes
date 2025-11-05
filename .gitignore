@@ -7,3 +7,4 @@ debug_output
 train_output
 datagenerate_rlColdStartOutput
 logs
+*tmp

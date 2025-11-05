@@ -111,6 +111,7 @@ def train(attn_implementation="flash_attention_2"):
     if "qwen2.5" in model_args.model_name_or_path.lower():
         if not model_args.use_geometry_encoder:
             from transformers import Qwen2_5_VLForConditionalGeneration
+            print("========origin qwen=======")
             model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 model_args.model_name_or_path,
                 cache_dir=training_args.cache_dir,

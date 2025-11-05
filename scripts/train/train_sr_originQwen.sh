@@ -11,11 +11,8 @@ NPROC_PER_NODE=1  # Automatically detects available GPUs
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"  # [ModelArguments] Pretrained model path
-stage="cold_start" #[cold_start, cold_startv2]
-GEOMETRY_ENCODER_TYPE="vggt"
-GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
-OUTPUT_DIR="train_output/sr"                   # Directory for saving checkpoints
+MODEL_PATH="/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"  # [ModelArguments] Pretrained model path
+OUTPUT_DIR="train_output/qwen"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
 
@@ -33,7 +30,7 @@ LR=5e-6
 # GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
 GRADIENT_ACCUMULATION_STEPS=4
 export NCCL_IGNORE_DISABLED_P2P=1
-nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
+torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
             --master_port=$MASTER_PORT \
             src/qwen_vl/train/train_qwen.py \
@@ -56,7 +53,7 @@ nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --base_interval 2 \
             --video_max_frames 8 \
             --video_min_frames 4 \
-            --num_train_epochs 1 \
+            --num_train_epochs 2 \
             --warmup_ratio 0.03 \
             --lr_scheduler_type "cosine" \
             --weight_decay 0.01 \
@@ -69,8 +66,4 @@ nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --group_by_modality_length true \
             --seed 0 \
             --report_to "none" \
-            --use_geometry_encoder true \
-            --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
-            --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
-            --stage $stage \
-            > ${OUTPUT_DIR}/train_sr.log 2>&1 &
+            > ${OUTPUT_DIR}/train_qwen.log 2>&1

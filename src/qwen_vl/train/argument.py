@@ -21,7 +21,7 @@ class ModelArguments:
 
 
     # haohh Geometry encoder control config
-    stage: str = field(default="cold_start")
+    stage: str = field(default="")
 
 
 

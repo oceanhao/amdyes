@@ -60,7 +60,14 @@ def preprocess_qwen_2_visual(
     stage: str = None,               # NEW
 ) -> Dict:
     roles = {"human": "user", "gpt": "assistant"}
-    system_message = "You are a helpful assistant."
+    if stage=="stage2-1_rlColdStart":
+        system_message = (
+            "You are a helpful assistant. Answer the user's question based on the provided images. "
+            "Whenever you determine that the question requires spatial or geometric reasoning, you may invoke an external tool that provides additional geometric information to assist in your reasoning and answer generation by outputting <vggt>."
+        )
+
+    else:
+        system_message = "You are a helpful assistant."
     if visual_type not in ["image", "video"]:
         raise ValueError("visual_type must be either 'image' or 'video'")
 
@@ -218,6 +225,7 @@ class LazySupervisedDataset(Dataset):
                 for ann in annotations:
                     ann["data_path"] = data["data_path"]
                     ann["tag"] = data["tag"]
+                    ann['dataset_name']=data['dataset_name']
                 list_data_dict += annotations
 
             print(f"Total training samples: {len(list_data_dict)}")
@@ -509,12 +517,20 @@ class LazySupervisedDataset(Dataset):
 
         elif self.stage =="force_notuse":
             self.use_vggt_epoch = False
-
+        elif self.stage == "cold_startv2":
+            dataset_name = self.list_data_dict[i]['dataset_name']
+            if "spar" in dataset_name:
+                self.use_vggt_epoch = bool(random.getrandbits(1))
+            elif "llava_hound" in dataset_name:
+                self.use_vggt_epoch = False
         else:
             if self.stage == "cold_start" or self.stage == "force_half":
                 self.use_vggt_epoch = bool(random.getrandbits(1))
         # NEW: 先对原始样本做一次完整快照，用于 meta（避免后续改写影响）
         orig = copy.deepcopy(self.list_data_dict[i])  # NEW
+        if os.getenv("Debug", "False")=="debug_dataset":
+            from remote_pdb import set_trace
+            set_trace() # you'll see the port number in the logs
 
         # NEW: 提取首条 human/gpt（如需最后一条可自行调整）
         orig_human_first, orig_gpt_first = None, None  # NEW
@@ -655,8 +671,15 @@ class LazySupervisedDataset(Dataset):
         elif "video" in self.list_data_dict[i]:
             data_dict["pixel_values_videos"] = video
             data_dict["video_grid_thw"] = grid_thw
-        data_dict["meta"] = meta  # NEW
+
+        if self.stage=="stage2-1_rlColdStart":
+            data_dict["meta"] = meta  # NEW
         data_dict["tag"] = self.list_data_dict[i].get("tag", "2d")
+
+        if os.getenv("Debug", "False")=="debug_dataset":
+            from remote_pdb import set_trace
+            set_trace() # you'll see the port number in the logs
+
         return data_dict
     # new: 复用现有 _get_item 的所有逻辑来处理“单条原始样本 dict”
     def build_from_entry(self, entry: dict) -> dict[str, torch.tensor]:
@@ -775,8 +798,8 @@ class DataCollatorForSupervisedDataset(object):
             batch["geometry_encoder_inputs"] = geometry_encoder_inputs
             assert len(set([instance["tag"] for instance in instances])) == 1, "all data in a batch should have the same tag"
             batch["tag"] = instances[0]["tag"]
-
-        batch["meta"] = [inst.get("meta") for inst in instances]  # NEW   
+        if "meta" in instances[0]:
+            batch["meta"] = [inst.get("meta") for inst in instances]  # NEW   
         return batch
 
 
@@ -865,7 +888,8 @@ class FlattenedDataCollatorForSupervisedDataset(DataCollatorForSupervisedDataset
         # assume all data in a batch has geometry_encoder_inputs
         if "geometry_encoder_inputs" in instances[0]:
             raise NotImplementedError("FlattenedDataCollatorForSupervisedDataset does not support geometry_encoder_inputs")
-        batch["meta"] = [inst.get("meta") for inst in instances]  # NEW
+        if self.stage=="stage2-1_rlColdStart":
+            batch["meta"] = [inst.get("meta") for inst in instances]  # NEW
         return batch
 
 
