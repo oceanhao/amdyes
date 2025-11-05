@@ -12,7 +12,7 @@ NPROC_PER_NODE=1  # Automatically detects available GPUs
 # Path Configuration
 # ======================
 MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"  # [ModelArguments] Pretrained model path
-stage="cold_start" #[cold_start, cold_startv2]
+stage="cold_startv2" #[cold_start, cold_startv2]
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 OUTPUT_DIR="train_output/sr"                   # Directory for saving checkpoints

@@ -164,7 +164,7 @@ def preprocess_qwen_2_visual(
                 target += target_mask
 
         # NEW: 在 RL ColdStart 阶段，为生成回答补上 assistant 起始提示（不含内容）
-        if stage not in ["cold_start","stage2-1_rlColdStart"] :
+        if stage not in ["cold_start","stage2-1_rlColdStart","cold_startv2","qwen"] :
             add_prompt_str = "<|im_start|>assistant\n"  # 和你上面 chat_template 的生成提示严格一致
             add_tokens = tokenizer.encode(add_prompt_str, add_special_tokens=False)
             input_id += add_tokens

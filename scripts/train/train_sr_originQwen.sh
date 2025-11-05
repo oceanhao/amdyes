@@ -15,7 +15,7 @@ MODEL_PATH="/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"  
 OUTPUT_DIR="train_output/qwen"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
-
+stage="qwen"
 # ======================
 # Model Configuration
 # ======================
@@ -66,4 +66,5 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --group_by_modality_length true \
             --seed 0 \
             --report_to "none" \
+            --stage $stage \
             > ${OUTPUT_DIR}/train_qwen.log 2>&1
