@@ -2,8 +2,8 @@ from transformers import AutoProcessor, AutoModelForImageTextToText, AddedToken
 import torch, os, shutil
 
 
-src_model_dir = "/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"                      # 你的原模型目录（或模型ID）
-dst_save_dir  = "/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"    # 想把更新后的分词器/模型保存到这里
+src_model_dir = "/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori"                      # 你的原模型目录（或模型ID）
+dst_save_dir  = "/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori_with-vggt-special"    # 想把更新后的分词器/模型保存到这里
 os.makedirs(dst_save_dir, exist_ok=True)
 
 processor = AutoProcessor.from_pretrained(src_model_dir, trust_remote_code=True)

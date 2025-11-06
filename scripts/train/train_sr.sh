@@ -6,12 +6,13 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=1  # Automatically detects available GPUs
+NPROC_PER_NODE=4  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori"  # [ModelArguments] Pretrained model path
+# train sr一定要从含特殊vggt token的ckpt开始！！！！！！！获取带vggt token的方法：/remote-home/haohh/_cvpr2025/VG-LLM/scripts/add_spatialToken.py
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori_with-vggt-special"  # [ModelArguments] Pretrained model path
 stage="cold_startv2" #[cold_start, cold_startv2]
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
