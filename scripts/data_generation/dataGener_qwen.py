@@ -28,6 +28,20 @@ from qwen_vl.train.argument import (
 )
 from transformers import AutoTokenizer, AutoProcessor, Qwen2VLImageProcessor, AutoConfig, set_seed, enable_full_determinism  # CHG
 from torch.utils.data import DataLoader, Subset  # NEW
+import re  # 放在文件顶部；若不方便，也可把它写到函数内部
+
+def _insert_vggt_after_first_tag(s: str) -> str:
+    """
+    在字符串开头首个形如 <xxxx> 的标签后插入 <vggt>。
+    若开头没有 <...>，则直接在最前面插入 <vggt>。
+    """
+    if not s:
+        return "<vggt>"
+    m = re.match(r'^(\s*<[^>]+>)(.*)$', s, flags=re.DOTALL)
+    if m:
+        return f'{m.group(1)}<vggt>{m.group(2)}'
+    # 没有以 <...> 开头时，直接前置
+    return f'<vggt>{s}'
 
 
 # CHG: 允许任意参数，兼容 get_rank(group) 之类的调用
@@ -109,36 +123,6 @@ def move_to_device(batch, device):  # NEW
     else:  # NEW
         return batch  # NEW
 
-
-def set_model(model_args, model):
-    # CHG: 推理场景可直接冻结（若你仍需与训练时一致，可保持原逻辑不变）
-    if model_args.tune_mm_vision:
-        for n, p in model.visual.named_parameters():
-            p.requires_grad = True
-    else:
-        for n, p in model.visual.named_parameters():
-            p.requires_grad = False
-
-    if model_args.tune_mm_mlp:
-        for n, p in model.visual.merger.named_parameters():
-            p.requires_grad = True
-    else:
-        for n, p in model.visual.merger.named_parameters():
-            p.requires_grad = False
-
-    if model_args.tune_mm_llm:
-        for n, p in model.model.named_parameters():
-            p.requires_grad = True
-        model.lm_head.requires_grad = True
-    else:
-        for n, p in model.model.named_parameters():
-            p.requires_grad = False
-        model.lm_head.requires_grad = False
-
-    if model_args.use_geometry_encoder:
-        # vggt is frozen
-        for n, p in model.geometry_encoder.named_parameters():
-            p.requires_grad = False
 
 # NEW: 自定义推理类，构造接口严格对齐 Trainer(model=..., processing_class=..., args=..., **data_module)
 class Inferencer:
@@ -244,12 +228,18 @@ class Inferencer:
         with self.tmp_path.open("w", encoding="utf-8") as fout, torch.no_grad():
             for raw_batch in self.loader:
                 inputs = self._prepare_inputs(raw_batch)
-
+                if os.getenv("Debug", "False")=="debug_datage":
+                    from remote_pdb import set_trace
+                    set_trace() # you'll see the port number in the logs
                 input_ids = inputs["input_ids"]
                 cont = self.model.generate(**inputs, **self.gen_kwargs)
 
                 # 和你原来的逻辑一致：去掉 prompt 前缀
                 generated_ids_trimmed = [out_ids[len(in_ids):] for in_ids, out_ids in zip(input_ids, cont)]
+                
+                if os.getenv("Debug", "False")=="debug_datage":
+                    from remote_pdb import set_trace
+                    set_trace() # you'll see the port number in the logs
                 answers = self.processor.batch_decode(
                     generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
                 )
@@ -258,7 +248,7 @@ class Inferencer:
                 for t, meta in zip(answers, metas):
                     if meta is None:
                         continue  # 没有 meta 就跳过（理论上不会发生）
-
+                    orig_human_first_with_vggt = _insert_vggt_after_first_tag(meta.get("orig_human_first", ""))
                     # NEW: 组装新的 JSON（严格按你给的格式）
                     new_obj = {
                         "id": meta.get("id"),
@@ -273,7 +263,7 @@ class Inferencer:
                             },
                             {
                                 "from": "human",
-                                "value": self.fixed_text_b  # 固定 textB
+                                "value": self.fixed_text_b +orig_human_first_with_vggt  # 固定 textB
                             },
                             {
                                 "from": "gpt",
@@ -292,15 +282,26 @@ class Inferencer:
         if torch.distributed.is_available() and torch.distributed.is_initialized():
             torch.distributed.barrier()
         if self.rank == 0:
-            merged = self.out_dir / "samples_all.jsonl"  # CHG: 合并后的文件名
+            merged = self.out_dir / "samples_all.jsonl"  # 保持文件名不变
             with merged.open("w", encoding="utf-8") as fm:
+                fm.write("[\n")  # 开始中括号
+                first = True
                 for r in range(self.world_size):
                     p = self.out_dir / f"samples_rank{r}.jsonl"
                     if p.exists():
                         with p.open("r", encoding="utf-8") as fr:
                             for line in fr:
-                                fm.write(line)
+                                line = line.rstrip()
+                                if not line:
+                                    continue
+                                if first:
+                                    fm.write(line)
+                                    first = False
+                                else:
+                                    fm.write(",\n" + line)
+                fm.write("\n]\n")  # 结束中括号
             print(f"[OK] 合并完成 -> {merged}")
+
 
 
 
@@ -321,6 +322,7 @@ def train(attn_implementation="flash_attention_2"):
     if "qwen2.5" in model_args.model_name_or_path.lower():
         if not model_args.use_geometry_encoder:
             from transformers import Qwen2_5_VLForConditionalGeneration
+            # from qwen_vl.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGeneration
             model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 model_args.model_name_or_path,
                 cache_dir=training_args.cache_dir,
@@ -384,7 +386,6 @@ def train(attn_implementation="flash_attention_2"):
         padding_side="right",
         use_fast=False,
     )
-    set_model(model_args, model)
 
     if torch.distributed.get_rank() == 0:
         # CHG: 推理无需打印可训练参数，但保留兼容
@@ -412,8 +413,8 @@ def train(attn_implementation="flash_attention_2"):
         rank=rank,
         world_size=world_size,
         processor=processor,
-        fixed_text_a="######fixed_text_a##########", 
-        fixed_text_b="#########fixed_text_b#############",
+        fixed_text_a=" To improve my reasoning, I need to use an external tool that provides additional geometric information to assist my reasoning and generate a more accurate answer. <vggt>", 
+        fixed_text_b=" After invoking the above tool, additional geometric information has been obtained.",
         **data_module            # 关键：像 Trainer 一样用 **data_module
     )
 

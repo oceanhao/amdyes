@@ -1,9 +1,8 @@
+# qwen2_5_vl_vgllm_style.py
 import base64
 from io import BytesIO
 from typing import List, Optional, Tuple, Union
 
-import decord
-import numpy as np
 import torch
 from accelerate import Accelerator, DistributedType
 from loguru import logger as eval_logger
@@ -12,6 +11,7 @@ from tqdm import tqdm
 from transformers import (
     AutoProcessor,
     AutoTokenizer,
+    AutoConfig,
     Qwen2_5_VLForConditionalGeneration,
 )
 
@@ -19,19 +19,22 @@ from lmms_eval import utils
 from lmms_eval.api.instance import Instance
 from lmms_eval.api.model import lmms
 from lmms_eval.api.registry import register_model
-from lmms_eval.models.model_utils.load_video import read_video_pyav_base64
 
-try:
-    from qwen_vl_utils import process_vision_info
-except ImportError:
-    eval_logger.warning("Failed to import qwen_vl_utils; Please install it via `pip install qwen-vl-utils`")
+# —— 不再使用 qwen_vl_utils / process_vision_info —— #
 
+# 若启用了几何/外部特征，加载带 VGGT 的模型类（与 vgllm 一致）
+from qwen_vl.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGenerationWithVGGT
 
-@register_model("qwen2_5_vl")
+# 复用数据模块（与 vgllm 一致）
+from qwen_vl.train.argument import DataArguments          # NEW
+from qwen_vl.data.data_qwen import make_supervised_data_module  # NEW
+# 如需在本类内做图像预处理，可引入（默认仍交给 dataset/collator 处理）
+from qwen_vl.data.utils import load_and_preprocess_images       # 可选：这里未直接使用
+
+@register_model("qwen2_5_vl")  # 与原注册名一致：替换为“按 vgllm 风格”的实现
 class Qwen2_5_VL(lmms):
     """
-    Qwen2.5_VL Model
-    "https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct"
+    Qwen2.5-VL 按 vgllm 的方式构造 batch 与推理的实现。
     """
 
     def __init__(
@@ -40,28 +43,23 @@ class Qwen2_5_VL(lmms):
         device: Optional[str] = "cuda",
         device_map: Optional[str] = "auto",
         batch_size: Optional[Union[int, str]] = 1,
-        use_cache=True,
+        use_cache: bool = True,
         use_flash_attention_2: Optional[bool] = False,
         min_pixels: int = 256 * 28 * 28,
         max_pixels: int = 1605632,
         max_num_frames: int = 32,
-        use_custom_video_loader: Optional[bool] = False,
-        fps: Optional[float] = None,  # Only applicable if use_custom_video_loader is True
-        max_image_size: Optional[int] = None,  # Only applicable if use_custom_video_loader is True
+        use_custom_video_loader: Optional[bool] = False,  # 保留形参占位，与老接口兼容
+        fps: Optional[float] = None,                      # 同上
+        max_image_size: Optional[int] = None,             # 同上
+        max_length: Optional[int] = None,                 # 允许外部限制 tokenizer 的 max_length
+        add_frame_index: bool = False,                    # 与 vgllm 参数集对齐
+        stage: Optional[str] = "inference",               # 透传给 DataArguments
         **kwargs,
     ) -> None:
         super().__init__()
-        # Do not use kwargs for now
         assert kwargs == {}, f"Unexpected kwargs: {kwargs}"
 
-        self.use_custom_video_loader = use_custom_video_loader
-        self.fps = fps
-        # if self.fps and not self.use_custom_video_loader:
-        #     raise ValueError("FPS is only applicable if use_custom_video_loader is True")
-        self.max_image_size = max_image_size
-        if self.max_image_size and not self.use_custom_video_loader:
-            raise ValueError("max_image_size is only applicable if use_custom_video_loader is True")
-
+        # —— 设备 & 加速器 —— #
         accelerator = Accelerator()
         if accelerator.num_processes > 1:
             self._device = torch.device(f"cuda:{accelerator.local_process_index}")
@@ -73,30 +71,48 @@ class Qwen2_5_VL(lmms):
             self._device = torch.device(f"cuda:{accelerator.local_process_index}")
             self.device_map = f"cuda:{accelerator.local_process_index}"
 
+        # —— 选择模型类（是否带 VGGT） —— #
+        config = AutoConfig.from_pretrained(pretrained)
+        if getattr(config, "use_geometry_encoder", False) or getattr(config, "use_vggt_feature", False):
+            load_class = Qwen2_5_VLForConditionalGenerationWithVGGT
+            eval_logger.info("Using Qwen2_5_VLForConditionalGenerationWithVGGT")
+        else:
+            load_class = Qwen2_5_VLForConditionalGeneration
+            eval_logger.info("Using Qwen2_5_VLForConditionalGeneration")
+
         if use_flash_attention_2:
-            self._model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            self._model = load_class.from_pretrained(
                 pretrained,
+                config=config,
                 torch_dtype=torch.bfloat16,
                 device_map=self.device_map,
                 attn_implementation="flash_attention_2",
             ).eval()
         else:
-            self._model = Qwen2_5_VLForConditionalGeneration.from_pretrained(pretrained, torch_dtype="auto", device_map=self.device_map).eval()
-        self.max_pixels = max_pixels
-        self.min_pixels = min_pixels
-        self.max_num_frames = max_num_frames
-        self.processor = AutoProcessor.from_pretrained(pretrained, max_pixels=max_pixels, min_pixels=min_pixels, padding_side="left")
+            self._model = load_class.from_pretrained(
+                pretrained, config=config, torch_dtype="auto", device_map=self.device_map
+            ).eval()
+
+        # —— 处理器 / 分词器 —— #
+        self.processor = AutoProcessor.from_pretrained(
+            pretrained, max_pixels=max_pixels, min_pixels=min_pixels, padding_side="left"
+        )
         self._tokenizer = AutoTokenizer.from_pretrained(pretrained, padding_side="left")
+        if max_length is not None:
+            eval_logger.warning(f"Setting max_length to {max_length}")
+            setattr(self.processor.tokenizer, "model_max_length", max_length)
+            setattr(self._tokenizer, "model_max_length", max_length)
 
         self._config = self.model.config
         self.batch_size_per_gpu = int(batch_size)
         self.use_cache = use_cache
+        self.max_num_frames = max_num_frames
+        self.add_frame_index = add_frame_index
 
+        # —— 多卡封装 —— #
         if accelerator.num_processes > 1:
-            assert accelerator.distributed_type in [
-                DistributedType.FSDP,
-                DistributedType.MULTI_GPU,
-            ], "Unsupported distributed type provided. Only DDP and FSDP are supported."
+            assert accelerator.distributed_type in [DistributedType.FSDP, DistributedType.MULTI_GPU], \
+                "Only DDP and FSDP are supported."
             if accelerator.distributed_type == DistributedType.FSDP:
                 self._model = accelerator.prepare(self.model)
             else:
@@ -110,9 +126,34 @@ class Qwen2_5_VL(lmms):
             self._rank = 0
             self._world_size = 1
 
+        # —— 关键：复用 data module（与 vgllm 完全一致） —— #
+        self._data_args = DataArguments()
+        # 与当前模型/处理器对齐的字段
+        setattr(self._data_args, "stage", stage)
+        # 注意：DataArguments 原定义如无下列字段，请在你项目里对应补齐
+        setattr(self._data_args, "video_max_frames", max_num_frames)
+        setattr(self._data_args, "image_processor", self.processor.image_processor)
+        # 若你的 pipeline 里需要几何编码开关，可从 config 透传：
+        setattr(self._data_args, "use_geometry_encoder",
+                bool(getattr(config, "use_geometry_encoder", False) or getattr(config, "use_vggt_feature", False)))
+
+        data_module = make_supervised_data_module(tokenizer=self._tokenizer, data_args=self._data_args)
+        self.train_dataset = data_module["train_dataset"]
+        self.data_collator = data_module["data_collator"]
+
+        # 仅保留模型真正会吃的键（与 vgllm 一致）
+        self._allowed_input_keys = {
+            "input_ids", "attention_mask",
+            "past_key_values", "inputs_embeds",
+            "pixel_values", "pixel_values_videos",
+            "image_grid_thw", "video_grid_thw",
+            "rope_deltas", "cache_position", "second_per_grid_ts",
+            "geometry_encoder_inputs", "boxes",
+        }
+
+    # --------- 性能/工具函数，与 vgllm 完全一致 --------- #
     @property
     def config(self):
-        # return the associated transformers.AutoConfig for the given pretrained model.
         return self._config
 
     @property
@@ -121,7 +162,6 @@ class Qwen2_5_VL(lmms):
 
     @property
     def model(self):
-        # returns the model, unwrapping it if using Accelerate
         if hasattr(self, "accelerator"):
             return self.accelerator.unwrap_model(self._model)
         else:
@@ -130,10 +170,6 @@ class Qwen2_5_VL(lmms):
     @property
     def eot_token_id(self):
         return self.tokenizer.eos_token_id
-
-    @property
-    def max_length(self):
-        return self._max_length
 
     @property
     def batch_size(self):
@@ -155,171 +191,145 @@ class Qwen2_5_VL(lmms):
         raise NotImplementedError("Loglikelihood is not implemented for Qwen2.5_VL")
 
     def flatten(self, input):
-        new_list = []
-        for i in input:
-            for j in i:
-                new_list.append(j)
-        return new_list
+        return [j for i in input for j in i]
 
+    def _target_device(self):
+        return "cuda" if self.device_map == "auto" else self._device
+
+    def _to_device_tree(self, obj, device):
+        if isinstance(obj, torch.Tensor):
+            return obj.to(device, non_blocking=True)
+        if isinstance(obj, (list, tuple)):
+            return type(obj)(self._to_device_tree(x, device) for x in obj)
+        if isinstance(obj, dict):
+            return {k: self._to_device_tree(v, device) for k, v in obj.items()}
+        return obj
+
+    def _batch_from_entries(self, entries: list[dict]) -> dict:
+        """
+        与 vgllm 同步：把原始 entry 交给 dataset.build_from_entry，再由 data_collator 打包成 batch。
+        """
+        assert self.train_dataset is not None and self.data_collator is not None, \
+            "train_dataset / data_collator 未初始化；请检查 make_supervised_data_module(...)。"
+        samples = [self.train_dataset.build_from_entry(e) for e in entries]  # CPU
+        batch = self.data_collator(samples)  # 仍在 CPU
+        return batch
+
+    def _generate_batch(self, batch: dict, gen_kwargs: dict | None = None) -> list[str]:
+        """
+        统一的推理入口：过滤允许键 → 搬到设备 → model.generate → 裁剪解码。
+        """
+        gen_kwargs = {} if gen_kwargs is None else dict(gen_kwargs)
+        gen_kwargs.setdefault("max_new_tokens", 4096)
+        gen_kwargs.setdefault("temperature", 0)
+        gen_kwargs.setdefault("top_p", None)
+        gen_kwargs.setdefault("num_beams", 1)
+
+        model_inputs = {k: v for k, v in batch.items() if k in self._allowed_input_keys and v is not None}
+
+        device = self._target_device()
+        model_inputs = self._to_device_tree(model_inputs, device)
+
+        pad_token_id = self.tokenizer.pad_token_id
+
+        outputs = self.model.generate(
+            **model_inputs,
+            eos_token_id=self.tokenizer.eos_token_id,
+            pad_token_id=pad_token_id,
+            do_sample=bool(gen_kwargs["temperature"] > 0),
+            temperature=gen_kwargs["temperature"],
+            top_p=gen_kwargs["top_p"],
+            num_beams=gen_kwargs["num_beams"],
+            max_new_tokens=gen_kwargs["max_new_tokens"],
+            use_cache=True,
+        )
+
+        # 用 attention_mask 或 非 pad 计数 计算输入长度
+        in_lens = []
+        if "attention_mask" in batch and batch["attention_mask"] is not None and batch["attention_mask"].dim() == 2:
+            in_lens = batch["attention_mask"].sum(dim=1).tolist()
+        if not in_lens:
+            pad_id = self.tokenizer.pad_token_id
+            for row in batch["input_ids"]:
+                in_lens.append(int((row != pad_id).sum().item()) if pad_id is not None else int(row.numel()))
+
+        trimmed = [out_ids[L:] for L, out_ids in zip(in_lens, outputs)]
+        answers = self.processor.batch_decode(
+            trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+        )
+        return answers
+
+    # --------- 推理接口（与 vgllm 的 generate_until 对齐） --------- #
     def generate_until(self, requests: List[Instance]) -> List[str]:
+        """
+        严格 vgllm 风格：把 (context, visual) 先转成 entries（只挂路径/对象与 <image>/<video> 标记），
+        再交给 dataset.build_from_entry + data_collator 构造 batch，最后统一 _generate_batch。
+        """
         res = []
 
         def _collate(x):
-            # the negative sign on len(toks) sorts descending - this has a few advantages:
-            # - time estimates will always be over not underestimates, which is more useful for planning
-            # - to know the size of a batch when going through the list, you know the first one is always the batch
-            #   padded context length. this is useful to simplify the batching logic and more importantly to make
-            #   automatic adaptive batches much much easier to implement
-            # - any OOMs will happen right away rather than near the end
             toks = self.tokenizer.encode(x[0])
             return -len(toks), x[0]
 
         pbar = tqdm(total=len(requests), disable=(self.rank != 0), desc="Model Responding")
-        # we group requests by their generation_kwargs,
-        # so that we don't try to execute e.g. greedy sampling and temp=0.8 sampling
-        # in the same batch.
+
         re_ords = utils.Collator([reg.args for reg in requests], _collate, grouping=True)
         chunks = re_ords.get_batched(n=self.batch_size, batch_fn=None)
+
         for chunk in chunks:
             contexts, all_gen_kwargs, doc_to_visual, doc_id, task, split = zip(*chunk)
-            task = task[0]
-            split = split[0]
+            task = task[0]; split = split[0]
+
+            # 与 vgllm 保持一致的视觉解析：不解码，只拿“可引用对象/路径”
             visuals = [doc_to_visual[0](self.task_dict[task][split][ids]) for ids in doc_id]
             visuals = self.flatten(visuals)
 
-            gen_kwargs = all_gen_kwargs[0]
-
-            # Set default values for until and max_new_tokens
-            until = [self.tokenizer.decode(self.eot_token_id)]
-
-            # Update values from gen_kwargs if present
-            if "until" in gen_kwargs:
-                until = gen_kwargs.pop("until")
-                if isinstance(until, str):
-                    until = [until]
-                elif not isinstance(until, list):
-                    raise ValueError(f"Expected `gen_kwargs['until']` to be of type Union[str,list] but got {type(until)}")
-
-            # if isinstance(contexts, tuple):
-            #     contexts = list(contexts)
-
-            # for i in range(len(contexts)):
-            #     for j in range(32):
-            #         if f"<image {j}>" in contexts[i]:
-            #             contexts[i] = contexts[i].replace(f"<image {j}>", "<image>")
-            #         if f"\\<image {j}\\>" in contexts[i]:
-            #             contexts[i] = contexts[i].replace(f"\\<image {j}\\>", "<image>")
-            # if "<image>" in contexts[i]:
-            #     contexts[i] = contexts[i].replace("<image>", "")
-            # print(contexts[i])
-
-            # for i in range(len(contexts)):
-            #     if "<image>" in contexts[i]:
-            #         contexts[i] = contexts[i].replace("<image>", "")
-            import os
-            if os.getenv("Debug", "False")=="True":
-                from remote_pdb import RemotePdb
-                RemotePdb('127.0.0.1', 8457).set_trace()
-            messages = []
-            processed_visuals = []
-            for i, context in enumerate(contexts):
-                # context += "\nPlease think step by step."
-                # if "<image>" in context:
-                #     context = context.replace("<image>", "")
-
-                message = [{"role": "system", "content": "You are a helpful assistant."}]
-
-                if len(visuals) > 0:
-                    visual = visuals[i] if i < len(visuals) else None
-                    if isinstance(visual, str) and visual.endswith((".mp4", ".avi", ".mov")):  # Video file
-                        if self.use_custom_video_loader:
-                            visual = read_video_pyav_base64(visual, num_frm=self.max_num_frames, fps=self.fps, img_format="JPEG", max_image_size=self.max_image_size)
-                            image_contents = list(map(lambda x: f"data:image/jpeg;base64,{x}", visual))
-                            message.append({"role": "user", "content": [{"type": "video", "video": image_contents}, {"type": "text", "text": context}]})
-                        else:
-                            vr = decord.VideoReader(visual)
-                            first_frame = vr[0].asnumpy()
-                            height, width = first_frame.shape[:2]
-                            # max_pixels = height * width
-                            message.append({"role": "user", "content": [{"type": "video", "video": visual, "max_pixels": 360 * 420}, {"type": "text", "text": context}]})
-                    elif isinstance(visual, Image.Image):  # Single image
-                        base64_image = visual.convert("RGB")
-                        buffer = BytesIO()
-                        base64_image.save(buffer, format="JPEG")
-                        base64_bytes = base64.b64encode(buffer.getvalue())
-                        base64_string = base64_bytes.decode("utf-8")
-                        message.append({"role": "user", "content": [{"type": "image", "image": f"data:image/jpeg;base64,{base64_string}"}, {"type": "text", "text": context}]})
-                    elif isinstance(visual, (list, tuple)) and all(isinstance(v, Image.Image) for v in visual):  # Multiple images
-                        image_content = []
-                        for v in visual:
-                            base64_image = v.convert("RGB")
-                            buffer = BytesIO()
-                            base64_image.save(buffer, format="JPEG")
-                            base64_bytes = base64.b64encode(buffer.getvalue())
-                            base64_string = base64_bytes.decode("utf-8")
-                            image_content.append({"type": "image", "image": f"data:image/jpeg;base64,{base64_string}"})
-                        message.append({"role": "user", "content": image_content + [{"type": "text", "text": context}]})
-                    else:
-                        message.append({"role": "user", "content": [{"type": "text", "text": context}]})
+            # 1) 组装 entries（只构造 human 一轮；多轮对话见下方说明）
+            entries = []
+            for i, ctx in enumerate(contexts):
+                visual = visuals[i] if i < len(visuals) else None
+                entry = {
+                    "id": str(doc_id[i]),
+                    "conversations": [],
+                    "data_source": "lmms_eval",
+                    "data_path": "",
+                    "tag": "2d",
+                }
+                if visual is None:
+                    human_val = ctx
+                elif isinstance(visual, str) and visual.lower().endswith((".mp4", ".avi", ".mov")):
+                    entry["video"] = visual
+                    human_val = "<video>\n" + ctx
+                elif isinstance(visual, Image.Image):
+                    entry["image"] = [visual]
+                    human_val = "<image>\n" + ctx
+                elif isinstance(visual, (list, tuple)) and all(isinstance(v, Image.Image) for v in visual):
+                    entry["image"] = list(visual)
+                    human_val = ("<image>" * len(visual)) + "\n" + ctx
                 else:
-                    message.append({"role": "user", "content": [{"type": "text", "text": context}]})
+                    # 其他自定义视觉对象：直接作为纯文本
+                    human_val = ctx
 
-                messages.append(message)
-            # print("message")
+                entry["conversations"].append({"from": "human", "value": human_val})
+                entries.append(entry)
 
-            text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-            image_inputs, video_inputs = process_vision_info(messages)
-            inputs = self.processor(
-                text=text,
-                images=image_inputs,
-                videos=video_inputs,
-                # fps=self.fps,
-                padding=True,
-                return_tensors="pt",
-            )
+            # 2) dataset + collator 打包
+            batch = self._batch_from_entries(entries)
 
-            if self.device_map == "auto":
-                inputs = inputs.to("cuda")
-            else:
-                inputs = inputs.to(self.device)
+            # 3) 统一推理
+            gen_kwargs = dict(all_gen_kwargs[0]) if all_gen_kwargs else {}
+            answers = self._generate_batch(batch, gen_kwargs)
 
-            if "max_new_tokens" not in gen_kwargs:
-                gen_kwargs["max_new_tokens"] = 4096
-            if "temperature" not in gen_kwargs:
-                gen_kwargs["temperature"] = 0
-            if "top_p" not in gen_kwargs:
-                gen_kwargs["top_p"] = None
-            if "num_beams" not in gen_kwargs:
-                gen_kwargs["num_beams"] = 1
-
-            pad_token_id = self.tokenizer.pad_token_id
-
-            cont = self.model.generate(
-                **inputs,
-                eos_token_id=self.tokenizer.eos_token_id,
-                pad_token_id=pad_token_id,
-                do_sample=True if gen_kwargs["temperature"] > 0 else False,
-                temperature=gen_kwargs["temperature"],
-                top_p=gen_kwargs["top_p"],
-                num_beams=gen_kwargs["num_beams"],
-                max_new_tokens=gen_kwargs["max_new_tokens"],
-                use_cache=self.use_cache,
-            )
-
-            generated_ids_trimmed = [out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, cont)]
-            answers = self.processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False)
-            for i, ans in enumerate(answers):
-                answers[i] = ans
-
-            for ans, context in zip(answers, contexts):
+            for ans, ctx in zip(answers, contexts):
                 res.append(ans)
-                self.cache_hook.add_partial("generate_until", (context, gen_kwargs), ans)
+                self.cache_hook.add_partial("generate_until", (ctx, gen_kwargs), ans)
                 pbar.update(1)
-            # reorder this group of results back to original unsorted form
-        res = re_ords.get_original(res)
 
+        res = re_ords.get_original(res)
         pbar.close()
         return res
 
+    # 若要做“多轮对话推理”，建议直接把多轮对话按 entries["conversations"] 填满；
+    # 这里与 vgllm 保持一致，函数留空，避免与外部评测框架假定的输入协议冲突。
     def generate_until_multi_round(self, requests) -> List[str]:
-        raise NotImplementedError("TODO: Implement multi-round generation")
+        raise NotImplementedError("Use entries['conversations'] with multiple human/assistant turns via _batch_from_entries.")

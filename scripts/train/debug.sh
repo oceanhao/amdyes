@@ -6,15 +6,15 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=2  # Automatically detects available GPUs
+NPROC_PER_NODE=1  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"  # [ModelArguments] Pretrained model path
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-init"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
-OUTPUT_DIR="debug_output"                   # Directory for saving checkpoints
+OUTPUT_DIR="train_output/debug_output"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
 

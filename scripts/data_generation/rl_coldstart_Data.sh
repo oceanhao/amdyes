@@ -6,7 +6,7 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=1  # Automatically detects available GPUs
+NPROC_PER_NODE=4  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
@@ -21,7 +21,7 @@ mkdir -p $OUTPUT_DIR
 # ======================
 # Model Configuration
 # ======================
-DATASETS="llava_hound_sampleN"   
+DATASETS="llava_hound_tool_10k"   
 # DATASETS="spar_234k"                 # [DataArguments] Dataset with sampling rate
 
 # ======================
@@ -46,8 +46,8 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --max_pixels $((576*28*28)) \
             --min_pixels $((16*28*28)) \
             --base_interval 2 \
-            --video_max_frames 8 \
-            --video_min_frames 4 \
+            --video_max_frames 4 \
+            --video_min_frames 2 \
             --video_max_frame_pixels $((1664*28*28)) \
             --video_min_frame_pixels $((256*28*28)) \
             --dataloader_num_workers 4 \

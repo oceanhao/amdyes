@@ -212,31 +212,31 @@ def print_trainable_parameters(self) -> None:
 
 def create_optimizer(self):
 
-    m = self.model
+    # m = self.model
 
-    # 兼容不同封装，尽量找到文本层的 ModuleList
-    layers = None
-    try:
-        layers = m.model.model.layers
-    except Exception:
-        try:
-            layers = m.language_model.model.layers
-        except Exception:
-            try:
-                layers = m.text_model.model.layers
-            except Exception:
-                try:
-                    layers = m.model.layers
-                except Exception:
-                    layers = None
+    # # 兼容不同封装，尽量找到文本层的 ModuleList
+    # layers = None
+    # try:
+    #     layers = m.model.model.layers
+    # except Exception:
+    #     try:
+    #         layers = m.language_model.model.layers
+    #     except Exception:
+    #         try:
+    #             layers = m.text_model.model.layers
+    #         except Exception:
+    #             try:
+    #                 layers = m.model.layers
+    #             except Exception:
+    #                 layers = None
 
-    if layers is not None and len(layers) > 0:
-        n = len(layers)
-        q = max(1, n//3)  # 前/后各 1/4，至少 1 层
-        for i in range(n):
-            train_this = (i < q) or (i >= n - q) #范围内才训练
-            for p in layers[i].parameters():
-                p.requires_grad = bool(train_this)
+    # if layers is not None and len(layers) > 0:
+    #     n = len(layers)
+    #     q = max(1, n//3)  # 前/后各 1/4，至少 1 层
+    #     for i in range(n):
+    #         train_this = (i < q) or (i >= n - q) #范围内才训练
+    #         for p in layers[i].parameters():
+    #             p.requires_grad = bool(train_this)
 
 
     opt_model = self.model

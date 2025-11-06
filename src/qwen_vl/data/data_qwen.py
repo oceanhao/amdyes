@@ -78,10 +78,10 @@ def preprocess_qwen_2_visual(
     # NEW: 标记是否进入 RL ColdStart 推理阶段（仅取 user）
     rl_coldstart = (stage == "stage2-1_rlColdStart")  # NEW
 
-    visual_replicate_index = 0
     input_ids, targets = [], []
-
+    visual_replicate_index = 0 
     for i, source in enumerate(sources):
+
         try:
             if roles[source[0]["from"]] != roles["human"]:
                 source = source[1:]
@@ -164,7 +164,7 @@ def preprocess_qwen_2_visual(
                 target += target_mask
 
         # NEW: 在 RL ColdStart 阶段，为生成回答补上 assistant 起始提示（不含内容）
-        if stage not in ["cold_start","stage2-1_rlColdStart","cold_startv2","qwen"] :
+        if stage not in ["cold_start","cold_startv2","qwen"] :#从llava houd、spar等读取的都不需要.但"stage2-1_rlColdStart"需要，因为他在前面去掉了user
             add_prompt_str = "<|im_start|>assistant\n"  # 和你上面 chat_template 的生成提示严格一致
             add_tokens = tokenizer.encode(add_prompt_str, add_special_tokens=False)
             input_id += add_tokens
@@ -523,6 +523,8 @@ class LazySupervisedDataset(Dataset):
                 self.use_vggt_epoch = bool(random.getrandbits(1))
             elif "llava_hound" in dataset_name:
                 self.use_vggt_epoch = False
+        elif self.stage =="stage2-1_rlColdStart":
+            self.use_vggt_epoch = False
         else:
             if self.stage == "cold_start" or self.stage == "force_half":
                 self.use_vggt_epoch = bool(random.getrandbits(1))

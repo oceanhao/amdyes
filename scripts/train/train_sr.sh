@@ -11,7 +11,7 @@ NPROC_PER_NODE=1  # Automatically detects available GPUs
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"  # [ModelArguments] Pretrained model path
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori"  # [ModelArguments] Pretrained model path
 stage="cold_startv2" #[cold_start, cold_startv2]
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
@@ -28,7 +28,7 @@ DATASETS="spar_234k,llava_hound_64k"
 # ======================
 # Training Hyperparameters
 # ======================
-LR=5e-6
+LR=8e-6
 # total_batch_size=4
 # GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
 GRADIENT_ACCUMULATION_STEPS=4

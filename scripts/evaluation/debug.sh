@@ -10,7 +10,7 @@ export NCCL_IGNORE_DISABLED_P2P=1
 benchmark="cvbench"                     # choices: [vsibench, cvbench, blink_spatial,mindcube_full,mmbench_en_dev,videomme]
 model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init"
 num_processes=1
-stage='force_notuse' #'force_use'、'force_notuse','force_half'(一半vggt)  ("cold_start","stage2-1_rlColdStart"等stage不能在这里使用)
+stage='force_use' #'force_use'、'force_notuse','force_half'(一半vggt)  ("cold_start","stage2-1_rlColdStart"等stage不能在这里使用)
 # ---------- 输出与日志 ----------
 out_root="logs"                                          # 总日志根目录
 out_day="${out_root}/$(TZ='Asia/Shanghai' date +%Y%m%d)" # 日期分桶

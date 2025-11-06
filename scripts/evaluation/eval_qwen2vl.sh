@@ -8,8 +8,8 @@ export NCCL_ASYNC_ERROR_HANDLING=1   # 发生通信异常及时报错而不是�
 export NCCL_BLOCKING_WAIT=1          # collective 出错立刻阻塞报错，便于定位
 export NCCL_IGNORE_DISABLED_P2P=1
 PORT=$(( (RANDOM % 20000) + 20000 ))     # 随机端口：20000–39999
-benchmark="videomme"                 #  choices: [vsibench, cvbench, blink_spatial,mindcube_full,mmbench_en_dev,videomme]
-model_path="/remote-home/share/_hf_models/hfmodel/Qwen/Qwen2.5-VL-3B-Instruct"
+benchmark="mindcube_tiny"                 #  # choices: [vsibench, cvbench, blink_spatial,mindcube_full,mindcube_tiny,mmbench_en_dev,videomme]
+model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori"
 num_processes=4
 
 # ---------- 输出与日志 ----------
