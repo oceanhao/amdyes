@@ -11,7 +11,8 @@ NPROC_PER_NODE=1  # Automatically detects available GPUs
 # ======================
 # Path Configuration
 # ======================
-MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-init"  # [ModelArguments] Pretrained model path
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-coldv2"  # [ModelArguments] Pretrained model path
+stage="stage2-1_rlColdStart_train" #[cold_start, cold_startv2]
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 OUTPUT_DIR="train_output/debug_output"                   # Directory for saving checkpoints
@@ -21,7 +22,7 @@ mkdir -p $OUTPUT_DIR
 # ======================
 # Model Configuration
 # ======================
-DATASETS="spar_234k,llava_hound_64k"   
+DATASETS="llava_hound_tool_10k_multiRoundTrain"   
 # DATASETS="spar_234k"                 # [DataArguments] Dataset with sampling rate
 
 # ======================
@@ -74,5 +75,5 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --use_geometry_encoder true \
             --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
             --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
-            --stage "cold_start" \
+            --stage $stage \
             > ${OUTPUT_DIR}/debug_train.log 2>&1

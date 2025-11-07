@@ -36,6 +36,8 @@ class DataArguments:
     min_pixels: int = field(default=28 * 28 * 16)
     video_max_frame_pixels: int = field(default=32 * 28 * 28)
     video_min_frame_pixels: int = field(default=4 * 28 * 28)
+    video_max_total_pixels: int = field(default=1664 * 28 * 28)
+    video_min_total_pixels: int = field(default=256 * 28 * 28)
     max_samples: int = field(default=-1)
     shuffle: bool = field(default=True)
     model_type: str = field(default="qwen2.5vl")

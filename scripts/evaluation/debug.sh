@@ -39,7 +39,7 @@ echo "[INFO] output_path=${output_path}"
 # ---------- 启动（后台 + nohup + 重定向到日志） ----------
 nohup accelerate launch --main_process_port "${PORT}" --num_processes="${num_processes}" -m lmms_eval \
   --model vgllm \
-  --model_args "pretrained=${model_path},max_num_frames=8,max_length=25600,stage=${stage}" \
+  --model_args "pretrained=${model_path},use_flash_attention_2=true,max_num_frames=8,max_length=25600,stage=${stage}" \
   --tasks "${benchmark}" \
   --batch_size 1 \
   --output_path "${output_path}" \

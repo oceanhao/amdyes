@@ -154,16 +154,40 @@ def train(attn_implementation="flash_attention_2"):
         ).image_processor
         data_args.model_type = "qwen2.5vl"
     else:
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
-            model_args.model_name_or_path,
+        from qwen_vl.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGenerationWithVGGT
+        config = AutoConfig.from_pretrained(model_args.model_name_or_path)
+        if hasattr(config, "use_geometry_encoder") and config.use_geometry_encoder != model_args.use_geometry_encoder:
+            raise ValueError(
+                "The use_geometry_encoder in config and model_args are not consistent. "
+                "Please check the model config."
+            )
+
+        for k in [
+            "use_geometry_encoder", 
+            "geometry_encoder_type", 
+            "reference_frame",
+            "feature_fusion_method", 
+            "fusion_num_layers",
+            "geometry_merger_type",
+            "stage"
+        ]:
+            setattr(config, k, getattr(model_args, k))
+
+        assert model_args.geometry_encoder_path is not None, \
+            "geometry_encoder_path must be set in the config when use_geometry_encoder is True."
+        model = Qwen2_5_VLForConditionalGenerationWithVGGT.from_pretrained(
+            pretrained_model_name_or_path=model_args.model_name_or_path,
+            config=config,
             cache_dir=training_args.cache_dir,
             attn_implementation=attn_implementation,
             torch_dtype=(torch.bfloat16 if training_args.bf16 else None),
+            geometry_encoder_path=model_args.geometry_encoder_path
         )
-        data_args.image_processor = Qwen2VLImageProcessor.from_pretrained(
+        data_args.image_processor = AutoProcessor.from_pretrained(
             model_args.model_name_or_path,
-        )
-        data_args.model_type = "qwen2vl"
+        ).image_processor
+        data_args.model_type = "qwen2.5vl"
+
 
     if data_args.data_flatten:
         replace_qwen2_vl_attention_class()

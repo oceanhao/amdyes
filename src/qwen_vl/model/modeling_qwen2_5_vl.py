@@ -2143,6 +2143,24 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
             position_ids (`torch.LongTensor` of shape `(3, batch_size, sequence_length)`)
             mrope_position_deltas (`torch.Tensor` of shape `(batch_size)`)
         """
+        # —— 新增：对 grid/second_ts 的“取模复用” —— #
+        def _grid_row(grid: Optional[torch.Tensor], idx: int) -> torch.Tensor:
+            """
+            从 grid 里取第 idx 行；若 idx 超界，则做模运算复用已有行。
+            适配“同一视觉内容重复出现、但 grid 只提供了一份”的情况。
+            """
+            if grid is None or grid.numel() == 0:
+                raise ValueError("Empty grid_thw while visual tokens exist.")
+            n = grid.shape[0]
+            return grid[idx] if idx < n else grid[idx % n]
+
+        def _sec_row(ts: Optional[torch.Tensor], idx: int, default: float = 1.0) -> float:
+            if ts is None or ts.numel() == 0:
+                return float(default)
+            n = ts.shape[0]
+            val = ts[idx] if idx < n else ts[idx % n]
+            return float(val)
+
         spatial_merge_size = self.config.vision_config.spatial_merge_size
         image_token_id = self.config.image_token_id
         video_token_id = self.config.video_token_id
@@ -2185,26 +2203,17 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                     else:
                         ed_video = len(input_tokens) + 1
                     if ed_image < ed_video:
-                        t, h, w = (
-                            image_grid_thw[image_index][0],
-                            image_grid_thw[image_index][1],
-                            image_grid_thw[image_index][2],
-                        )
+                        _g = _grid_row(image_grid_thw, image_index)
+                        t, h, w = (_g[0], _g[1], _g[2])
                         second_per_grid_t = 0
                         image_index += 1
                         remain_images -= 1
                         ed = ed_image
 
                     else:
-                        t, h, w = (
-                            video_grid_thw[video_index][0],
-                            video_grid_thw[video_index][1],
-                            video_grid_thw[video_index][2],
-                        )
-                        if second_per_grid_ts is not None:
-                            second_per_grid_t = second_per_grid_ts[video_index]
-                        else:
-                            second_per_grid_t = 1.0
+                        _g = _grid_row(video_grid_thw, video_index)
+                        t, h, w = (_g[0], _g[1], _g[2])
+                        second_per_grid_t = _sec_row(second_per_grid_ts, video_index, default=1.0)
                         video_index += 1
                         remain_videos -= 1
                         ed = ed_video
@@ -2237,31 +2246,42 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                     st = ed + vision_token_cnt
                     # ======= 新增：紧随其后的 VGGT 段，按 image 段同样处理 =======
                     # 条件：配置里有 vggt_start_token_id / vggt_pad_token_id，且剩余串中存在 <|vggt_start|>
-                    if (
+                    # ======= 新增：支持“多个连续 VGGT 段”，并确保它们出现在下一个视觉块之前 =======
+                    while (
                         vggt_start_token_id is not None
-                        and vggt_pad_token_id is not None
-                        and (vggt_start_token_id in input_tokens[st:])
+                        and vggt_pad_token_id   is not None
                     ):
-                        # 找到 vggt pad 的起点（严格仿照 image 的“找到第一个 pad，再当作视觉块起始”）
+                        # 下一段视觉块的起点（限定 VGGT 的可处理范围）
+                        _next_img = input_tokens.index(image_token_id, st) if (remain_images > 0 and image_token_id in input_tokens[st:]) else len(input_tokens) + 1
+                        _next_vid = input_tokens.index(video_token_id,  st) if (remain_videos > 0 and video_token_id in input_tokens[st:]) else len(input_tokens) + 1
+                        _next_vis = min(_next_img, _next_vid)
+                        # 本段 VGGT 的 pad 起点
                         if vggt_pad_token_id in input_tokens[st:]:
                             ed_vggt = input_tokens.index(vggt_pad_token_id, st)
-                            # 先补 vggt_start 之前的“文本”一维位置（通常含 <|vision_end|> 与 <|vggt_start|>）
-                            text_len_vggt = ed_vggt - st
-                            st_idx = llm_pos_ids_list[-1].max() + 1 if len(llm_pos_ids_list) > 0 else 0
-                            llm_pos_ids_list.append(torch.arange(text_len_vggt).view(1, -1).expand(3, -1) + st_idx)
+                        else:
+                            break
+                        # 若 VGGT 已越过下一段视觉块，则停止（交给下一轮视觉块处理）
+                        if ed_vggt > _next_vis:
+                            break
 
-                            # 用刚刚的 image 段网格（t,h,w）生成同样大小的 3D 位置（VGGT 作为“第二个同尺寸视觉块”）
-                            range_tensor = torch.arange(llm_grid_t).view(-1, 1)
-                            expanded_range = range_tensor.expand(-1, llm_grid_h * llm_grid_w)
-                            time_tensor = expanded_range * second_per_grid_t * self.config.vision_config.tokens_per_second
-                            time_tensor_long = time_tensor.long()
-                            t_index = time_tensor_long.flatten()
-                            h_index = torch.arange(llm_grid_h).view(1, -1, 1).expand(llm_grid_t, -1, llm_grid_w).flatten()
-                            w_index = torch.arange(llm_grid_w).view(1, 1, -1).expand(llm_grid_t, llm_grid_h, -1).flatten()
-                            llm_pos_ids_list.append(torch.stack([t_index, h_index, w_index]) + text_len_vggt + st_idx)
+                        # 先补 vggt_start 前的“文本”一维位置
+                        text_len_vggt = ed_vggt - st
+                        st_idx = llm_pos_ids_list[-1].max() + 1 if len(llm_pos_ids_list) > 0 else 0
+                        llm_pos_ids_list.append(torch.arange(text_len_vggt).view(1, -1).expand(3, -1) + st_idx)
 
-                            # 消耗掉 vggt 这块的 token（与 image 块等长）
-                            st = ed_vggt + vision_token_cnt
+                        # 用当前视觉段的 llm_grid 复用生成 VGGT 的 3D 位置
+                        range_tensor = torch.arange(llm_grid_t).view(-1, 1)
+                        expanded_range = range_tensor.expand(-1, llm_grid_h * llm_grid_w)
+                        time_tensor = expanded_range * second_per_grid_t * self.config.vision_config.tokens_per_second
+                        time_tensor_long = time_tensor.long()
+                        t_index = time_tensor_long.flatten()
+                        h_index = torch.arange(llm_grid_h).view(1, -1, 1).expand(llm_grid_t, -1, llm_grid_w).flatten()
+                        w_index = torch.arange(llm_grid_w).view(1, 1, -1).expand(llm_grid_t, llm_grid_h, -1).flatten()
+                        llm_pos_ids_list.append(torch.stack([t_index, h_index, w_index]) + text_len_vggt + st_idx)
+
+                        # 消耗本段 VGGT
+                        st = ed_vggt + vision_token_cnt
+
                         # 若未检测到 pad（极端/异常情况），则不做 VGGT 段的 3D 赋值，保持原逻辑继续
                 if st < len(input_tokens):
                     st_idx = llm_pos_ids_list[-1].max() + 1 if len(llm_pos_ids_list) > 0 else 0
@@ -2391,14 +2411,18 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                 # Process 3D geometry features if enabled
                 if getattr(self.config, 'use_geometry_encoder', False) and geometry_encoder_inputs is not None:
                     image_embeds,vggt_embeds = self._process_geometry_features(image_embeds, geometry_encoder_inputs)
-
+                # --- 支持“相同多组”视觉占位：允许整数倍，并把特征按倍数重复 ---
                 n_image_tokens = (input_ids == self.config.image_token_id).sum().item()
                 n_image_features = image_embeds.shape[0]
                 if n_image_tokens != n_image_features:
-                    raise ValueError(
-                        f"Image features and image tokens do not match: tokens: {n_image_tokens}, features {n_image_features}"
-                    )
-
+                    if n_image_features == 0 or (n_image_tokens % n_image_features) != 0:
+                        raise ValueError(
+                            f"Image features and tokens mismatch: tokens={n_image_tokens}, features={n_image_features}."
+                            " For repeated identical visuals, tokens must be an integer multiple of features."
+                        )
+                    repeat_k = n_image_tokens // n_image_features
+                    # 将同一份 image_embeds 直接在第0维复制 repeat_k 次以对齐所有占位
+                    image_embeds = image_embeds.repeat(repeat_k, 1)  # [repeat_k*N_img, D]
                 mask = input_ids == self.config.image_token_id
                 mask_unsqueezed = mask.unsqueeze(-1)
                 mask_expanded = mask_unsqueezed.expand_as(inputs_embeds)
@@ -2412,11 +2436,15 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
                 # 先检查是否存在 <|vggt_start|>
                 if (input_ids == self.config.vggt_start_token_id).any():
                     n_vggt_tokens = (input_ids == self.config.vggt_pad_token_id).sum().item()
-                    n_vggt_features = vggt_embeds.shape[0]
+                    n_vggt_features = int(vggt_embeds.shape[0])
                     if n_vggt_tokens != n_vggt_features:
-                        raise ValueError(
-                            f"VGGT features and VGGT tokens do not match: tokens: {n_vggt_tokens}, features {n_vggt_features}"
-                        )
+                        if n_vggt_features == 0 or (n_vggt_tokens % n_vggt_features) != 0:
+                            raise ValueError(
+                                f"VGGT features and tokens mismatch: tokens={n_vggt_tokens}, features={n_vggt_features}."
+                                " For repeated identical VGGT blocks, tokens must be an integer multiple of features."
+                            )
+                        repeat_k = n_vggt_tokens // n_vggt_features
+                        vggt_embeds = vggt_embeds.repeat(repeat_k, 1)  # [repeat_k*N_vggt, D]
 
                     vggt_mask = input_ids == self.config.vggt_pad_token_id
                     vggt_mask_unsqueezed = vggt_mask.unsqueeze(-1)

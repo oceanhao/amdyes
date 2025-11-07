@@ -8,9 +8,9 @@ export NCCL_ASYNC_ERROR_HANDLING=1   # 发生通信异常及时报错而不是�
 export NCCL_BLOCKING_WAIT=1          # collective 出错立刻阻塞报错，便于定位
 export NCCL_IGNORE_DISABLED_P2P=1
 PORT=$(( (RANDOM % 20000) + 20000 ))     # 随机端口：20000–39999
-benchmark="mindcube_tiny"                 #  # choices: [vsibench, cvbench, blink_spatial,mindcube_full,mindcube_tiny,mmbench_en_dev,videomme]
+benchmark="pope"                 #  # choices: [vsibench, cvbench, blink_spatial,mindcube_full,mindcube_tiny,mmbench_en_dev,videomme]
 model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/Qwen2.5-VL_flex-percept-ori"
-num_processes=4
+num_processes=1
 
 # ---------- 输出与日志 ----------
 out_root="logs"                                          # 总日志根目录
@@ -40,7 +40,7 @@ echo "[INFO] output_path=${output_path}"
 # ---------- 启动（后台 + nohup + 重定向到日志） ----------
 nohup accelerate launch --main_process_port "${PORT}" --num_processes="${num_processes}" -m lmms_eval \
   --model qwen2_5_vl \
-  --model_args "pretrained=${model_path},max_num_frames=8" \
+  --model_args "pretrained=${model_path},use_flash_attention_2=true,max_num_frames=8" \
   --tasks "${benchmark}" \
   --batch_size 1 \
   --output_path "${output_path}" \

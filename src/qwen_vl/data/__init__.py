@@ -33,6 +33,12 @@ SPAR_234K = {
     "tag": "3d"
 }
 
+spar_tool_40k = {
+    "annotation_path": "data/train/spar_tool_40k.json",
+    "data_path": "data/media",
+    "tag": "3d"
+}
+
 LLAVA_HOUND = {
     "annotation_path": "data/train/llava_hound_255k.json",
     "data_path": "data/media",
@@ -52,6 +58,11 @@ llava_hound_sampleN = {
 }
 llava_hound_tool_10k = {
     "annotation_path": "data/train/llava_hound_tool_10k.json",
+    "data_path": "data/media",
+    "tag": "2d"
+}
+llava_hound_tool_10k_multiRoundTrain = {
+    "annotation_path": "data/train/llava_hound_tool_10k_multiRoundTrain.json",
     "data_path": "data/media",
     "tag": "2d"
 }
@@ -86,7 +97,9 @@ data_dict = {
     "spar_234k": SPAR_234K,
     "llava_hound_64k": LLAVA_HOUND_64K,
     "llava_hound_sampleN":llava_hound_sampleN,
-    "llava_hound_tool_10k":llava_hound_tool_10k
+    "llava_hound_tool_10k":llava_hound_tool_10k,
+    "spar_tool_40k":spar_tool_40k,
+    "llava_hound_tool_10k_multiRoundTrain":llava_hound_tool_10k_multiRoundTrain,
 }
 
 

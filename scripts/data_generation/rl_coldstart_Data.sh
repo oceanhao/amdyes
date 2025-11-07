@@ -14,22 +14,22 @@ NPROC_PER_NODE=4  # Automatically detects available GPUs
 MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/qwen2.5-with-vggt-special"  # [ModelArguments] Pretrained model path
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
-OUTPUT_DIR="datagenerate_rlColdStartOutput"                   # Directory for saving checkpoints
+OUTPUT_DIR="datagenerate_rlColdStartOutput/spar"                   # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
 mkdir -p $OUTPUT_DIR
 
 # ======================
 # Model Configuration
 # ======================
-DATASETS="llava_hound_tool_10k"   
-# DATASETS="spar_234k"                 # [DataArguments] Dataset with sampling rate
+DATASETS="spar_tool_40k"   
+# DATASETS="spar_234k" spar_tool_40k llava_hound_tool_10k              # [DataArguments] Dataset with sampling rate
 
 # ======================
 # Training Hyperparameters
 # ======================
 
 export NCCL_IGNORE_DISABLED_P2P=1
-torchrun --nproc_per_node=$NPROC_PER_NODE \
+nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
             --master_port=$MASTER_PORT \
             scripts/data_generation/dataGener_qwen.py \
@@ -58,4 +58,4 @@ torchrun --nproc_per_node=$NPROC_PER_NODE \
             --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
             --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
             --stage "stage2-1_rlColdStart" \
-            > ${OUTPUT_DIR}/datagenerate.log 2>&1
+            > ${OUTPUT_DIR}/datagenerate.log 2>&1 &

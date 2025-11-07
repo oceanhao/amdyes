@@ -30,6 +30,7 @@ IMAGE_TOKEN_INDEX = 151655
 VIDEO_TOKEN_INDEX = 151656
 DEFAULT_IMAGE_TOKEN = "<image>"
 DEFAULT_VIDEO_TOKEN = "<video>"
+VGGT_TAG="<vggt>"
 
 local_rank = None
 
@@ -49,8 +50,6 @@ def read_jsonl(path, max_samples: int=-1):
                 break
     return ret
 
-
-# CHG: 增加 stage 参数
 def preprocess_qwen_2_visual(
     sources,
     tokenizer: transformers.PreTrainedTokenizer,
@@ -79,7 +78,7 @@ def preprocess_qwen_2_visual(
     rl_coldstart = (stage == "stage2-1_rlColdStart")  # NEW
 
     input_ids, targets = [], []
-    visual_replicate_index = 0 
+
     for i, source in enumerate(sources):
 
         try:
@@ -114,6 +113,8 @@ def preprocess_qwen_2_visual(
         target += [IGNORE_INDEX] * len(input_id)
 
         for conv in source:
+            visual_replicate_index = 0 
+
             try:
                 role = conv["role"]
                 content = conv["content"]
@@ -123,6 +124,9 @@ def preprocess_qwen_2_visual(
 
             role = roles.get(role, role)
             if role == "user":
+                if VGGT_TAG in content:
+                    vggt_use=True
+                    content = content.replace(VGGT_TAG, "")
                 visual_tag = f"<{visual_type}>"
                 if visual_tag in content:
                     parts = content.split(visual_tag)
@@ -525,9 +529,10 @@ class LazySupervisedDataset(Dataset):
                 self.use_vggt_epoch = False
         elif self.stage =="stage2-1_rlColdStart":
             self.use_vggt_epoch = False
+        elif self.stage == "cold_start" or self.stage == "force_half":   
+            self.use_vggt_epoch = bool(random.getrandbits(1))
         else:
-            if self.stage == "cold_start" or self.stage == "force_half":
-                self.use_vggt_epoch = bool(random.getrandbits(1))
+            self.use_vggt_epoch = False
         # NEW: 先对原始样本做一次完整快照，用于 meta（避免后续改写影响）
         orig = copy.deepcopy(self.list_data_dict[i])  # NEW
         if os.getenv("Debug", "False")=="debug_dataset":
@@ -890,8 +895,8 @@ class FlattenedDataCollatorForSupervisedDataset(DataCollatorForSupervisedDataset
         # assume all data in a batch has geometry_encoder_inputs
         if "geometry_encoder_inputs" in instances[0]:
             raise NotImplementedError("FlattenedDataCollatorForSupervisedDataset does not support geometry_encoder_inputs")
-        if self.stage=="stage2-1_rlColdStart":
-            batch["meta"] = [inst.get("meta") for inst in instances]  # NEW
+        # if self.stage=="stage2-1_rlColdStart":
+        #     batch["meta"] = [inst.get("meta") for inst in instances]  # NEW
         return batch
 
 
