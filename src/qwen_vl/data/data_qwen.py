@@ -190,7 +190,7 @@ class LazySupervisedDataset(Dataset):
 
     def __init__(self, tokenizer: transformers.PreTrainedTokenizer, data_args):
         super(LazySupervisedDataset, self).__init__()
-        if data_args.dataset_use:
+        if data_args.dataset_use!="":
             dataset = data_args.dataset_use.split(",")
             dataset_list = data_list(dataset)
             print(f"Loading datasets: {dataset_list}")
@@ -211,7 +211,7 @@ class LazySupervisedDataset(Dataset):
             self.get_rope_index = get_rope_index_2
 
         list_data_dict = []
-        if data_args.dataset_use:
+        if data_args.dataset_use!="":
             for data in dataset_list:
                 file_format = data["annotation_path"].split(".")[-1]
                 if file_format == "jsonl":

@@ -7,8 +7,8 @@ export NCCL_ASYNC_ERROR_HANDLING=1   # 发生通信异常及时报错而不是�
 export NCCL_BLOCKING_WAIT=1          # collective 出错立刻阻塞报错，便于定位
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 export NCCL_IGNORE_DISABLED_P2P=1
-benchmark="mme"                     # choices: [vsibench, cvbench, blink_spatial,mindcube_full,mindcube_tiny,mmbench_en_dev,videomme,mmstar,pope,mme]
-model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-coldv2"
+benchmark="vsibench"                     # choices: [vsibench, cvbench, blink_spatial,mindcube_full,mindcube_tiny,mmbench_en_dev,videomme,mmstar,pope,mme]
+model_path="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e"
 num_processes=4
 stage='force_use' #'force_use'、'force_notuse','force_half'(一半vggt)  ("cold_start","stage2-1_rlColdStart"等stage不能在这里使用)
 # ---------- 输出与日志 ----------
@@ -39,7 +39,7 @@ echo "[INFO] output_path=${output_path}"
 # ---------- 启动（后台 + nohup + 重定向到日志） ----------
 nohup accelerate launch --main_process_port "${PORT}" --num_processes="${num_processes}" -m lmms_eval \
   --model vgllm \
-  --model_args "pretrained=${model_path},use_flash_attention_2=true,max_num_frames=8,max_length=25600,stage=${stage}" \
+  --model_args "pretrained=${model_path},use_flash_attention_2=true,max_num_frames=32,max_length=25600,stage=${stage}" \
   --tasks "${benchmark}" \
   --batch_size 1 \
   --output_path "${output_path}" \

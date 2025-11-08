@@ -12,8 +12,8 @@ NPROC_PER_NODE=4  # Automatically detects available GPUs
 # Path Configuration
 # ======================
 # train sr一定要从含特殊vggt token的ckpt开始！！！！！！！获取带vggt token的方法：/remote-home/haohh/_cvpr2025/VG-LLM/scripts/add_spatialToken.py
-MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e"  # [ModelArguments] Pretrained model path
-stage="cold_startv2" #[cold_start, cold_startv2]
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-coldv2"  # [ModelArguments] Pretrained model path
+stage="stage2-1_rlColdStart_train" #[cold_start, cold_startv2]
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 out_root="train_output"                 # Directory for saving checkpoints
@@ -30,7 +30,7 @@ DATASETS="spar_234k,llava_hound_64k"
 # ======================
 # Training Hyperparameters
 # ======================
-LR=5e-6
+LR=8e-6
 # total_batch_size=4
 # GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
 GRADIENT_ACCUMULATION_STEPS=4
