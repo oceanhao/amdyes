@@ -13,12 +13,13 @@ NPROC_PER_NODE=4  # Automatically detects available GPUs
 # ======================
 # train sr一定要从含特殊vggt token的ckpt开始！！！！！！！获取带vggt token的方法：/remote-home/haohh/_cvpr2025/VG-LLM/scripts/add_spatialToken.py
 MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e"  # [ModelArguments] Pretrained model path
-stage="cold_startv2" #[cold_start, cold_startv2]
+stage="cold_start" #[cold_start, cold_startv2]
 GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 out_root="train_output"                 # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
-OUTPUT_DIR="${out_root}/${stage}"
+other_path_tag="_from_init-3e"
+OUTPUT_DIR="${out_root}/${stage}${other_path_tag}"
 mkdir -p $OUTPUT_DIR
 
 # ======================
@@ -30,10 +31,10 @@ DATASETS="spar_234k,llava_hound_64k"
 # ======================
 # Training Hyperparameters
 # ======================
-LR=5e-6
-# total_batch_size=4
-# GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
-GRADIENT_ACCUMULATION_STEPS=4
+LR=3e-6
+total_batch_size=64
+GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
+# GRADIENT_ACCUMULATION_STEPS=4
 export NCCL_IGNORE_DISABLED_P2P=1
 nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --master_addr=$MASTER_ADDR \
@@ -69,7 +70,7 @@ nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --gradient_checkpointing \
             --dataloader_num_workers 4 \
             --group_by_modality_length true \
-            --seed 0 \
+            --seed 42 \
             --report_to "none" \
             --use_geometry_encoder true \
             --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \

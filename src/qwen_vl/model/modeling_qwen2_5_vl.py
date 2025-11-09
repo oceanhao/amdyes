@@ -59,19 +59,24 @@ import torch.distributed as dist
 import random
 import os
 
-if is_flash_attn_2_available():
-    from flash_attn import flash_attn_varlen_func
-    from flash_attn.layers.rotary import apply_rotary_emb
+import warnings
 
+if is_flash_attn_2_available():
+    try:
+        from flash_attn import flash_attn_varlen_func
+        from flash_attn.layers.rotary import apply_rotary_emb
+        from transformers.modeling_flash_attention_utils import _flash_attention_forward
+    except Exception as e:
+        flash_attn_varlen_func = None
+        apply_rotary_emb = None
+        warnings.warn(
+            f"[FlashAttention] 导入 flash-attn 失败，已回退到常规模式。"
+            f"请检查安装与 Torch/CUDA 版本匹配。错误详情：{e}"
+        )
 else:
     flash_attn_varlen_func = None
     apply_rotary_emb = None
 
-
-if is_flash_attn_2_available():
-    from transformers.modeling_flash_attention_utils import _flash_attention_forward
-else:
-    flash_attn_varlen_func = None
 
 
 logger = logging.get_logger(__name__)
