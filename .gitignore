@@ -8,3 +8,5 @@ train_output
 datagenerate_rlColdStartOutput
 logs
 *tmp
+outputs
+generatedData
