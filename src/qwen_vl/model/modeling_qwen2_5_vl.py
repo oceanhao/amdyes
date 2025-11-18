@@ -61,6 +61,14 @@ import os
 
 import warnings
 
+
+# from vllm import LLM, ModelRegistry
+# from vllm.model_executor.models.registry import _MULTIMODAL_MODELS
+# # model_registry.register_model("Qwen2_5_VLForConditionalGenerationWithVGGT", Qwen2_5_VLForConditionalGenerationWithVGGT)
+# ModelRegistry.register_model("Qwen2_5_VLForConditionalGenerationWithVGGT", Qwen2_5_VLForConditionalGenerationWithVGGT)
+# _MULTIMODAL_MODELS["Qwen2_5_VLForConditionalGenerationWithVGGT"] = ("Qwen2_5_VLForConditionalGeneration", "Qwen2_5_VLForConditionalGenerationWithVGGT")
+
+
 if is_flash_attn_2_available():
     try:
         from flash_attn import flash_attn_varlen_func
@@ -69,7 +77,7 @@ if is_flash_attn_2_available():
     except Exception as e:
         flash_attn_varlen_func = None
         apply_rotary_emb = None
-        warnings.warn(
+        print(
             f"[FlashAttention] 导入 flash-attn 失败，已回退到常规模式。"
             f"请检查安装与 Torch/CUDA 版本匹配。错误详情：{e}"
         )
@@ -2735,3 +2743,17 @@ class Qwen2_5_VLForConditionalGenerationWithVGGT(Qwen2_5_VLPreTrainedModel, Gene
 
 
 __all__ = ["Qwen2_5_VLForConditionalGeneration", "Qwen2_5_VLModel", "Qwen2_5_VLPreTrainedModel"]
+try:
+    from vllm import LLM, ModelRegistry
+    from vllm.model_executor.models.registry import _MULTIMODAL_MODELS
+    # model_registry.register_model("Qwen2_5_VLForConditionalGenerationWithVGGT", Qwen2_5_VLForConditionalGenerationWithVGGT)
+    ModelRegistry.register_model("Qwen2_5_VLForConditionalGenerationWithVGGT", Qwen2_5_VLForConditionalGenerationWithVGGT)
+    # ModelRegistry.register_model(
+    #     "Qwen2_5_VLForConditionalGenerationWithVGGT",
+    #     "vllm.model_executor.models.qwen2_5_vl:Qwen2_5_VLForConditionalGeneration",
+    # )
+    _MULTIMODAL_MODELS["Qwen2_5_VLForConditionalGenerationWithVGGT"] = ("Qwen2_5_VLForConditionalGeneration", "Qwen2_5_VLForConditionalGenerationWithVGGT")
+except Exception as e:
+        warnings.warn(
+        f"check vllm:{e}"
+    )

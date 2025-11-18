@@ -1,0 +1,39 @@
+wandb: Detected [huggingface_hub.inference, openai] in use.
+wandb: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+wandb: For more information, check out the docs at: https://weave-docs.wandb.ai/
+  0%|          | 0/31875 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 522, in <module>
+    train(attn_implementation="flash_attention_2")
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 507, in train
+    grpo_trainer.train()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2245, in train
+    return inner_training_loop(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2556, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 3712, in training_step
+    inputs = self._prepare_inputs(inputs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/trl/extras/profiling.py", line 87, in wrapper
+    return func(self, *args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/trl/trainer/grpo_trainer.py", line 647, in _prepare_inputs
+    inputs = self._generate_and_score_completions(inputs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/trl/trainer/grpo_trainer.py", line 663, in _generate_and_score_completions
+    prompt_inputs = self.processing_class(
+TypeError: 'ProcessorShim' object is not callable
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 522, in <module>
+[rank0]:     train(attn_implementation="flash_attention_2")
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 507, in train
+[rank0]:     grpo_trainer.train()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2245, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2556, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 3712, in training_step
+[rank0]:     inputs = self._prepare_inputs(inputs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/trl/extras/profiling.py", line 87, in wrapper
+[rank0]:     return func(self, *args, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/trl/trainer/grpo_trainer.py", line 647, in _prepare_inputs
+[rank0]:     inputs = self._generate_and_score_completions(inputs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/trl/trainer/grpo_trainer.py", line 663, in _generate_and_score_completions
+[rank0]:     prompt_inputs = self.processing_class(
+[rank0]: TypeError: 'ProcessorShim' object is not callable

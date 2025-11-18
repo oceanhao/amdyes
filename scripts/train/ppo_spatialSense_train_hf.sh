@@ -1,0 +1,106 @@
+#!/bin/bash
+# Complete QwenVL Training Launch Script with Full Parameter Documentation
+
+# ======================
+# Distributed Configuration
+# ======================
+MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
+MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
+NPROC_PER_NODE=2  # Automatically detects available GPUs
+
+
+############################
+# Paths
+############################
+MODEL_PATH="/remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e"
+STAGE="rl_grpo"  # [cold_start, cold_startv2, grpo]
+GEOMETRY_ENCODER_TYPE="vggt"
+GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
+OUT_ROOT="train_output"
+CACHE_DIR="./cache"
+OTHER_TAG=""
+OUTPUT_DIR="${OUT_ROOT}/${STAGE}${OTHER_TAG}"
+mkdir -p "${OUTPUT_DIR}"
+
+# ======================
+# Model Configuration
+# ======================
+DATASETS="spar_234k,llava_hound_64k"  
+# DATASETS="spar_234k"       "spar_234k,llava_hound_64k"            # [DataArguments] Dataset with sampling rate
+
+# ======================
+# Training Hyperparameters
+# ======================
+LR=3e-6
+
+total_batch_size=48
+GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
+# GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
+# GRADIENT_ACCUMULATION_STEPS=4
+
+# === GRPO 关键参数（可按需改）===
+RL_NUM_GENERATIONS="4"   # 每个prompt生成数（G）
+PER_DEVICE_TRAIN_BATCH_SIZE=$((  RL_NUM_GENERATIONS * 2))   # << 建议至少为2，便于GRPO
+RL_REWARD_WEIGHTS="-1.0 1.0 0.5"
+RL_BETA=0                      # KL 系数；0更省显存
+GLOBAL_MICRO=$(( PER_DEVICE_TRAIN_BATCH_SIZE * $NPROC_PER_NODE))
+
+
+############################
+# Launch
+############################
+ts="$(TZ='Asia/Shanghai' date +%Y%m%dT%H%M%S)"
+LOG="${OUTPUT_DIR}/train_grpo_${ts}.log"
+echo "=== Launching GRPO ==="
+echo "GPUs: ${NPROC_PER_NODE}, per_device_batch: ${PER_DEVICE_TRAIN_BATCH_SIZE}, GLOBAL_MICRO: ${GLOBAL_MICRO}, num_generations: ${RL_NUM_GENERATIONS}"
+echo "Log -> ${LOG}"
+
+export NCCL_IGNORE_DISABLED_P2P=1
+nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
+            --master_addr=$MASTER_ADDR \
+            --master_port=$MASTER_PORT \
+            src/qwen_vl/train/train_qwen_grpo.py \
+            --model_name_or_path $MODEL_PATH \
+            --tune_mm_llm True \
+            --tune_mm_vision False \
+            --tune_mm_mlp False \
+            --dataset_use $DATASETS \
+            --output_dir $OUTPUT_DIR \
+            --cache_dir $CACHE_DIR \
+            --bf16 \
+            --per_device_train_batch_size "${PER_DEVICE_TRAIN_BATCH_SIZE}" \
+            --gradient_accumulation_steps $GRADIENT_ACCUMULATION_STEPS \
+            --learning_rate $LR \
+            --mm_projector_lr 1e-5 \
+            --vision_tower_lr 0 \
+            --optim adamw_torch \
+            --model_max_length 25600 \
+            --data_flatten False \
+            --base_interval 2 \
+            --video_max_frames 8 \
+            --video_min_frames 4 \
+            --num_train_epochs 1 \
+            --warmup_ratio 0.03 \
+            --lr_scheduler_type "cosine" \
+            --weight_decay 0.01 \
+            --logging_steps 50 \
+            --save_steps 1000 \
+            --save_total_limit 4 \
+            --deepspeed "scripts/zero2_opt.json" \
+            --gradient_checkpointing \
+            --dataloader_num_workers 4 \
+            --group_by_modality_length true \
+            --seed 42 \
+            --report_to "none" \
+            --use_geometry_encoder true \
+            --geometry_encoder_type $GEOMETRY_ENCODER_TYPE \
+            --geometry_encoder_path $GEOMETRY_ENCODER_PATH \
+            --stage $STAGE \
+            --rl_stage rl_grpo \
+            --rl_num_generations "${RL_NUM_GENERATIONS}" \
+            --rl_reward_weights ${RL_REWARD_WEIGHTS} \
+            --rl_max_completion_length 512 \
+            --rl_beta "${RL_BETA}" \
+            > "${LOG}" 2>&1 &
+
+echo "PID: $!"

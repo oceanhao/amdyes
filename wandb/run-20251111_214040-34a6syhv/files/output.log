@@ -1,0 +1,80 @@
+wandb: Detected [huggingface_hub.inference, openai] in use.
+wandb: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+wandb: For more information, check out the docs at: https://weave-docs.wandb.ai/
+  0%|          | 0/31875 [00:00<?, ?it/s]`generation_config` default values have been modified to match model-specific defaults: {'temperature': 1e-06, 'repetition_penalty': 1.05}. If this is not desired, please set these values explicitly.
+  0%|          | 24/31875 [01:01<23:18:44,  2.63s/it]Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 536, in <module>
+    train(attn_implementation="flash_attention_2")
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 521, in train
+    grpo_trainer.train()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2245, in train
+    return inner_training_loop(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2556, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 3764, in training_step
+    self.accelerator.backward(loss, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/accelerator.py", line 2321, in backward
+    self.deepspeed_engine_wrapped.backward(loss, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/utils/deepspeed.py", line 275, in backward
+    self.engine.step()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/engine.py", line 2322, in step
+    self._take_model_step(lr_kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/engine.py", line 2225, in _take_model_step
+    self.optimizer.step()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/zero/stage_1_and_2.py", line 1914, in step
+    self._optimizer_step(i)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/zero/stage_1_and_2.py", line 1820, in _optimizer_step
+    self.optimizer.step()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/lr_scheduler.py", line 137, in wrapper
+    return func.__get__(opt, opt.__class__)(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/optimizer.py", line 487, in wrapper
+    out = func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/optimizer.py", line 91, in _use_grad
+    ret = func(self, *args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/adamw.py", line 220, in step
+    adamw(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/optimizer.py", line 154, in maybe_fallback
+    return func(*args, **kwargs)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/adamw.py", line 782, in adamw
+    func(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/adamw.py", line 606, in _multi_tensor_adamw
+    exp_avg_sq_sqrt = torch._foreach_sqrt(device_exp_avg_sqs)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 11.49 GiB. GPU 0 has a total capacity of 79.14 GiB of which 222.75 MiB is free. Process 147771 has 78.91 GiB memory in use. Of the allocated memory 61.14 GiB is allocated by PyTorch, and 17.07 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 536, in <module>
+[rank0]:     train(attn_implementation="flash_attention_2")
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 521, in train
+[rank0]:     grpo_trainer.train()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2245, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2556, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 3764, in training_step
+[rank0]:     self.accelerator.backward(loss, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/accelerator.py", line 2321, in backward
+[rank0]:     self.deepspeed_engine_wrapped.backward(loss, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/utils/deepspeed.py", line 275, in backward
+[rank0]:     self.engine.step()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/engine.py", line 2322, in step
+[rank0]:     self._take_model_step(lr_kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/engine.py", line 2225, in _take_model_step
+[rank0]:     self.optimizer.step()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/zero/stage_1_and_2.py", line 1914, in step
+[rank0]:     self._optimizer_step(i)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/deepspeed/runtime/zero/stage_1_and_2.py", line 1820, in _optimizer_step
+[rank0]:     self.optimizer.step()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/lr_scheduler.py", line 137, in wrapper
+[rank0]:     return func.__get__(opt, opt.__class__)(*args, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/optimizer.py", line 487, in wrapper
+[rank0]:     out = func(*args, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/optimizer.py", line 91, in _use_grad
+[rank0]:     ret = func(self, *args, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/adamw.py", line 220, in step
+[rank0]:     adamw(
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/optimizer.py", line 154, in maybe_fallback
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/adamw.py", line 782, in adamw
+[rank0]:     func(
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/optim/adamw.py", line 606, in _multi_tensor_adamw
+[rank0]:     exp_avg_sq_sqrt = torch._foreach_sqrt(device_exp_avg_sqs)
+[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 11.49 GiB. GPU 0 has a total capacity of 79.14 GiB of which 222.75 MiB is free. Process 147771 has 78.91 GiB memory in use. Of the allocated memory 61.14 GiB is allocated by PyTorch, and 17.07 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

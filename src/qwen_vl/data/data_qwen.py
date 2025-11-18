@@ -24,7 +24,7 @@ import transformers
 from . import data_list
 from .rope2d import get_rope_index_25, get_rope_index_2
 from .utils import prepare_image_inputs
-
+from typing import List
 IGNORE_INDEX = -100
 IMAGE_TOKEN_INDEX = 151655
 VIDEO_TOKEN_INDEX = 151656
@@ -79,6 +79,8 @@ def preprocess_qwen_2_visual(
 
     input_ids, targets = [], []
 
+    all_conv=[]
+
     for i, source in enumerate(sources):
 
         try:
@@ -111,7 +113,7 @@ def preprocess_qwen_2_visual(
             [{"role": "system", "content": system_message}]
         )
         target += [IGNORE_INDEX] * len(input_id)
-
+        all_conv.append({"role": "system", "content": system_message})
         for conv in source:
             visual_replicate_index = 0 
 
@@ -157,6 +159,7 @@ def preprocess_qwen_2_visual(
                     content = "".join(new_parts)
 
             conv = [{"role": role, "content": content}]
+            all_conv.append({"role": role, "content": content})
             encode_id = tokenizer.apply_chat_template(conv)
             input_id += encode_id
             if role in ["user", "system"]:
@@ -166,7 +169,7 @@ def preprocess_qwen_2_visual(
                 target_mask = encode_id.copy()
                 target_mask[:3] = [IGNORE_INDEX] * 3
                 target += target_mask
-
+        
         # NEW: 在 RL ColdStart 阶段，为生成回答补上 assistant 起始提示（不含内容）
         if stage not in ["cold_start","cold_startv2","qwen"] :#从llava houd、spar等读取的都不需要.但"stage2-1_rlColdStart"需要，因为他在前面去掉了user
             add_prompt_str = "<|im_start|>assistant\n"  # 和你上面 chat_template 的生成提示严格一致
@@ -180,10 +183,19 @@ def preprocess_qwen_2_visual(
 
     input_ids = torch.tensor(input_ids, dtype=torch.long)
     targets = torch.tensor(targets, dtype=torch.long)
-    return dict(
+
+    if "rl_" in stage and "start" not in stage.lower():
+        dict_t=dict(
+            input_ids=input_ids,
+            labels=targets,
+            prompt=all_conv
+        )
+    else:
+        dict_t=dict(
         input_ids=input_ids,
         labels=targets,
     )
+    return dict_t
 
 class LazySupervisedDataset(Dataset):
     """Dataset for supervised fine-tuning."""
@@ -328,41 +340,78 @@ class LazySupervisedDataset(Dataset):
         #     # write to local
         #     img.save(f"images/img_{j}.jpg", format="JPEG")
 
-    def process_video(self, video_file):
+    # def process_video(self, video_file,dataset_name: str = ""):
+    #     if not os.path.exists(video_file):
+    #         print(f"File not exist: {video_file}")
+    #     vr = VideoReader(video_file, num_threads=4)
+    #     total_frames = len(vr)
+    #     avg_fps = vr.get_avg_fps()
+    #     video_length = total_frames / avg_fps
+    #     interval = getattr(self.data_args, "base_interval", 4)
+
+    #     num_frames_to_sample = round(video_length / interval)
+    #     video_min_frames = getattr(self.data_args, "video_min_frames", 4)
+    #     video_max_frames = getattr(self.data_args, "video_max_frames", 8)
+
+    #     target_frames = min(
+    #         max(num_frames_to_sample, video_min_frames), video_max_frames
+    #     )
+    #     frame_idx = np.linspace(0, total_frames - 1, target_frames, dtype=int)
+    #     frame_idx = np.unique(frame_idx)
+    #     video = vr.get_batch(frame_idx).asnumpy()
+    #     fps = len(frame_idx) / video_length
+    #     processor = copy.deepcopy(self.data_args.image_processor)
+    #     processor.max_pixels = self.data_args.video_max_frame_pixels
+    #     processor.min_pixels = self.data_args.video_min_frame_pixels
+    #     processor.size["longest_edge"] = processor.max_pixels
+    #     processor.size["shortest_edge"] = processor.min_pixels
+    #     video_processed = processor.preprocess(
+    #         images=None, videos=video, return_tensors="pt"
+    #     )
+    #     video_tensor = video_processed["pixel_values_videos"]
+    #     grid_thw = video_processed["video_grid_thw"][0]
+    #     second_per_grid_ts = [
+    #         self.data_args.image_processor.temporal_patch_size / fps
+    #     ] * len(grid_thw)
+    #     return video_tensor, grid_thw, second_per_grid_ts
+
+    def process_video(self, video_file: str, dataset_name: str = ""):
+        # 当为 VSI 数据集时，用根目录拼接相对路径（原始视频）
+        if "vsi_" in (dataset_name or "").lower() and not os.path.isabs(video_file):
+            video_file = os.path.join(self.data_args.vsi_590k_dataRoot, video_file)
         if not os.path.exists(video_file):
-            print(f"File not exist: {video_file}")
-        vr = VideoReader(video_file, num_threads=4)
+            raise FileNotFoundError(f"File not exist: {video_file}")
+
+        # 多线程高效解码（decord）
+        num_threads = getattr(self.data_args, "video_decode_threads", max(4, (os.cpu_count() or 4)))
+        vr = VideoReader(video_file, num_threads=num_threads)
+
         total_frames = len(vr)
-        avg_fps = vr.get_avg_fps()
+        if total_frames == 0:
+            raise ValueError(f"No frames in video: {video_file}")
+        avg_fps = vr.get_avg_fps() or 1e-6
         video_length = total_frames / avg_fps
+
         interval = getattr(self.data_args, "base_interval", 4)
+        min_f, max_f = getattr(self.data_args, "video_min_frames", 4), getattr(self.data_args, "video_max_frames", 8)
+        target_frames = min(max(round(video_length / interval), min_f), max_f)
 
-        num_frames_to_sample = round(video_length / interval)
-        video_min_frames = getattr(self.data_args, "video_min_frames", 4)
-        video_max_frames = getattr(self.data_args, "video_max_frames", 8)
+        frame_idx = np.unique(np.linspace(0, total_frames - 1, target_frames, dtype=int))
+        video = vr.get_batch(frame_idx).asnumpy()  # 批量取帧，避免逐帧 I/O
+        fps = len(frame_idx) / max(video_length, 1e-6)
 
-        target_frames = min(
-            max(num_frames_to_sample, video_min_frames), video_max_frames
-        )
-        frame_idx = np.linspace(0, total_frames - 1, target_frames, dtype=int)
-        frame_idx = np.unique(frame_idx)
-        video = vr.get_batch(frame_idx).asnumpy()
-        fps = len(frame_idx) / video_length
         processor = copy.deepcopy(self.data_args.image_processor)
         processor.max_pixels = self.data_args.video_max_frame_pixels
         processor.min_pixels = self.data_args.video_min_frame_pixels
         processor.size["longest_edge"] = processor.max_pixels
         processor.size["shortest_edge"] = processor.min_pixels
-        video_processed = processor.preprocess(
-            images=None, videos=video, return_tensors="pt"
-        )
-        video_tensor = video_processed["pixel_values_videos"]
-        grid_thw = video_processed["video_grid_thw"][0]
-        second_per_grid_ts = [
-            self.data_args.image_processor.temporal_patch_size / fps
-        ] * len(grid_thw)
+
+        out = processor.preprocess(images=None, videos=video, return_tensors="pt")
+        video_tensor = out["pixel_values_videos"]
+        grid_thw = out["video_grid_thw"][0]
+        second_per_grid_ts = [self.data_args.image_processor.temporal_patch_size / fps] * len(grid_thw)
         return video_tensor, grid_thw, second_per_grid_ts
-    
+        
 
     def __getitem__(self, i) -> Dict[str, torch.Tensor]:
         num_base_retries = 3
@@ -399,126 +448,127 @@ class LazySupervisedDataset(Dataset):
         except Exception as e:
             raise e
     # 放在 Dataset 类中
-    def _resolve_images(self, source: dict) -> List[Image.Image]:
-        """
-        返回 PIL.Image 列表，兼容多种来源：
-        - source["image"] 为绝对/相对路径字符串
-        - source["image"] 为路径列表
-        - source["image"] 为 PIL.Image 或其列表
-        - source["image_dir"] 或 "frames_dir"：目录下所有图片（排序后采样）
-        - base64 data URI: "data:image/jpeg;base64,...."
-        """
+    # 兼容 "vsi_" 数据集根目录的精简实现
+    def _resolve_images(self, source: dict, dataset_name: str = "") -> List[Image.Image]:
         imgs: List[Image.Image] = []
+        root = self.data_args.vsi_590k_dataRoot if "vsi_" in (dataset_name or "").lower() else source.get("data_path", "")
 
         def _open_one(p):
             if isinstance(p, Image.Image):
                 return p.convert("RGB")
             if isinstance(p, str) and p.startswith("data:image"):
-                head, b64 = p.split("base64,", 1)
-                from io import BytesIO
                 import base64
-                return Image.open(BytesIO(base64.b64decode(b64))).convert("RGB")
+                from io import BytesIO
+                return Image.open(BytesIO(base64.b64decode(p.split("base64,", 1)[1]))).convert("RGB")
             if isinstance(p, str):
-                # 绝对路径 or 相对 data_path
-                full = p if os.path.isabs(p) else os.path.join(source.get("data_path", ""), p)
+                full = p if os.path.isabs(p) else os.path.join(root, p)  # 这里在 vsi_ 时走 vsi_590k_dataRoot
                 return Image.open(full).convert("RGB")
             raise NotImplementedError(f"Unsupported image spec: {type(p)}")
 
         if "image" in source:
             v = source["image"]
             if isinstance(v, (list, tuple)):
-                for x in v:
-                    imgs.append(_open_one(x))
+                imgs.extend(_open_one(x) for x in v)
             else:
                 imgs.append(_open_one(v))
 
-        # 目录帧
         frames_dir = source.get("image_dir") or source.get("frames_dir")
         if frames_dir:
-            full_dir = frames_dir if os.path.isabs(frames_dir) else os.path.join(source.get("data_path", ""), frames_dir)
+            full_dir = frames_dir if os.path.isabs(frames_dir) else os.path.join(root, frames_dir)
             if os.path.isdir(full_dir):
-                files = [os.path.join(full_dir, f) for f in os.listdir(full_dir)
-                        if os.path.isfile(os.path.join(full_dir, f))
-                        and f.lower().endswith((".jpg",".jpeg",".png",".bmp",".webp"))]
-                files.sort()
-                for f in files:
-                    imgs.append(Image.open(f).convert("RGB"))
+                exts = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
+                files = sorted(
+                    os.path.join(full_dir, f) for f in os.listdir(full_dir)
+                    if os.path.isfile(os.path.join(full_dir, f)) and f.lower().endswith(exts)
+                )
+                imgs.extend(Image.open(f).convert("RGB") for f in files)
 
         if not imgs:
             raise FileNotFoundError("No images resolved from source.")
         return imgs
-    def read_video_images(self, source):
+
+    def read_video_images(self, source: dict, dataset_name: str = "") -> List[Image.Image]:
         """
         兼容：
-        - source["video"] 为绝对/相对路径视频文件
-        - source["video"] 指向帧目录
+        - 帧目录（image_dir / video 为目录）
+        - 原始视频文件（多线程 decord，失败降级 OpenCV）
+        只均匀采样至多 video_max_frames 帧；VSI 数据集用 vsi_590k_dataRoot 拼接相对路径。
         """
         assert isinstance(source["video"], str), "video should be a string"
         v = source["video"]
-        video_path = v if os.path.isabs(v) else os.path.join(source.get("data_path",""), v)
+        # 1) 解析路径（VSI 优先走 dataRoot）
+        if "vsi_" in (dataset_name or "").lower() and not os.path.isabs(v):
+            video_path = os.path.join(self.data_args.vsi_590k_dataRoot, v)
+        else:
+            video_path = v if os.path.isabs(v) else os.path.join(source.get("data_path", ""), v)
 
+        # 2) 若是帧目录：只取均匀采样的前 max 帧
         if os.path.isdir(video_path):
-            frame_files = [os.path.join(video_path, f) for f in os.listdir(video_path)
-                        if os.path.isfile(os.path.join(video_path, f))]
-            frame_files.sort()
-            # 与你原来的采样策略一致
-            def get_frame_indices(n, fps=1):
-                video_length = n / fps
-                interval = getattr(self.data_args, "base_interval", 2)
-                n_to_sample = round(video_length / interval)
-                vmin = getattr(self.data_args, "video_min_frames", 4)
-                vmax = getattr(self.data_args, "video_max_frames", 8)
-                tgt = min(max(n_to_sample, vmin), vmax)
-                idx = np.linspace(0, n-1, tgt, dtype=int)
-                return np.unique(idx)
-            idx = get_frame_indices(len(frame_files), 1)
-            return [Image.open(frame_files[i]).convert("RGB") for i in idx]
+            exts = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
+            files = sorted(
+                os.path.join(video_path, f) for f in os.listdir(video_path)
+                if os.path.isfile(os.path.join(video_path, f)) and f.lower().endswith(exts)
+            )
+            if not files:
+                raise FileNotFoundError(f"No frame files in dir: {video_path}")
+            vmax = getattr(self.data_args, "video_max_frames", 8)
+            idx = np.unique(np.linspace(0, len(files)-1, num=min(vmax, len(files)), dtype=int))
+            return [Image.open(files[i]).convert("RGB") for i in idx]
 
-        if any(video_path.lower().endswith(ext) for ext in [".mp4",".avi",".mov"]):
+        # 3) 原始视频：decord 多线程 + 均匀采样（避开最后两帧），失败则 OpenCV 兜底
+        if video_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv", ".webm", ".m4v")):
+            os.environ.setdefault("DECORD_EOF_RETRY_MAX", "20480")  # 更鲁棒
+            os.environ.setdefault("DECORD_SW_DECODE", "1")
+            num_threads = int(getattr(self.data_args, "video_decode_threads", max(4, (os.cpu_count() or 4))))
+            vmax = getattr(self.data_args, "video_max_frames", 8)
+
+            # --- decord 路径 ---
             try:
-                vr = VideoReader(video_path, num_threads=4)
+                vr = VideoReader(video_path, num_threads=num_threads)
                 total = len(vr)
-                avg_fps = vr.get_avg_fps()
-                def get_frame_indices(total_frames, fps):
-                    video_length = total_frames / max(fps, 1e-6)
-                    interval = getattr(self.data_args, "base_interval", 2)
-                    n_to_sample = round(video_length / interval)
-                    vmin = getattr(self.data_args, "video_min_frames", 4)
-                    vmax = getattr(self.data_args, "video_max_frames", 8)
-                    tgt = min(max(n_to_sample, vmin), vmax)
-                    return np.unique(np.linspace(0, total_frames-1, tgt, dtype=int))
-                idx = get_frame_indices(total, avg_fps)
+                if total <= 0:
+                    raise RuntimeError("No frames decoded by decord.")
+                hi = max(0, total - 1 - 2)                     # 避开最后两帧
+                target = min(vmax, hi + 1)
+                idx = np.unique(np.linspace(0, hi, num=target, dtype=int))
                 frames = vr.get_batch(idx).asnumpy()
                 return [Image.fromarray(fr).convert("RGB") for fr in frames]
-            except Exception:
-                # decord失败降级到OpenCV
+            except Exception as e_dec:
+                # --- OpenCV 兜底（按索引随机访问）---
                 try:
                     import cv2
                     cap = cv2.VideoCapture(video_path)
+                    if not cap.isOpened():
+                        raise RuntimeError("OpenCV cannot open video.")
+                    tot = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or 0
+                    if tot <= 0:
+                        raise RuntimeError("Invalid frame count in video.")
+                    hi = max(0, tot - 1 - 2)
+                    target = min(vmax, hi + 1)
+                    idx = np.unique(np.linspace(0, hi, num=target, dtype=int))
                     frames = []
-                    ok, frame_bgr = cap.read()
-                    while ok:
-                        frames.append(Image.fromarray(frame_bgr[:, :, ::-1]).convert("RGB"))
+                    for i in idx:
+                        cap.set(cv2.CAP_PROP_POS_FRAMES, int(i))
                         ok, frame_bgr = cap.read()
+                        if not ok:
+                            continue
+                        frames.append(Image.fromarray(frame_bgr[:, :, ::-1]).convert("RGB"))
                     cap.release()
                     if not frames:
-                        raise RuntimeError("No frames decoded by OpenCV.")
-                    # 简单等间隔采样
-                    vmin = getattr(self.data_args, "video_min_frames", 4)
-                    vmax = getattr(self.data_args, "video_max_frames", 8)
-                    tgt = min(max(len(frames), vmin), vmax)
-                    idx = np.unique(np.linspace(0, len(frames)-1, tgt, dtype=int))
-                    return [frames[i] for i in idx]
-                except Exception as e:
-                    raise FileNotFoundError(f"Cannot read video: {video_path}, err={e}")
+                        raise RuntimeError("OpenCV decoded zero frames.")
+                    return frames
+                except Exception as e_cv:
+                    raise FileNotFoundError(f"Cannot read video: {video_path}, decord_err={e_dec}, cv2_err={e_cv}")
+
         raise FileNotFoundError(f"Invalid video path: {video_path}")
 
 
+
     def _get_item(self, i) -> Dict[str, torch.Tensor]:
-
-        if self.stage == "force_use":
+        dataset_name = self.list_data_dict[i]['dataset_name']
+        if self.stage == "force_use" or os.getenv("force_vggt_tag", "False")=="force_use":
             self.use_vggt_epoch = True
-
+            print("####force_use####")
         elif self.stage =="force_notuse":
             self.use_vggt_epoch = False
         elif self.stage == "cold_startv2":
@@ -546,17 +596,19 @@ class LazySupervisedDataset(Dataset):
                 orig_human_first = msg.get("value")  # NEW
             if msg.get("from") == "gpt" and orig_gpt_first is None:  # NEW
                 orig_gpt_first = msg.get("value")  # NEW
-
-        meta = {  # NEW
-            "id": orig.get("id"),
-            "data_source": orig.get("data_source"),
-            "video": orig.get("video"),          # 注意：此处保留原始 video，不受后续改写影响
-            "data_path": orig.get("data_path"),
-            "tag": orig.get("tag"),
-            "orig_conversations": copy.deepcopy(orig.get("conversations", [])),
-            "orig_human_first": orig_human_first,
-            "orig_gpt_first": orig_gpt_first,
-        }
+        if self.stage =="stage2-1_rlColdStart":
+            meta = {  # NEW
+                "id": orig.get("id"),
+                "data_source": orig.get("data_source"),
+                "video": orig.get("video"),          # 注意：此处保留原始 video，不受后续改写影响
+                "data_path": orig.get("data_path"),
+                "tag": orig.get("tag"),
+                "orig_conversations": copy.deepcopy(orig.get("conversations", [])),
+                "orig_human_first": orig_human_first,
+                "orig_gpt_first": orig_gpt_first,
+            }
+        else:
+            meta = orig
 
 
         sources = self.list_data_dict[i]
@@ -566,11 +618,14 @@ class LazySupervisedDataset(Dataset):
         video = None
         
         if "video" in sources[0]:
-            sources[0]["images"] = self.read_video_images(sources[0])
+            sources[0]["images"] = self.read_video_images(sources[0],dataset_name)
             num_image = len(sources[0]["images"])
-            sources[0]["conversations"][0]["value"] = sources[0]["conversations"][0]["value"].replace(
-                DEFAULT_VIDEO_TOKEN, "".join([DEFAULT_IMAGE_TOKEN] * num_image)
-            )
+            # from remote_pdb import set_trace
+            # set_trace() # you'll see the port number in the logs
+            if "vsi_" in dataset_name:
+                sources[0]["conversations"][0]["value"] = sources[0]["conversations"][0]["value"].replace(DEFAULT_IMAGE_TOKEN, "".join([DEFAULT_IMAGE_TOKEN] * num_image))
+            else:
+                sources[0]["conversations"][0]["value"] = sources[0]["conversations"][0]["value"].replace(DEFAULT_VIDEO_TOKEN, "".join([DEFAULT_IMAGE_TOKEN] * num_image))
             del sources[0]["video"]
         
         # # replace <image>\n with <image>
@@ -586,7 +641,7 @@ class LazySupervisedDataset(Dataset):
         # ---- 替换 _get_item 里 'if "image" in sources[0]:' 的主体 ----
         if "image" in sources[0] or "image_dir" in sources[0] or "frames_dir" in sources[0]:
             # 统一解析为 PIL.Image 列表
-            images = self._resolve_images(sources[0])
+            images = self._resolve_images(sources[0],dataset_name)
 
             # 画可视化标记（如有）
             self.draw_visual_marks(images, sources[0].get("spar_info", None))
@@ -604,6 +659,11 @@ class LazySupervisedDataset(Dataset):
                 sources_conv, self.tokenizer, grid_thw=grid_thw_merged, visual_type="image",
                 vggt_use=self.use_vggt_epoch, stage=self.stage
             )
+            
+            if "rl_" in self.stage and "start" not in self.stage.lower():
+                data_dict["meta"] = meta  # NEW
+                data_dict["images"] = images  # NEW
+
             position_ids, _ = self.get_rope_index(
                 self.data_args.image_processor.merge_size,
                 data_dict["input_ids"],
@@ -611,24 +671,28 @@ class LazySupervisedDataset(Dataset):
             )
 
         elif "video" in sources[0]:
-            video_file = self.list_data_dict[i]["video"]
-            video_folder = self.list_data_dict[i]["data_path"]
-            if isinstance(video_file, List):
-                if len(video_file) > 1:
-                    video_file = [
-                        os.path.join(video_folder, file) for file in video_file
-                    ]
-                    results = [self.process_video(file) for file in video_file]
-                    video, grid_thw, second_per_grid_ts = zip(*results)
+            if "vsi_" in dataset_name:
+                video, grid_thw, second_per_grid_ts = self.process_video(sources[0].get("video"),dataset_name)
+            else:
+                video_file = self.list_data_dict[i]["video"]
+                video_folder = self.list_data_dict[i]["data_path"]
+                if isinstance(video_file, List):
+                    if len(video_file) > 1:
+                        video_file = [
+                            os.path.join(video_folder, file) for file in video_file
+                        ]
+                        results = [self.process_video(file) for file in video_file]
+                        video, grid_thw, second_per_grid_ts = zip(*results)
+                    else:
+                        video_file = video_file[0]
+                        video_file = os.path.join(video_folder, video_file)
+                        video, grid_thw, second_per_grid_ts = self.process_video(video_file)
+                        
                 else:
-                    video_file = video_file[0]
                     video_file = os.path.join(video_folder, video_file)
                     video, grid_thw, second_per_grid_ts = self.process_video(video_file)
-                    video = [video]
-            else:
-                video_file = os.path.join(video_folder, video_file)
-                video, grid_thw, second_per_grid_ts = self.process_video(video_file)
-                video = [video]
+                
+            video = [video]
             grid_thw_merged = copy.deepcopy(grid_thw)
             if not isinstance(grid_thw, Sequence):
                 grid_thw_merged = [grid_thw_merged]
@@ -679,7 +743,7 @@ class LazySupervisedDataset(Dataset):
             data_dict["pixel_values_videos"] = video
             data_dict["video_grid_thw"] = grid_thw
 
-        if self.stage=="stage2-1_rlColdStart":
+        if self.stage=="stage2-1_rlColdStart" or "generation" in self.stage:
             data_dict["meta"] = meta  # NEW
         data_dict["tag"] = self.list_data_dict[i].get("tag", "2d")
 
@@ -688,6 +752,8 @@ class LazySupervisedDataset(Dataset):
             set_trace() # you'll see the port number in the logs
 
         return data_dict
+
+
     # new: 复用现有 _get_item 的所有逻辑来处理“单条原始样本 dict”
     def build_from_entry(self, entry: dict) -> dict[str, torch.tensor]:
         """

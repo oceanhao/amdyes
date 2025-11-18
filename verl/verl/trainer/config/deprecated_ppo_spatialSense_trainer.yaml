@@ -1,0 +1,288 @@
+defaults:
+  # <folder_name>@<field_name>.<field_name>: <yaml_file_name>
+  # actor_rollout_ref.actor: trainer/config/actor/megatron_actor.yaml
+  - actor@actor_rollout_ref.actor: megatron_actor
+  # data: trainer/config/data/legacy_data.yaml
+  - data@data: legacy_data
+  # load the reference default config, then apply the fields in the current yaml
+  # Reference model config.
+  # Reference model will be enabled when actor.use_kl_loss or/and algorithm.use_kl_in_reward is/are True.
+  - ref@actor_rollout_ref.ref: megatron_ref
+  # Rollout model config.
+  - rollout@actor_rollout_ref.rollout: rollout
+  # Critic model config.
+  - critic@critic: megatron_critic
+  # Reward model config.
+  - reward_model@reward_model: megatron_reward_model
+  # Rollout correction config.
+  - algorithm@algorithm: rollout_correction
+  - _self_
+
+# 关键：告诉 VERL 用你的自定义数据集类
+data:
+  custom_cls:
+    path: /remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/online_rl_dataset.py
+    name: QwenVLRLOnlineDataset     # 上面的类名
+  # 你的自定义开关，数据集类可从 config.data.* 读取
+  dataset_use: "spar_234k,llava_hound_64k"
+  stage: "cold_start"
+  prompt_key: prompt
+  image_key: image                  # 对齐上面 Dataset 的列名
+  max_prompt_length: 20480
+  max_response_length: 512
+  train_batch_size: 128             # 每轮 rollout 的 prompt 数
+  train_max_samples: 32
+  val_max_samples: 32
+
+# 自定义奖励函数：把 (α, β, λ) 传入
+custom_reward_function:
+  path: verl/utils/reward_score/spatial_sense_reward.py
+  name: compute_score               # 你的函数名（若不同请改成一致）
+  reward_kwargs:                    # <== 新版支持把 kwargs 合入自定义函数 :contentReference[oaicite:3]{index=3}
+    alpha: 1.0                      # α
+    beta:  0.2                      # β
+    lambda_coef: 0.5                # λ（避免与 Python 关键词冲突，函数里用同名形参）
+
+actor_rollout_ref:
+  model:
+    path: /remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e   # 你的权重
+    trust_remote_code: True
+    # 关键：导入你的自定义模型类以注册到 HF
+    external_lib: qwen_vl.model.modeling_qwen2_5_vl                                  # 作为 importlib 的模块名被导入 :contentReference[oaicite:4]{index=4}
+  actor:
+    strategy: fsdp
+    ppo_mini_batch_size: 64
+    ppo_micro_batch_size_per_gpu: 4
+    use_kl_loss: True                 # 用 GRPO 时开启 KL Loss（而不是 reward 中加 KL）:contentReference[oaicite:5]{index=5}
+    kl_loss_coef: 0.001               # 可按需微调
+    ppo_epochs: 1
+  ref:
+    log_prob_micro_batch_size_per_gpu: 8
+  rollout:
+    name: vllm                        # 若 vLLM 暂不支持你的多模态结构，可换成 "hf" :contentReference[oaicite:6]{index=6}
+    mode: async
+    temperature: 1.0
+    top_k: -1
+    top_p: 1.0
+    dtype: bfloat16
+    gpu_memory_utilization: 0.85
+    n: 4                              # 每个 prompt 采样多条响应（GRPO/RLOO 需要 >1）:contentReference[oaicite:7]{index=7}
+    ignore_eos: False
+    free_cache_engine: True           # 建议与 enforce_eager 一起用（vLLM 某些版本）:contentReference[oaicite:8]{index=8}
+    enforce_eager: True
+    tensor_model_parallel_size: 1
+    max_num_seqs: 25600                # vLLM 队列控制（也可走 engine_kwargs.vllm.*）:contentReference[oaicite:9]{index=9}
+    # 额外透传给 vLLM 引擎的参数
+    engine_kwargs:
+      vllm:
+        max_num_seqs: 25600
+        max_num_batched_tokens: 25600
+        enforce_eager: True           # 冗余设置，确保生效 :contentReference[oaicite:10]{index=10}
+
+critic: null
+
+algorithm:
+  adv_estimator: grpo          # 用“组相对优势”（自动做反事实基线），你的函数只需产出分数 S=α*acc+β*format，不要再自己做 λ*优势 :contentReference[oaicite:11]{index=11}
+  gamma: 1.0
+  lam: 1.0
+  use_kl_in_reward: False      # KL 通过 actor.use_kl_loss 实现，不在 reward 注入 :contentReference[oaicite:12]{index=12}
+
+# config for the trainer
+trainer:
+
+  # Whether to balance batch sizes across distributed workers
+  balance_batch: True
+
+  # Number of epochs in training
+  total_epochs: 30
+
+  # Total training steps (can be set explicitly or derived from epochs)
+  total_training_steps: null
+
+  # Project name for experiment tracking (e.g., wandb)
+  project_name: verl_spatial
+
+  # Experiment name for run identification in tracking tools
+  experiment_name: gsm8k
+
+  # Logging backends to use: "console", "wandb", etc.
+  logger: ["console", "wandb"]
+
+  # Number of generations to log during validation
+  log_val_generations: 0
+
+  # Directory for logging rollout data; no dump if null
+  rollout_data_dir: null
+
+  # Directory for logging validation data; no dump if null
+  validation_data_dir: null
+
+  # Number of nodes used in the training
+  nnodes: 1
+
+  # Number of GPUs per node
+  n_gpus_per_node: 8
+
+  # Save frequency (by iteration) for model checkpoints
+  save_freq: -1
+
+  # ESI refers to the elastic server instance used during training, similar to the training plan. For example,
+  # if you purchase 10 hours of computing power, the ESI will automatically shut down after 10 hours of training.
+  # To ensure a checkpoint is saved before ESI shuts down, the system will start saving a checkpoint in advance.
+  # The advance time is calculated as: Advance Time = Longest historical step duration + Checkpoint save duration + esi_redundant_time.
+  # Here, esi_redundant_time is a user-defined value that further extends the advance time for added safety.
+  esi_redundant_time: 0
+
+  # Resume mode: "auto", "disable", or "resume_path"
+  # "auto": resume from last checkpoint if available
+  # "disable": start from scratch
+  # "resume_path": resume from a user-defined path
+  resume_mode: auto
+
+  # Path to resume training from (only used when resume_mode is "resume_path")
+  resume_from_path: null
+
+  # Whether to run validation before training begins
+  val_before_train: True
+
+  # Whether to run validation only
+  val_only: False
+
+  # Validation frequency (in training iterations)
+  test_freq: -1
+
+  # Number of iterations to warm up the critic before updating policy
+  critic_warmup: 0
+
+  # Default path to distributed filesystem for saving checkpoints
+  default_hdfs_dir: null
+
+  # Whether to delete local checkpoints after loading
+  del_local_ckpt_after_load: False
+
+  # Default local directory for saving checkpoints
+  default_local_dir: checkpoints/${trainer.project_name}/${trainer.experiment_name}
+
+  # Maximum number of actor checkpoints to keep
+  max_actor_ckpt_to_keep: null
+
+  # Maximum number of critic checkpoints to keep
+  max_critic_ckpt_to_keep: null
+
+  # Timeout (in seconds) for Ray worker to wait for registration
+  ray_wait_register_center_timeout: 300
+
+  # Device to run training on (e.g., "cuda", "cpu")
+  device: cuda
+
+  # whether to use legacy worker implementation
+  #  mode: "auto", "enable", or "disable"
+  use_legacy_worker_impl: auto
+
+# profiler configs
+global_profiler:
+
+  # Required when using verl.utils.omega_conf_to_dataclass to instantiate dataclass configs
+  _target_: verl.utils.profiler.ProfilerConfig
+
+  # Profiling tool: choose between nsys, npu, torch, torch_memory
+  tool: null
+
+  # profile steps
+  steps: null
+
+  # Whether to combine continuous steps into one database.
+  ## If True, worker.profiler.discrete must be False, [1,2] in one, [5] in another.
+  ## If False, [1] in one, [2] in another, [5] in another.
+  profile_continuous_steps: False
+
+  # Path to save profiling contents
+  save_path: "outputs/profile"
+
+  # Specific tool configs, can use +profiler.tool_config.[tool].xxx to config
+  global_tool_config:
+
+    # nsys config
+    nsys:
+
+      # Required when using verl.utils.omega_conf_to_dataclass to instantiate dataclass configs
+      _target_: verl.utils.profiler.config.NsightToolConfig
+
+      # True for each task has its own database, False for all tasks in one training step share one database.
+      discrete: False
+
+      # controller Nvidia Nsight Systems Options. Must set when profile_steps is not None.
+      ## reference https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+      ## reference https://docs.ray.io/en/latest/ray-observability/user-guides/profiling.html
+      controller_nsight_options:
+
+        # Select the API(s) to be traced.
+        trace: "cuda,nvtx,cublas,ucx"
+
+        # Track the GPU memory usage by CUDA kernels. Must be string type "true" or "false".
+        cuda-memory-usage: "true"
+
+        # CUDA graphs will be traced as a whole
+        cuda-graph-trace: "graph"
+
+      # worker Nvidia Nsight Systems Options. Must set when profile_steps is not None.
+      worker_nsight_options:
+
+        # Select the API(s) to be traced.
+        trace: "cuda,nvtx,cublas,ucx"
+
+        # Track the GPU memory usage by CUDA kernels. Must be string type "true" or "false".
+        cuda-memory-usage: "true"
+
+        # CUDA graphs will be traced as a whole
+        cuda-graph-trace: "graph"
+
+        # Profiling only in a range of torch.cuda.profiler.start and stop. Do not change this config.
+        capture-range: "cudaProfilerApi"
+
+        # Specify the desired behavior when a capture range ends.
+        # In verl we need the torch.cuda.profiler.start/stop pair to repeats n times.
+        # valid values are "repeat-shutdown:n" or null.
+        # For normal whole step profiling, n = len(profile_steps);
+        # but for discrete profiling, n = len(profile_steps) * Number(subtasks).
+        # Or you can just leave it null and the program will use n = len(profile_steps) * 6;
+        capture-range-end: null
+
+        # Send signal to the target application's process group. We let the program to exit by itself.
+        kill: none
+
+    # enable memory visualization for debugging memory usage
+    torch_memory:
+
+      #  Maximum number of allocation entries to record
+      trace_alloc_max_entries: 100_000
+
+      # The depth of the call stack to capture for each allocation
+      stack_depth: 32
+
+      # 'alloc': records only allocation events || 'state': records memory state changes || 'all': records both.
+      context: "all"
+
+      # 'python': records Python stacks || 'cpp': records C++ stacks (available in some versions) || 'all': records both.
+      stacks: "all"
+
+      # devices, record_context etc.
+      kw_args: {}
+
+# configs for TransferQueue
+transfer_queue:
+
+  # Whether to enable transfer queue
+  enable: False
+
+# configs related to ray
+ray_kwargs:
+
+  # configs related to ray initialization
+  ray_init:
+
+    # Number of CPUs for Ray. Use a fixed number instead of null when using SLURM.
+    num_cpus: null
+
+  # Path to save Ray timeline JSON for performance profiling
+  timeline_json_file: null

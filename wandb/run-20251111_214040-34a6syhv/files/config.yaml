@@ -1,0 +1,803 @@
+_attn_implementation_autoset:
+    value: true
+_name_or_path:
+    value: /remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e
+_wandb:
+    value:
+        cli_version: 0.22.2
+        e:
+            kl0e6pthipthjq01xdhcltsqx9382s8z:
+                args:
+                    - --model_name_or_path
+                    - /remote-home/haohh/_cvpr2025/VG-LLM/ckpt_saves/mhan/flex-percept-init-3e
+                    - --tune_mm_llm
+                    - "True"
+                    - --tune_mm_vision
+                    - "False"
+                    - --tune_mm_mlp
+                    - "False"
+                    - --dataset_use
+                    - llava_hound_64k
+                    - --output_dir
+                    - train_output/grpo
+                    - --cache_dir
+                    - ./cache
+                    - --bf16
+                    - --per_device_train_batch_size
+                    - "4"
+                    - --gradient_accumulation_steps
+                    - "1"
+                    - --learning_rate
+                    - "3e-6"
+                    - --mm_projector_lr
+                    - "1e-5"
+                    - --vision_tower_lr
+                    - "0"
+                    - --optim
+                    - adamw_torch
+                    - --model_max_length
+                    - "25600"
+                    - --data_flatten
+                    - "False"
+                    - --base_interval
+                    - "2"
+                    - --video_max_frames
+                    - "8"
+                    - --video_min_frames
+                    - "4"
+                    - --num_train_epochs
+                    - "1"
+                    - --warmup_ratio
+                    - "0.03"
+                    - --lr_scheduler_type
+                    - cosine
+                    - --weight_decay
+                    - "0.01"
+                    - --logging_steps
+                    - "50"
+                    - --save_steps
+                    - "1000"
+                    - --save_total_limit
+                    - "4"
+                    - --deepspeed
+                    - scripts/zero2_opt.json
+                    - --gradient_checkpointing
+                    - --dataloader_num_workers
+                    - "4"
+                    - --group_by_modality_length
+                    - "true"
+                    - --seed
+                    - "42"
+                    - --report_to
+                    - none
+                    - --use_geometry_encoder
+                    - "true"
+                    - --geometry_encoder_type
+                    - vggt
+                    - --geometry_encoder_path
+                    - facebook/VGGT-1B
+                    - --stage
+                    - grpo
+                    - --rl_stage
+                    - grpo
+                    - --rl_num_generations
+                    - "2"
+                    - --rl_reward_weights
+                    - "-1.0"
+                    - "1.0"
+                    - "0.5"
+                    - --rl_max_completion_length
+                    - "512"
+                    - --rl_beta
+                    - "0"
+                codePath: src/qwen_vl/train/train_qwen_grpo.py
+                codePathLocal: src/qwen_vl/train/train_qwen_grpo.py
+                cpu_count: 96
+                cpu_count_logical: 192
+                cudaVersion: "12.4"
+                disk:
+                    /:
+                        total: "3779302981632"
+                        used: "1664063057920"
+                email: 1903663672@qq.com
+                executable: /remote-home/haohh/anaconda3/envs/vgllm/bin/python3.10
+                git:
+                    commit: 0a4373d990a261bc0f6b3a2092eebe94367f6534
+                    remote: https://github.com/oceanhao/amdyes.git
+                gpu: NVIDIA A100-SXM4-80GB
+                gpu_count: 8
+                gpu_nvidia:
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-96be0a43-632f-6617-d9a5-6efc006c8765
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-dd7cdb7e-9baa-ecc7-2589-1c1811aade96
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-4bafc568-0add-0147-8e1d-53e4418bc4b0
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-ff691d2d-b3f3-9594-6218-8d25e1ac4af4
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-c6ea3590-6a28-de76-11f7-961714650320
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-b39a83cd-30e5-59fb-3718-ffed06d9b62b
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-25284556-7217-19a9-d94b-57e65f06144d
+                    - architecture: Ampere
+                      cudaCores: 6912
+                      memoryTotal: "85899345920"
+                      name: NVIDIA A100-SXM4-80GB
+                      uuid: GPU-3b50a8fe-e9ca-7252-6eb0-7e201aab2e1d
+                host: 61b78ea82751
+                memory:
+                    total: "1081968689152"
+                os: Linux-5.4.0-216-generic-x86_64-with-glibc2.35
+                program: /remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py
+                python: CPython 3.10.12
+                root: /remote-home/haohh/_cvpr2025/VG-LLM
+                startedAt: "2025-11-11T13:40:40.685124Z"
+                writerId: kl0e6pthipthjq01xdhcltsqx9382s8z
+        m:
+            - "1": train/global_step
+              "6":
+                - 3
+              "7": []
+            - "2": '*'
+              "5": 1
+              "6":
+                - 1
+              "7": []
+        python_version: 3.10.12
+        t:
+            "1":
+                - 1
+                - 5
+                - 11
+                - 30
+                - 41
+                - 49
+                - 51
+                - 53
+                - 71
+                - 84
+                - 95
+                - 98
+            "2":
+                - 1
+                - 5
+                - 11
+                - 30
+                - 41
+                - 49
+                - 51
+                - 53
+                - 71
+                - 84
+                - 95
+                - 98
+            "3":
+                - 7
+                - 13
+                - 19
+                - 66
+            "4": 3.10.12
+            "5": 0.22.2
+            "6": 4.50.0
+            "9":
+                "1": transformers_trainer
+            "12": 0.22.2
+            "13": linux-x86_64
+accelerator_config:
+    value:
+        dispatch_batches: null
+        even_batches: true
+        gradient_accumulation_kwargs: null
+        non_blocking: false
+        split_batches: false
+        use_seedable_sampler: true
+adafactor:
+    value: false
+adam_beta1:
+    value: 0.9
+adam_beta2:
+    value: 0.999
+adam_epsilon:
+    value: 1e-08
+add_cross_attention:
+    value: false
+architectures:
+    value:
+        - Qwen2_5_VLForConditionalGenerationWithVGGT
+attention_dropout:
+    value: 0
+auto_find_batch_size:
+    value: false
+average_tokens_across_devices:
+    value: false
+bad_words_ids:
+    value: null
+batch_eval_metrics:
+    value: false
+begin_suppress_tokens:
+    value: null
+beta:
+    value: 0
+bf16:
+    value: true
+bf16_full_eval:
+    value: false
+bos_token_id:
+    value: 151643
+cache_implementation:
+    value: null
+chunk_size_feed_forward:
+    value: 0
+cross_attention_hidden_size:
+    value: null
+data_seed:
+    value: null
+dataloader_drop_last:
+    value: false
+dataloader_num_workers:
+    value: 0
+dataloader_persistent_workers:
+    value: false
+dataloader_pin_memory:
+    value: true
+dataloader_prefetch_factor:
+    value: null
+ddp_backend:
+    value: null
+ddp_broadcast_buffers:
+    value: null
+ddp_bucket_cap_mb:
+    value: null
+ddp_find_unused_parameters:
+    value: null
+ddp_timeout:
+    value: 1800
+debug:
+    value: []
+decoder_start_token_id:
+    value: null
+deepspeed:
+    value: scripts/zero2_opt.json
+disable_tqdm:
+    value: false
+dispatch_batches:
+    value: null
+diversity_penalty:
+    value: 0
+do_eval:
+    value: false
+do_predict:
+    value: false
+do_sample:
+    value: false
+do_train:
+    value: false
+ds3_gather_for_generation:
+    value: true
+early_stopping:
+    value: false
+encoder_no_repeat_ngram_size:
+    value: 0
+eos_token_id:
+    value: 151645
+epsilon:
+    value: 0.2
+epsilon_high:
+    value: null
+eval_accumulation_steps:
+    value: null
+eval_delay:
+    value: 0
+eval_do_concat_batches:
+    value: true
+eval_on_start:
+    value: false
+eval_steps:
+    value: null
+eval_strategy:
+    value: "no"
+eval_use_gather_object:
+    value: false
+evaluation_strategy:
+    value: null
+exponential_decay_length_penalty:
+    value: null
+feature_fusion_method:
+    value: add
+finetuning_task:
+    value: null
+forced_bos_token_id:
+    value: null
+forced_eos_token_id:
+    value: null
+fp16:
+    value: false
+fp16_backend:
+    value: auto
+fp16_full_eval:
+    value: false
+fp16_opt_level:
+    value: O1
+fsdp:
+    value: []
+fsdp_config:
+    value:
+        min_num_params: 0
+        xla: false
+        xla_fsdp_grad_ckpt: false
+        xla_fsdp_v2: false
+fsdp_min_num_params:
+    value: 0
+fsdp_transformer_layer_cls_to_wrap:
+    value: null
+full_determinism:
+    value: false
+fusion_num_layers:
+    value: 1
+geometry_encoder_type:
+    value: vggt
+geometry_merger_type:
+    value: mlp
+gradient_accumulation_steps:
+    value: 1
+gradient_checkpointing:
+    value: false
+gradient_checkpointing_kwargs:
+    value: null
+greater_is_better:
+    value: null
+group_by_length:
+    value: false
+half_precision_backend:
+    value: auto
+hidden_act:
+    value: silu
+hidden_size:
+    value: 2048
+hub_always_push:
+    value: false
+hub_model_id:
+    value: null
+hub_private_repo:
+    value: null
+hub_strategy:
+    value: every_save
+hub_token:
+    value: <HUB_TOKEN>
+id2label:
+    value:
+        "0": LABEL_0
+        "1": LABEL_1
+ignore_data_skip:
+    value: false
+image_token_id:
+    value: 151655
+include_for_metrics:
+    value: []
+include_inputs_for_metrics:
+    value: false
+include_num_input_tokens_seen:
+    value: false
+include_tokens_per_second:
+    value: false
+initializer_range:
+    value: 0.02
+intermediate_size:
+    value: 11008
+is_decoder:
+    value: false
+is_encoder_decoder:
+    value: false
+jit_mode_eval:
+    value: false
+label_names:
+    value: null
+label_smoothing_factor:
+    value: 0
+label2id:
+    value:
+        LABEL_0: 0
+        LABEL_1: 1
+learning_rate:
+    value: 3e-06
+length_column_name:
+    value: length
+length_penalty:
+    value: 1
+load_best_model_at_end:
+    value: false
+local_rank:
+    value: 0
+log_completions:
+    value: false
+log_level:
+    value: passive
+log_level_replica:
+    value: warning
+log_on_each_node:
+    value: true
+logging_dir:
+    value: train_output/grpo/runs/Nov11_21-40-07_61b78ea82751
+logging_first_step:
+    value: false
+logging_nan_inf_filter:
+    value: true
+logging_steps:
+    value: 50
+logging_strategy:
+    value: steps
+lr_scheduler_type:
+    value: linear
+max_completion_length:
+    value: 512
+max_grad_norm:
+    value: 1
+max_length:
+    value: 20
+max_position_embeddings:
+    value: 128000
+max_prompt_length:
+    value: null
+max_steps:
+    value: -1
+max_window_layers:
+    value: 70
+metric_for_best_model:
+    value: null
+min_length:
+    value: 0
+min_p:
+    value: null
+model/num_parameters:
+    value: 4705137664
+model_init_kwargs:
+    value: null
+model_type:
+    value: qwen2_5_vl
+mp_parameters:
+    value: ""
+neftune_noise_alpha:
+    value: null
+no_cuda:
+    value: false
+no_repeat_ngram_size:
+    value: 0
+num_attention_heads:
+    value: 16
+num_beam_groups:
+    value: 1
+num_beams:
+    value: 1
+num_generations:
+    value: 2
+num_hidden_layers:
+    value: 36
+num_iterations:
+    value: 1
+num_key_value_heads:
+    value: 2
+num_return_sequences:
+    value: 1
+num_train_epochs:
+    value: 1
+optim:
+    value: adamw_torch
+optim_args:
+    value: null
+optim_target_modules:
+    value: null
+output_attentions:
+    value: false
+output_dir:
+    value: train_output/grpo
+output_hidden_states:
+    value: false
+output_scores:
+    value: false
+overwrite_output_dir:
+    value: false
+pad_token_id:
+    value: null
+past_index:
+    value: -1
+per_device_eval_batch_size:
+    value: 8
+per_device_train_batch_size:
+    value: 4
+per_gpu_eval_batch_size:
+    value: null
+per_gpu_train_batch_size:
+    value: null
+prediction_loss_only:
+    value: false
+prefix:
+    value: null
+problem_type:
+    value: null
+push_to_hub:
+    value: false
+push_to_hub_model_id:
+    value: null
+push_to_hub_organization:
+    value: null
+push_to_hub_token:
+    value: <PUSH_TO_HUB_TOKEN>
+ray_scope:
+    value: last
+ref_model_mixup_alpha:
+    value: 0.6
+ref_model_sync_steps:
+    value: 512
+reference_frame:
+    value: first
+remove_invalid_values:
+    value: false
+remove_unused_columns:
+    value: false
+repetition_penalty:
+    value: 1
+report_to:
+    value:
+        - wandb
+restore_callback_states_from_checkpoint:
+    value: false
+resume_from_checkpoint:
+    value: null
+return_dict:
+    value: true
+return_dict_in_generate:
+    value: false
+reward_weights:
+    value:
+        - -1
+        - 1
+        - 0.5
+rms_norm_eps:
+    value: 1e-06
+rope_scaling:
+    value:
+        mrope_section:
+            - 16
+            - 24
+            - 24
+        rope_type: default
+        type: default
+rope_theta:
+    value: 1e+06
+run_name:
+    value: train_output/grpo
+save_on_each_node:
+    value: false
+save_only_model:
+    value: false
+save_safetensors:
+    value: true
+save_steps:
+    value: 1000
+save_strategy:
+    value: steps
+save_total_limit:
+    value: 4
+scale_rewards:
+    value: group
+seed:
+    value: 42
+sep_token_id:
+    value: null
+skip_memory_metrics:
+    value: true
+sliding_window:
+    value: 32768
+split_batches:
+    value: null
+stage:
+    value: grpo
+suppress_tokens:
+    value: null
+sync_ref_model:
+    value: false
+task_specific_params:
+    value: null
+temperature:
+    value: 1
+tf_legacy_loss:
+    value: false
+tf32:
+    value: null
+tie_encoder_decoder:
+    value: false
+tie_word_embeddings:
+    value: true
+tokenizer_class:
+    value: null
+top_k:
+    value: 50
+top_p:
+    value: 1
+torch_compile:
+    value: false
+torch_compile_backend:
+    value: null
+torch_compile_mode:
+    value: null
+torch_dtype:
+    value: bfloat16
+torch_empty_cache_steps:
+    value: null
+torchdynamo:
+    value: null
+torchscript:
+    value: false
+tp_size:
+    value: 0
+tpu_metrics_debug:
+    value: false
+tpu_num_cores:
+    value: null
+transformers_version:
+    value: 4.50.0
+typical_p:
+    value: 1
+use_bfloat16:
+    value: false
+use_cache:
+    value: false
+use_cpu:
+    value: false
+use_geometry_encoder:
+    value: true
+use_ipex:
+    value: false
+use_legacy_prediction_loop:
+    value: false
+use_liger_kernel:
+    value: false
+use_mps_device:
+    value: false
+use_sliding_window:
+    value: false
+use_vllm:
+    value: false
+vggt_end_token_id:
+    value: 151666
+vggt_pad_token_id:
+    value: 151667
+vggt_start_token_id:
+    value: 151665
+video_token_id:
+    value: 151656
+vision_config:
+    value:
+        _attn_implementation_autoset: false
+        _name_or_path: ""
+        add_cross_attention: false
+        architectures: null
+        bad_words_ids: null
+        begin_suppress_tokens: null
+        bos_token_id: null
+        chunk_size_feed_forward: 0
+        cross_attention_hidden_size: null
+        decoder_start_token_id: null
+        depth: 32
+        diversity_penalty: 0
+        do_sample: false
+        early_stopping: false
+        encoder_no_repeat_ngram_size: 0
+        eos_token_id: null
+        exponential_decay_length_penalty: null
+        finetuning_task: null
+        forced_bos_token_id: null
+        forced_eos_token_id: null
+        fullatt_block_indexes:
+            - 7
+            - 15
+            - 23
+            - 31
+        hidden_act: silu
+        hidden_size: 1280
+        id2label:
+            "0": LABEL_0
+            "1": LABEL_1
+        in_channels: 3
+        in_chans: 3
+        intermediate_size: 3420
+        is_decoder: false
+        is_encoder_decoder: false
+        label2id:
+            LABEL_0: 0
+            LABEL_1: 1
+        length_penalty: 1
+        max_length: 20
+        min_length: 0
+        model_type: qwen2_5_vl
+        no_repeat_ngram_size: 0
+        num_beam_groups: 1
+        num_beams: 1
+        num_heads: 16
+        num_return_sequences: 1
+        out_hidden_size: 2048
+        output_attentions: false
+        output_hidden_states: false
+        output_scores: false
+        pad_token_id: null
+        patch_size: 14
+        prefix: null
+        problem_type: null
+        remove_invalid_values: false
+        repetition_penalty: 1
+        return_dict: true
+        return_dict_in_generate: false
+        sep_token_id: null
+        spatial_merge_size: 2
+        spatial_patch_size: 14
+        suppress_tokens: null
+        task_specific_params: null
+        temperature: 1
+        temporal_patch_size: 2
+        tf_legacy_loss: false
+        tie_encoder_decoder: false
+        tie_word_embeddings: true
+        tokenizer_class: null
+        tokens_per_second: 2
+        top_k: 50
+        top_p: 1
+        torch_dtype: bfloat16
+        torchscript: false
+        typical_p: 1
+        use_bfloat16: false
+        window_size: 112
+vision_end_token_id:
+    value: 151653
+vision_start_token_id:
+    value: 151652
+vision_token_id:
+    value: 151654
+vllm_device:
+    value: null
+vllm_dtype:
+    value: null
+vllm_enable_prefix_caching:
+    value: null
+vllm_gpu_memory_utilization:
+    value: null
+vllm_guided_decoding_regex:
+    value: null
+vllm_max_model_len:
+    value: null
+vllm_server_host:
+    value: 0.0.0.0
+vllm_server_port:
+    value: 8000
+vllm_server_timeout:
+    value: 120
+vocab_size:
+    value: 151668
+warmup_ratio:
+    value: 0
+warmup_steps:
+    value: 0
+weight_decay:
+    value: 0

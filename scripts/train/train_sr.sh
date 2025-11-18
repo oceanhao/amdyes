@@ -6,7 +6,7 @@
 # ======================
 MASTER_ADDR="127.0.0.1"                     # [Required] Master node IP for multi-GPU training
 MASTER_PORT=$(shuf -i 20000-29999 -n 1)     # Random port to avoid conflicts
-NPROC_PER_NODE=4  # Automatically detects available GPUs
+NPROC_PER_NODE=3  # Automatically detects available GPUs
 
 # ======================
 # Path Configuration
@@ -18,21 +18,24 @@ GEOMETRY_ENCODER_TYPE="vggt"
 GEOMETRY_ENCODER_PATH="facebook/VGGT-1B"
 out_root="train_output"                 # Directory for saving checkpoints
 CACHE_DIR="./cache"                        # [TrainingArguments] Cache directory for models
-other_path_tag="_from_init-3e"
-OUTPUT_DIR="${out_root}/${stage}${other_path_tag}"
+OUT_ROOT="train_output"
+CACHE_DIR="./cache"
+OTHER_TAG=""
+ts="$(TZ='Asia/Shanghai' date +%Y%m%dT%H%M%S)"
+OUTPUT_DIR="${OUT_ROOT}/${ts}/${stage}_${OTHER_TAG}"
 mkdir -p $OUTPUT_DIR
 
 # ======================
 # Model Configuration
 # ======================
-DATASETS="spar_234k,llava_hound_64k"   
-# DATASETS="spar_234k"                 # [DataArguments] Dataset with sampling rate
+DATASETS="spar_234k"   
+# DATASETS="spar_234k"       "spar_234k,llava_hound_64k"            # [DataArguments] Dataset with sampling rate
 
 # ======================
 # Training Hyperparameters
 # ======================
 LR=3e-6
-total_batch_size=64
+total_batch_size=12
 GRADIENT_ACCUMULATION_STEPS=$(($total_batch_size / $NPROC_PER_NODE))
 # GRADIENT_ACCUMULATION_STEPS=4
 export NCCL_IGNORE_DISABLED_P2P=1
@@ -54,7 +57,7 @@ nohup torchrun --nproc_per_node=$NPROC_PER_NODE \
             --mm_projector_lr 1e-5 \
             --vision_tower_lr 0 \
             --optim adamw_torch \
-            --model_max_length 25600 \
+            --model_max_length 20000 \
             --data_flatten False \
             --base_interval 2 \
             --video_max_frames 8 \

@@ -84,6 +84,17 @@ SCAN2CAP = {
     "tag": "3d"
 }
 
+vsi_20k  = {
+    "annotation_path": "data/train/vsi_20k_alig.json",
+    "data_path": "/remote-home/share/_datasets/VSI-590k",
+    "tag": "3d"
+}
+vsi_50k  = {
+    "annotation_path": "data/train/vsi_50k_alig.json",
+    "data_path": "/remote-home/share/_datasets/VSI-590k",
+    "tag": "3d"
+}
+
 data_dict = {
     "cambrian_737k": CAMBRIAN_737K,
     "mp_doc": MP_DOC,
@@ -100,6 +111,8 @@ data_dict = {
     "llava_hound_tool_10k":llava_hound_tool_10k,
     "spar_tool_40k":spar_tool_40k,
     "llava_hound_tool_10k_multiRoundTrain":llava_hound_tool_10k_multiRoundTrain,
+    "vsi_20k": vsi_20k,
+    "vsi_50k": vsi_50k,
 }
 
 

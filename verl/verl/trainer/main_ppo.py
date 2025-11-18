@@ -30,7 +30,22 @@ from verl.trainer.ppo.utils import need_critic, need_reference_policy
 from verl.utils.config import validate_config
 from verl.utils.device import is_cuda_available
 from verl.utils.import_utils import load_extern_type
+from qwen_vl.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGenerationWithVGGT
 
+try:
+    from vllm import LLM, ModelRegistry
+    from vllm.model_executor.models.registry import _MULTIMODAL_MODELS
+    # model_registry.register_model("Qwen2_5_VLForConditionalGenerationWithVGGT", Qwen2_5_VLForConditionalGenerationWithVGGT)
+    ModelRegistry.register_model("Qwen2_5_VLForConditionalGenerationWithVGGT", Qwen2_5_VLForConditionalGenerationWithVGGT)
+    # ModelRegistry.register_model(
+    #     "Qwen2_5_VLForConditionalGenerationWithVGGT",
+    #     "vllm.model_executor.models.qwen2_5_vl:Qwen2_5_VLForConditionalGeneration",
+    # )
+    _MULTIMODAL_MODELS["Qwen2_5_VLForConditionalGenerationWithVGGT"] = ("Qwen2_5_VLForConditionalGeneration", "Qwen2_5_VLForConditionalGenerationWithVGGT")
+except Exception as e:
+        warnings.warn(
+        f"check vllm:{e}"
+    )
 
 @hydra.main(config_path="config", config_name="ppo_trainer", version_base=None)
 def main(config):

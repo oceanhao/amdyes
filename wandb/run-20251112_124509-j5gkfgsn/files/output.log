@@ -1,0 +1,73 @@
+wandb: Detected [huggingface_hub.inference, openai] in use.
+wandb: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+wandb: For more information, check out the docs at: https://weave-docs.wandb.ai/
+  0%|          | 0/3104 [00:00<?, ?it/s]RemotePdb session open at 127.0.0.1:33737, waiting for connection ...
+RemotePdb session open at 127.0.0.1:33737, waiting for connection ...
+RemotePdb accepted connection from ('127.0.0.1', 56876).
+RemotePdb accepted connection from ('127.0.0.1', 56876).
+[Try #0] Failed to fetch sample 185823. Exception: 'NoneType' object does not support item assignment
+[Try #1] Failed to fetch sample 185823. Exception: 'NoneType' object does not support item assignment
+[Try #2] Failed to fetch sample 185823. Exception: 'NoneType' object does not support item assignment
+[Try other #0] Failed to fetch sample 185824. Exception: 'NoneType' object does not support item assignment
+[Try other #1] Failed to fetch sample 185824. Exception: 'NoneType' object does not support item assignment
+[Try other #2] Failed to fetch sample 185824. Exception: 'NoneType' object does not support item assignment
+Traceback (most recent call last):
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 490, in <module>
+    train(attn_implementation="flash_attention_2")
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 470, in train
+    grpo_trainer.train()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2245, in train
+    return inner_training_loop(
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2508, in _inner_training_loop
+    batch_samples, num_items_in_batch = self.get_batch_samples(epoch_iterator, num_batches, args.device)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 5224, in get_batch_samples
+    batch_samples += [next(epoch_iterator)]
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/data_loader.py", line 564, in __iter__
+    current_batch = next(dataloader_iter)
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+    data = self._next_data()
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 757, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_grpo.py", line 122, in __getitem__
+    proc: Dict[str, Any] = self.base.__getitem__(idx)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_qwen.py", line 412, in __getitem__
+    raise e
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_qwen.py", line 409, in __getitem__
+    sample = self._get_item(i)
+  File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_qwen.py", line 621, in _get_item
+    data_dict["meta"] = meta  # NEW
+TypeError: 'NoneType' object does not support item assignment
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 490, in <module>
+[rank0]:     train(attn_implementation="flash_attention_2")
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/train/train_qwen_grpo.py", line 470, in train
+[rank0]:     grpo_trainer.train()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2245, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 2508, in _inner_training_loop
+[rank0]:     batch_samples, num_items_in_batch = self.get_batch_samples(epoch_iterator, num_batches, args.device)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/transformers/trainer.py", line 5224, in get_batch_samples
+[rank0]:     batch_samples += [next(epoch_iterator)]
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/accelerate/data_loader.py", line 564, in __iter__
+[rank0]:     current_batch = next(dataloader_iter)
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+[rank0]:     data = self._next_data()
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 757, in _next_data
+[rank0]:     data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+[rank0]:     data = [self.dataset[idx] for idx in possibly_batched_index]
+[rank0]:   File "/remote-home/haohh/anaconda3/envs/vgllm/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+[rank0]:     data = [self.dataset[idx] for idx in possibly_batched_index]
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_grpo.py", line 122, in __getitem__
+[rank0]:     proc: Dict[str, Any] = self.base.__getitem__(idx)
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_qwen.py", line 412, in __getitem__
+[rank0]:     raise e
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_qwen.py", line 409, in __getitem__
+[rank0]:     sample = self._get_item(i)
+[rank0]:   File "/remote-home/haohh/_cvpr2025/VG-LLM/src/qwen_vl/data/data_qwen.py", line 621, in _get_item
+[rank0]:     data_dict["meta"] = meta  # NEW
+[rank0]: TypeError: 'NoneType' object does not support item assignment

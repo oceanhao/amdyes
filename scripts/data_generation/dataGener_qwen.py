@@ -244,7 +244,7 @@ class Inferencer:
                     generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
                 )
 
-                metas = raw_batch.get("meta", [None] * len(answers))  # NEW
+                metas = raw_batch.get("meta")  # NEW
                 for t, meta in zip(answers, metas):
                     if meta is None:
                         continue  # 没有 meta 就跳过（理论上不会发生）
